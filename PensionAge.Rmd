@@ -1,5 +1,5 @@
 ---
-title: "Forecasting the population age structure to determine the best pension age"
+title: "Forecasting the old age dependency ratio to determine the best pension age"
 author: "Rob J Hyndman, Yijun Zeng and Han Lin Shang"
 date: "`r format(Sys.time(), '%-d %B %Y')`"
 fontsize: 11pt
@@ -22,14 +22,14 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, cache=TRUE, messages=FALSE, warning=FALSE)
+knitr::opts_chunk$set(echo = FALSE, messages=FALSE, warning=FALSE)
 # Make sure you have the latest version of rmarkdown and bookdown
 #devtools::install_github("rstudio/rmarkdown")
 #devtools::install_github("rstudio/bookdown")
 library(demography)
 library(addb)
 library(ggplot2)
-source("Rcode/functions-v4.R")
+source("functions-v4.R")
 ```
 
 \begin{abstract}
@@ -59,11 +59,11 @@ In this paper, we use the old aged dependency ratio (OADR\footnote{All abbreviat
 \begin{equation}
   OADR=\frac{\text{number of people aged over pension age}}{\text{number of people aged 15 to pension age}}*100%
 \end{equation}
-The research presented here forecasts future population age structures over the next 50 years. We then use those projections to compute the OADR associated with pension age both before and after the adjustments. One major contribution of the current study is the combined use of the Hyndman-Ullah forecasting method [@HU07] and the product-ratio method [@HBY13] to forecast a population age structure.  Forecasts of population structure have been built on forecasts of age and gender-specific mortality rates, fertility rates and net migration using this method. These forecasts presuppose that the historical trends of past years will continue. Historical data of those rates have thus been used as input to simulate future paths of age and gender-specific population structure.
+We provide forecasts of future population age structures over the next 50 years. We then use those projections to compute the OADR associated with pension age both before and after the adjustments. One contribution of the current study is the combined use of the Hyndman-Ullah forecasting method [@HU07] and the product-ratio method [@HBY13] to forecast a population age structure.  Forecasts of population structure have been built on forecasts of age and gender-specific mortality rates, fertility rates and net migration using this method. These forecasts presuppose that the historical trends of past years will continue. Historical data of those rates have thus been used as input to simulate future paths of age and gender-specific population structure.
 
-Using these predicted population paths, we can calculate the average of OADR and predict the levels of old age dependency that correspond to different pension age schemes. By testing different pension age schemes, we aim to find the pension age with the desired OADR outcome. Therefore, other main contributions of this research are (1) to examine the effect of adjusting pension ages by comparing OADR before and after adjustment; and (2)\ to suggest a suitable pension age scheme to ensure that the economic burden will remain relatively constant at a desired level in the future. It should be noted that the desired level has been set at 21%, which is the estimated current level of OADR in 2014. This level was chosen because, while the current financial burden on tax payers is affordable, it is approaching the limits of affordability. However, whether or not the current level is the most appropriate level to Australia remains to be examined and it is not the focus of this paper. This paper concentrates on providing a framework for policy makers to find a target pension age for a given desired level of OADR.
+Using these predicted population paths, we can calculate the average of OADR and predict the levels of old age dependency that correspond to different pension age schemes. By testing different pension age schemes, we aim to find the pension age with the desired OADR outcome. Therefore, other contributions of this research are (1) to examine the effect of adjusting pension ages by comparing OADR before and after adjustment; and (2) to suggest a suitable pension age scheme to ensure that the economic burden will remain relatively constant at a desired level in the future. It should be noted that the desired level has been set at 21%, which is the estimated current level of OADR in 2014. This level was chosen because, while the current financial burden on tax payers is affordable, it is approaching the limits of affordability. However, whether or not the current level is the most appropriate level to Australia remains to be examined and it is not the focus of this paper. This paper concentrates on providing a framework for policy makers to find a target pension age for a given desired level of OADR.
 
-Some may argue that using OADR as a measure of financial burden for the next generation could be biased, with a large number of retirees able to rely on self-financed retirement income, such as superannuation. However, 80% of Australians over pension age fully or partly rely on the age pension [@Power14]. Therefore, the proportion of people over working age is still a good representation of financial burden on future working generations.  Nevertheless, it should be aware that using OADR as a single measurement of financial burden might overlook some important economic factors. Some have suggested to use adjusted OADR that considers those important factors in analyzing pension finance [@HY12]. This paper emphasizes how to undertake a better forecasting of economic burden for a given policy rather than the better choice of measurements. Therefore, the simple version of OADR was chosen to illustrate my approach (i.e., without adjustment). There is a ground to extend the approach to incorporate more complex measurement which takes into account of other important economic factors.
+Some may argue that using OADR as a measure of financial burden for the next generation could be biased, with a large number of retirees able to rely on self-financed retirement income, such as superannuation. However, 80% of Australians over pension age fully or partly rely on the age pension [@Power14]. Therefore, the proportion of people over working age is still a good representation of financial burden on future working generations.  Nevertheless, using OADR as a single measurement of financial burden may overlook some important economic factors. @HY12 have suggested the use of an adjusted OADR that takes account of some of these factors in analyzing pension finance [@HY12]. This paper emphasizes how to undertake a better forecasting of economic burden for a given policy rather than the better choice of measurements. Therefore, the simple version of OADR was chosen to illustrate my approach (i.e., without adjustment). There is a ground to extend the approach to incorporate more complex measurement which takes into account of other important economic factors.
 
 Furthermore, choosing the right model to forecast population age structure was another important step involved in the quantification process. I chose to combine the Hyndman-Ullah method and product-ratio method for the forecast. The combination of those two methods overcomes some of shortcomings of other popular demographic forecasting methods such as the Lee-Carter method [@LC92] or the deterministic methods used by the Australian Bureau of Statistics [@ABS06; @ABS12]. More details on forecasting methods are given in later sections.
 
@@ -84,7 +84,7 @@ The ageing trend in Australia, along with retirees' dependence on the age pensio
 
 The issue is not only a problem for the government, but also for future retirees. Given children born today are expected to live up to their 90s on average, the @PC13 suggests that Australians won't be able to afford to spend 35 years in retirement (i.e., retire around 65). They have predicted that a third of baby boomers are expected to spend all their money and assets before they die\footnote{Baby Boomers are people born during the Post-World War II baby boom between the years 1946 and 1964}. This problem might eventually deteriorate the sustainability of the age pension, although the welfare system works well at the moment, because demographic changes often have delayed effects [@IGR03].
 
-```{r changespension, echo=FALSE, fig.cap="Government's adjustments on pension age scheme.", fig.height=4, fig.width=8, message=FALSE, warning=FALSE, messages=FALSE}
+```{r changespension, echo=FALSE, fig.cap="Government's adjustments on pension age scheme.", fig.height=4, fig.width=8, message=FALSE, warning=FALSE, cache=TRUE}
 year <- 2065-2007
 proposed <- ts(pmin(70,
          c(rep(65,2017-2008), 65 + cumsum(rep(c(0.5,0),55))))[1:50],
@@ -403,7 +403,7 @@ The algorithm to find the upper and lower boundary of plausible pension age sche
 
 ## Forecast in Population Age Structure and OADR
 
-```{r getdata}
+```{r getdata, cache=TRUE}
 ############################
 ## GET ALL THE DATA
 ############################
@@ -443,7 +443,7 @@ The algorithm to find the upper and lower boundary of plausible pension age sche
 load("ausdata.rda")
 ```
 
-```{r smoothing}
+```{r smoothing, cache=TRUE}
 ################################################
 ################ SMOOTHING STEP ################
 ################################################
@@ -453,7 +453,7 @@ ausfert.sm <- smooth.demogdata(aus.fert, obs.var="theoretical")
 ausmig.sm <- smooth.demogdata(aus.mig)
 ```
 
-```{r models}
+```{r models, cache=TRUE}
 ################################################
 ################ MODELLING STEP ################
 ################################################
@@ -474,14 +474,14 @@ migf <- forecast(mig.fit, h=50)
 I use the fitted model of fertility rates as an example to interpret the results of fitted models. It should be noted that models fitted to product and ratio series are less likely to be interpreted in an economic sense. Figure \ref{fig:componentsfertility} above shows the mean age pattern ($\mu(x)$), the first two basis functions ($\phi_1(x)$ and $\phi_2(x)$) and first two coefficients (i.e., principal component scores $\beta_{t,1}$ and $\beta_{t,2}$) for fertility rates. The first term ($\phi_1(x)*\beta_{t,1}$) accounts for the most variation in fertility, so a relatively sensible interpretation can be given to the first term. In the plot of coefficient 1,
 estimated historical first principal component scores $\beta_{t,1}$ are shown in black for 1950-2009. It captures the general trend of fertility change over time. It indicates a sharp increase between 1950-1960, followed by a rapid decline of fertility rates from 1961. This increase of fertility is linked to the Post-World War II baby boom\footnote{between the years 1946 and 1964} in Australia, resulting from the recovery from war and the Great Depression\footnote{The Great Depression was a severe economic depression in the decade before World War II}. The dramatic decrease from 1960 was due to the availability of contraception pills in Australia. A  noticeable further reduction of fertility rates in late 1960s may be due to a change in the law allowing abortion in some states in Australia.
 
-```{r componentsfertility, fig.cap="Fitted basis functions and coefficients for Australian fertility rates."}
+```{r componentsfertility, fig.cap="Fitted basis functions and coefficients for Australian fertility rates.", cache=TRUE}
 par(mgp=c(2.2,0.45,0), tcl=-0.4, mar=c(3.3,3.6,1.1,1.1))
 plot(fertf, 'c', comp=2)
 ```
 
 The first basis function $\phi_1(x)$ measures the different effects of the trend over time across ages. It indicates the general pattern of fertility has very little effect on females of age 15. This makes intuitive sense because most early pregnancies are accidental, therefore, any of previously discussed events has no effect on early pregnancies. In addition, there are two spikes in the first basic function, which suggests that the historical trend has a distinct impact on females aged around their 20s and 40s. Furthermore, the blue line is the fitted value of future coefficients (i.e., $\beta_{n+h,1}$, for $h=1,2,\dots,50$) and the yellow shading shows their 80% prediction interval according to the fitted ARIMA model of first coefficients $\left\{\beta_{t,1}\right\}$. Other terms further explain variation that has not been captured by first term, but less economic explanations can be given for them.
 
-```{r simulation}
+```{r simulation, cache=TRUE}
 ############### SIMULATION STEP #################
 # This takes a while!
 #aus.sim <- pop.sim(mortf, fertf, migf, firstyearpop=pop2010, N=2000)
@@ -504,7 +504,7 @@ totmpop.q <- apply(totmpop,1,quantile,p=c(0.025,.1,.5,.9,.975),na.rm=TRUE)/1e6
 ```
 
 
-```{r totalpopulationbyyears, fig.cap="Fifth-year forecasts of total population for each sex, along with 80% prediction intervals. The actually population from 1950 to 2010 is shown using circles.", fig.height=4}
+```{r totalpopulationbyyears, fig.cap="Fifth-year forecasts of total population for each sex, along with 80% prediction intervals. The actually population from 1950 to 2010 is shown using circles.", fig.height=4, cache=TRUE}
 par(mgp=c(2.2,0.45,0), tcl=-0.4, mar=c(3.3,3.6,1.1,1.1))
 par(mfrow=c(1,2))
 fy <- 2012+(1:50)
@@ -531,7 +531,7 @@ polygon(c(fy,rev(fy)),
 lines(fy,totmpop.q[3,],lwd=2,col="blue")
 ```
 
-```{r totalpopulationin2028, fig.cap="Forecast population pyramid for 2028, along with 80% prediction intervals. The actual pyramid for 2010 is shown using dashed lines."}
+```{r totalpopulationin2028, fig.cap="Forecast population pyramid for 2028, along with 80% prediction intervals. The actual pyramid for 2010 is shown using dashed lines.", cache=TRUE}
 par(mgp=c(2.2,0.45,0), tcl=-0.4, mar=c(4.3,3.6,3.0,3.3))
 plot(c(0,100),c(0,100),type="n", main="Forecast population: 2028",yaxt="n",
     xlab="Population ('000)",ylab="Age",xaxt="n",xlim=c(-1,1)*max(abs(popm.hi[,20]),abs(popf.hi[,20]))/1e3)
@@ -559,13 +559,13 @@ Both \ref{fig:totalpopulationbyyears} and \ref{fig:totalpopulationin2028} show t
 
 Figure \ref{fig:totalpopulationin2028} shows the mean and the 80% prediction interval of simulated population paths for year 2028, along with the 2010 base population. It can be observed that overall population size is expected to increase substantially.  The uncertainty of population of infant is much higher than other ages, which reflects the higher forecast variation of fertility rates than mortality rates. The uncertainty of the young age population is mainly due to migration [@HB08].
 
-```{r OADRat65, fig.cap="Fifty-year forecasts of the old aged dependency ratio with assumption of pension age equal to 65 for both sexes, along with 80% prediction interval."}
+```{r OADRat65, fig.cap="Fifty-year forecasts of the old aged dependency ratio with assumption of pension age equal to 65 for both sexes, along with 80% prediction interval.", cache=TRUE}
 oadp.f <- oadr(pop2010,aus.sim,current)
 autoplot(oadp.f) + xlab("year") + ylab("ratio") + 
     ggtitle("Old age dependency ratio forecasts with pension age=65")
 ```
 
-```{r OADRcurrent, fig.cap="Fifty-year forecasts of the old aged dependency ratio associated with a pension age equal to 65 (black line) and equal to the pension age scheme with approved change (red line) respectively, along with the desired OADR level in grey (i.e., mean forecast of OADR in 2014). The actual OADRs for 1950-2010 are shown in black."}
+```{r OADRcurrent, fig.cap="Fifty-year forecasts of the old aged dependency ratio associated with a pension age equal to 65 (black line) and equal to the pension age scheme with approved change (red line) respectively, along with the desired OADR level in grey (i.e., mean forecast of OADR in 2014). The actual OADRs for 1950-2010 are shown in black.", cache=TRUE}
 oadp.f.67 <- oadr(pop2010, aus.sim, pension.age=approved)
 oadp.f <- oadr(pop2010,aus.sim,pension.age=current)
 oadp.f.prop <- oadr(pop2010,aus.sim,pension.age=proposed)
@@ -587,7 +587,7 @@ Figure \ref{fig:OADRcurrent} presents a comparison of the mean forecast of OADR 
 
 ## Plausible Pension Age Schemes
 
-```{r pension}
+```{r pension, cache=TRUE}
 ###find the optimal scheme of pension.age based on mean forecast
 target <- oadp.f$mean[4]
 
@@ -608,7 +608,7 @@ oadp.f.optimal <- oadr(pop2010,
                     aus.sim,pension.age=pension.age)
 ```
 
-```{r pensionupper}
+```{r pensionupper, cache=TRUE}
 ###find the upper boundary of pension ages whose prediction interval contains target    
 pension.age.upper <- proposed
 for(i in 6:50)
@@ -626,7 +626,7 @@ oadp.f.upper<- oadr(pop2010,
                     aus.sim,pension.age=pension.age.upper)
 ```
 
-```{r pensionlower}
+```{r pensionlower, cache=TRUE}
 #####find the lower boundary of pension ages whose prediction interval contains target
 pension.age.lower <- proposed
 for(i in 6:20)
@@ -643,7 +643,7 @@ for(i in 6:20)
 oadp.f.lower<- oadr(pop2010, aus.sim,pension.age=pension.age.lower)
 ```
 
-```{r pension forecast}
+```{r pension forecast, cache=TRUE}
 pension.fc <- structure(list(
   mean=ts(pension.age, start=2011),
   upper=pension.age.upper,
@@ -654,7 +654,7 @@ pension.fc <- structure(list(
 
 Table 1 shows the target pension age scheme, which is properly defined in section 3.2.2. It is assumed that it is impractical to change the pension age during 2011--2015, so the pension age has to be set at 65 for those years. \ref{fig:OADRwithoptimal} provides a visible comparison of the desired OADR level of 21% and the mean forecast of the OADR corresponding to the target pension age. Note that the OADR associated with target pension age scheme has nearly overlapped the desired OADR level, which indicates that we have successfully found the pension age with stable OADR at the desired levels.
 
-```{r pensionagetables}
+```{r pensionagetables, cache=TRUE}
 year <- time(oadp.f$mean)
 yr <- trunc(pension.age)
 mth <- trunc((pension.age - trunc(pension.age)) * 12)
@@ -671,7 +671,7 @@ knitr::kable(format(tab), booktabs=TRUE,
              caption="Fifty-year target pension age scheme with stable OADR around desired OADR. Y denotes years and M denotes months.")
 ```
 
-```{r pensionagetables2}
+```{r pensionagetables2, cache=TRUE}
 year <- time(oadp.f$mean)
 yr <- trunc(pension.age.lower)
 mth <- trunc((pension.age.lower - trunc(pension.age.lower)) * 12)
@@ -758,7 +758,7 @@ Upper & 76Y8M & 76Y10M \\
 \caption{Fifth-years lower and higher boundary of pension age scheme with one boundary of 80\% OADR around desired OADR. Y denotes years and M denotes months.}
 \end{table}
 
-```{r OADRwithoptimal, fig.cap="The mean forecast of old aged dependency ratio associated with target pension age scheme (listed in Table 1) shown in blue, along with the desired OADR level in red (i.e., mean forecast of OADR in 2014). The 80% prediction interval of the forecast of OADR is shown as blue shading."}
+```{r OADRwithoptimal, fig.cap="The mean forecast of old aged dependency ratio associated with target pension age scheme (listed in Table 1) shown in blue, along with the desired OADR level in red (i.e., mean forecast of OADR in 2014). The 80% prediction interval of the forecast of OADR is shown as blue shading.", cache=TRUE}
 ##plots of OADR with plausible pension age schemes 
 autoplot(oadp.f.optimal$x) + 
   geom_hline(yintercept=oadp.f$mean[4], col='red') +
@@ -767,7 +767,7 @@ autoplot(oadp.f.optimal$x) +
   xlab("year") + ylab("ratio") 
 ```
 
-```{r OADRboundaries, fig.cap="The  80% prediction interval forecast of OADR (in blue) associated with upper and lower boundary of plausible pension age schemes (listed in Table.2), along with desired OADR level (in red)."}
+```{r OADRboundaries, fig.cap="The  80% prediction interval forecast of OADR (in blue) associated with upper and lower boundary of plausible pension age schemes (listed in Table.2), along with desired OADR level (in red).", cache=TRUE}
 p1 <- autoplot(oadp.f.upper$x) + 
   geom_hline(yintercept=oadp.f$mean[4], col='red') +
   #autolayer(oadp.f.upper) +
@@ -783,7 +783,7 @@ p2 <- autoplot(oadp.f.lower$x) +
 gridExtra::grid.arrange(p1,p2, ncol=2)
 ```
 
-```{r comparisonofpensionages, fig.cap="The comparison between the target pension age scheme (in green) and real pension age scheme that has been set or proposed by government, along with the 80% confidence interval of the target pension age shown in green shade. The red solid line indicates the changes to the pension age from 65 to 67, announced in 2009."}
+```{r comparisonofpensionages, fig.cap="The comparison between the target pension age scheme (in green) and real pension age scheme that has been set or proposed by government, along with the 80% confidence interval of the target pension age shown in green shade. The red solid line indicates the changes to the pension age from 65 to 67, announced in 2009.", cache=TRUE}
 ggplot() +
   autolayer(pension.fc, series="Pension age to give OADR=0.21") +
 #  geom_hline(yintercept=65, color='black') +
@@ -793,10 +793,10 @@ ggplot() +
   xlab("Year") + ylab("Age of retirement")
 ```
   
-```{r ComparisonwithOADR22, fig.cap="The comparison between the target pension age scheme (in green) associated with desired level equal to current level plus $1%$ (i.e., 22%) and real pension age scheme that has been set or proposed by government, along with the 80% confidence interval of the target pension age shown in green shade."}
+```{r ComparisonwithOADR22, fig.cap="The comparison between the target pension age scheme (in green) associated with desired level equal to current level plus $1%$ (i.e., 22%) and real pension age scheme that has been set or proposed by government, along with the 80% confidence interval of the target pension age shown in green shade.", cache=TRUE}
 ```
 
-```{r OADR_realpensionage, fig.cap="The mean forecast of old aged dependency ratio associated with different pension age schemes under investigation, along with the desired OADR level in grey (i.e., mean forecast of OADR in 2014). The 80% prediction interval of the forecast of OADR is shown as shading."}
+```{r OADR_realpensionage, fig.cap="The mean forecast of old aged dependency ratio associated with different pension age schemes under investigation, along with the desired OADR level in grey (i.e., mean forecast of OADR in 2014). The 80% prediction interval of the forecast of OADR is shown as shading.", cache=TRUE}
 ```
 
 The upper and lower boundaries of the plausible pension age schemes (also called the 80 % confidence interval of the target pension age scheme in this paper) are reported in Table 2, and their corresponding OADR simulation results are shown in \ref{fig:OADRatboundaries}. It can be seen that the lower (upper) limit of the 80% prediction interval of OADR associated with lower (upper) boundary of the 80% confidence interval  pension age scheme is entirely stable around the desired level. Note the negative relationship between OADR and pension age. It suggests, on one hand, that any pension age higher than the upper boundary in table 2 is deemed to be undesirable because the age is too high to allow the age pension to provide enough welfare support or insurance to the aged. On the other hand, any pension age scheme lower than the lower boundary of the pension age reported in Table 2 will also be regarded as unreasonable, because it sacrifices the interests of the next generation to provide a very generous age pension immediately.
@@ -828,7 +828,7 @@ Let $i=1$, we first select historical data for a time interval of $[i,i+1,\dots,
 \end{equation}
 where $h$ denotes for the forecast horizon and $\text{AE}_{h,i}=|OADR^{mean}_{h,i}-OADR^{real}_{h,i}|$. This process is also known as "rolling forecasting origin", because the "origin" ($k+i-1$) at which the forecast is based rolls forward in time. We take the average of each row to obtain an absolute mean error of $h$-step-ahead forecast of OADR  where $h=1,2,\dots,H$.
 
-```{r rollingtest, fig.cap="The mean absolute error of $h$-step-ahead forecast for $h=1,2,\\dots,25$."}
+```{r rollingtest, fig.cap="The mean absolute error of $h$-step-ahead forecast for $h=1,2,\\dots,25$.", warning=FALSE, message=FALSE, cache=TRUE}
 ########Run a rolling forecast origin 
 t <- 2010-1950+1 
 H <- 25 ##forecast horizon for test
@@ -858,9 +858,9 @@ oadrtest
 oadr.real<- oadr(pop2010,aus.sim)$x
 oadr.real.mat <- oadr.error <- matrix(NA, 25, 12)
 for(i in 1:25)
-  oadr.real.mat[i,] <- oadr.real[(i+59):(59+21+i)]
+  oadr.real.mat[i,] <- oadr.real[(i+59):(59+11+i)]
 
-oadr.error <- abs(oadrtest-oadr.real.mat)
+oadr.error <- abs(oadrtest-oadr.real.mat[,1:11])
 oadrave <- apply(oadr.error,1,mean)
 oadrave
                
