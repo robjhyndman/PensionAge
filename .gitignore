@@ -6,9 +6,12 @@
 PensionAge-001.pdf
 PensionAge.md
 PensionAge.tex
+PensionAge.pdf
 Rcode/
 figures/
 _main.Rmd
-*.rda
+_book/
 _bookdown_files/
+PensionAge_cache/
+PensionAge_files/
 oldpension*
