@@ -1,0 +1,14 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.directory
+PensionAge-001.pdf
+PensionAge.md
+PensionAge.tex
+Rcode/
+figures/
+_main.Rmd
+*.rda
+_bookdown_files/
+oldpension*
