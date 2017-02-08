@@ -33,7 +33,7 @@ source("functions-v4.R")
 ```
 
 \begin{abstract}
-We forecast the old-aged dependency ratio for Australia, and estimate a pension age scheme that will provide a stable old aged dependency ratio at a specified level. Our approach involves a stochastic population forecasting method based on coherent functional data models for mortality, fertility and net migration, which we use to simulate future age-structures of the population. 
+We forecast the old-aged dependency ratio for Australia under various pension age proposals, and estimate a pension age scheme that will provide a stable old aged dependency ratio at a specified level. Our approach involves a stochastic population forecasting method based on coherent functional data models for mortality, fertility and net migration, which we use to simulate future age-structures of the population. 
 
 We apply these ideas to Australian historical demographic data and the results suggest that the pension age should be increased to 67 by 2021, 70 by 2032 and 75 by 2058 in order to maintain the old aged dependency ratio at the current level, which is 21%.
 
@@ -49,32 +49,28 @@ This approach can easily be extended to other target levels of the old-aged depe
 
 #Introduction
 
-Australia's ageing population is a result of three factors: (1) significant technological advances in medical care leading to longer life spans; (2) high fertility rates after World War II resulting in the ``baby-boomer'' generation; and (3) a large decline in fertility rates over the last twenty or so years [@Fehr2008].  Consequently, there are many older people leaving the workforce, and fewer workers replacing them. Similar demographic challenges face many other countries. One way of measuring this problem is via the old-age dependency ratio (OADP): the number of people post-retirement to the number of people of working age [@Walker1982]. The OADP has been increasing for many decades, but recently the rate of increase has jumped markedly, and we show that it will continue to increase at a rapid rate if there are no age-related policy changes.
+Australia's ageing population is a result of three factors: (1) significant technological advances in medical care leading to longer life spans; (2) high fertility rates after World War II resulting in the ``baby-boomer'' generation; and (3) a large decline in fertility rates over the past twenty or so years [@Fehr2008].  Consequently, there are many older people leaving the workforce, and fewer workers replacing them. Similar demographic challenges face many other countries. One way of measuring this problem is via the old-age dependency ratio (OADP): the number of people post-retirement to the number of people of working age [@Walker1982]. The OADP has been increasing for many decades, but recently the rate of increase has jumped markedly, and we show that it will continue to increase at a rapid rate if there are no age-related policy changes.
 
-This is consistent with the Australian Intergenerational Reports [@IGR02; @IGR07; @Swan2010] that explored the extent to which existing age-related policies would affect the burden of future working generations. To date, the Australian government has addressed the problem through a variety of approaches including modifications to compulsory superannuation policies, instigating work incentives for older people, and increasing the pension age\footnote{The \textit{pension age} is defined as the age at which eligible residents can access the age pension for the first time.}. In 2009, the federal government announced an increase in pension age from 65 to 67 by 2023 [@Nielson2010]. In May 2014, the Federal Treasurer proposed to further increase the pension age to 70 by 2035. This new proposal is in line with the recommendations from the @PC13 and the @NCOA2014. In this paper, we investigate the effect of these changes to the pension age on the forecast OADP.
+This is consistent with the Australian Intergenerational Reports [@IGR02; @IGR07; @Swan2010] that explored the extent to which existing age-related policies would affect the burden of future working generations. To date, the Australian government has addressed the problem through a variety of approaches including modifications to compulsory superannuation policies, instigating work incentives for older people, and increasing the pension age (defined as the age at which eligible residents can access the age pension for the first time). In 2009, the federal government announced an increase in pension age from 65 to 67 by 2023 [@Nielson2010]. In May 2014, the Federal Treasurer proposed a further increase in the pension age to 70 by 2035. This new proposal is in line with the recommendations from the @PC13 and the @NCOA2014. In this paper, we investigate the effect of these changes in the pension age on the forecast OADP.
 
 The research presented in this paper contributes to the discussion by forecasting the age structure of the population, quantifying the effects of changing the pension age on financial burdens, and hence finding an appropriate pension age scheme which is economically viable for Australia. The analysis of economic impact of increasing pension age can be complicated. In this paper, we will focus on only one aspect: the impact on the burden of future working age generations.
 
-In this paper, we use the old aged dependency ratio (OADR\footnote{All abbreviations have been summarized in Appendix A.}) as a measure of the financial burden on the Australian workforce because a rise in the OADR will reduce the ability of working age population to finance pensions and health costs [@ARW07; @IGR02; @IGR07].  The OADR is defined as the ratio of the number of people aged over the pension age to the number of people of working age [@ARW07]. This can be expressed using the formula below:
+In this paper, we use the old aged dependency ratio as a measure of the financial burden on the Australian workforce because a rise in the OADR will reduce the ability of working age population to finance pensions and health costs [@ARW07; @IGR02; @IGR07].  The OADR is defined as the ratio of the number of people aged over the pension age to the number of people of working age [@ARW07]. This can be expressed using the formula below:
 \begin{equation}
   OADR=\frac{\text{number of people aged over pension age}}{\text{number of people aged 15 to pension age}}*100%
 \end{equation}
-We provide forecasts of future population age structures over the next 50 years. We then use those projections to compute the OADR associated with pension age both before and after the adjustments. One contribution of the current study is the combined use of the Hyndman-Ullah forecasting method [@HU07] and the product-ratio method [@HBY13] to forecast a population age structure.  Forecasts of population structure have been built on forecasts of age and gender-specific mortality rates, fertility rates and net migration using this method. These forecasts presuppose that the historical trends of past years will continue. Historical data of those rates have thus been used as input to simulate future paths of age and gender-specific population structure.
+We provide forecasts of future population age structures over the next 50 years. We then use those forecasts to compute the OADR associated with pension age both before and after the adjustments. One contribution of the current study is the combined use of the Hyndman-Ullah forecasting method [@HU07] and the product-ratio method [@HBY13] to forecast a population age structure.  Forecasts of population structure have been built on forecasts of age and gender-specific mortality rates, fertility rates and net migration using this method. These forecasts presuppose that the historical trends of past years will continue. Historical data of those rates have thus been used as input to simulate future paths of age and gender-specific population structure.
 
-Using these predicted population paths, we can calculate the average of OADR and predict the levels of old age dependency that correspond to different pension age schemes. By testing different pension age schemes, we aim to find the pension age with the desired OADR outcome. Therefore, other contributions of this research are (1) to examine the effect of adjusting pension ages by comparing OADR before and after adjustment; and (2) to suggest a suitable pension age scheme to ensure that the economic burden will remain relatively constant at a desired level in the future. It should be noted that the desired level has been set at 21%, which is the estimated current level of OADR in 2014. This level was chosen because, while the current financial burden on tax payers is affordable, it is approaching the limits of affordability. However, whether or not the current level is the most appropriate level to Australia remains to be examined and it is not the focus of this paper. This paper concentrates on providing a framework for policy makers to find a target pension age for a given desired level of OADR.
+Using these predicted population paths, we can calculate the average OADR and predict the levels of old age dependency that correspond to different pension age schemes. By testing different pension age schemes, we aim to find the pension age with the desired OADR outcome. Therefore, other contributions of this research are (1) to examine the effect of adjusting pension ages by comparing OADR before and after adjustment; and (2) to suggest a suitable pension age scheme to ensure that the economic burden will remain relatively constant at a desired level in the future. It should be noted that the desired level has been set at 21%, the estimated level of OADR in 2014. Whether this OADR level is the most appropriate level for Australia remains to be examined and is not the focus of this paper. This paper concentrates on providing a framework for policy makers to find a target pension age for a given desired level of OADR.
 
-Some may argue that using OADR as a measure of financial burden for the next generation could be biased, with a large number of retirees able to rely on self-financed retirement income, such as superannuation. However, 80% of Australians over pension age fully or partly rely on the age pension [@Power14]. Therefore, the proportion of people over working age is still a good representation of financial burden on future working generations.  Nevertheless, using OADR as a single measurement of financial burden may overlook some important economic factors. @HY12 have suggested the use of an adjusted OADR that takes account of some of these factors in analyzing pension finance [@HY12]. This paper emphasizes how to undertake a better forecasting of economic burden for a given policy rather than the better choice of measurements. Therefore, the simple version of OADR was chosen to illustrate my approach (i.e., without adjustment). There is a ground to extend the approach to incorporate more complex measurement which takes into account of other important economic factors.
+Some may argue that using OADR as a measure of financial burden for the next generation could be biased, with a large number of retirees able to rely on self-financed retirement income, such as superannuation. However, 80% of Australians over pension age rely fully or partly on the age pension [@Power14]. Therefore, the proportion of people over working age is still a good representation of financial burden on future working generations.  Nevertheless, using OADR as a single measurement of financial burden may overlook some important economic factors, and @HY12 have suggested the use of an adjusted OADR that takes account of some of these factors in analyzing pension finance. We do not consider these here. Our approach is intended to illustrate how population forecasting can be used to explore the pension age issue in a simple context, and it could be extended to take into account other variables.
 
-Furthermore, choosing the right model to forecast population age structure was another important step involved in the quantification process. I chose to combine the Hyndman-Ullah method and product-ratio method for the forecast. The combination of those two methods overcomes some of shortcomings of other popular demographic forecasting methods such as the Lee-Carter method [@LC92] or the deterministic methods used by the Australian Bureau of Statistics [@ABS06; @ABS12]. More details on forecasting methods are given in later sections.
-
-The empirical analysis presented in this paper shows the adjustment of the pension age announced in 2009 was effective in reducing the financial burden to the desired level, which was set at current OADR-21%. However, it has been argued that a one-time adjustment is not sufficient to ensure a stable OADR in the long term. Therefore, this paper recommends consistently reviewing the pension age according to the presented statistical approach. This approach has been used to calculate the target pension age from now until 2060 and its 80% confidence interval. The target pension age found in this research increases to 67 by 2023, 70 by 2032 and 75 by 2058. This generates a stable OADR of around 21%. The rate of growth in the pension age as proposed by the government in 2014 is slightly lower than the target pension age found in this study, which suggests that the government may need to slightly accelerate the growth of the pension age to maintain an OADR at the current level.
-
-The remainder of this paper proceeds as follows. Section 2 reviews key literature on population forecasting and background works on the pension age. Section 3 describes the data and methods used in this study. Section 4 discusses the empirical results of this research, and outlines accuracy tests performed on the empirical results. Finally, Section 6 gives concluding remarks as well as identifies the scope for future research.
+The remainder of this paper proceeds as follows. Section \@ref(sec:litreview) reviews key literature on population forecasting and the pension age in Australia. Section \@ref(sec:data) describes the data and modelling framework we use in this study.  We show how our framework can be used to estimate a pension age scheme that leads to a target OADR in Section \@ref(sec:target). Finally, Section \@ref(sec:conclusions) gives concluding remarks as well as identifies the scope for future research.
 
 
-# Background and Literature Review
+# Background and Literature Review {#sec:litreview}
 
-## Background on Australian Age Pension
+## The age pension in Australia
 
 Age pension in Australia is an income support and provides access to a range of concessions for older Australians who have passed means testing. For example, it provides single home-owners with a real income of \$13653 p.a and additional allowances to cover expenses such as rent or pharmaceuticals\footnote{The pension amount is adjusted every 6 months for inflation}. The means test ensures that retirees with enough personal savings will become ineligible for public provision by reducing the pension at fixed levels of pay as personal wealth increases. The age pension in Australia is very generous, even with the means test. For instance, a couple holding assets of more than one million dollars is still eligible for a partial age pension.
 
@@ -106,94 +102,8 @@ The Australian government is trying to take early intervention in relation to th
 
 In fact, all supportive arguments for increasing the pension age in Australia have only justified the need to increase the pension age. No justification on the pace or degree of the change has been provided. Also, the government has not disclosed the method it used to determine the new pension age. It is therefore not surprising that the adjustment of the pension age has been questioned by the public. A consistent method to determine the appropriate pension age would be more persuasive in general. For example, it is preferred by OECD countries that pension age should be linked to life expectancy [@OECD12]. There is a practical issue as to how to link life expectancy with pension ages given that there is no information on future mortality rates [@PC13]. @CEDA07 [p7] proposed directly linking pension age with life expectancy in the way that ``pension age should increase by approximately 50% of any increase in life expectancy''. However, using a ‘rule of thumb’ approach might not be ideal, as 50% of the change in life expectancy may not be a good adjustment to pension age in the long term. My study suggests an approach, linking the pension age with the the aged dependency ratio, based on forecasts of future mortality and fertility rates. My approach has the advantage that it can be used to justify the change in pension age and directly links the pension age with our ultimate goal of a stable financial burden for the public.
 
-## Mathematical Preliminaries 
 
-### Principal Component Analysis
-
-Principal component analysis (PCA) is the main estimation method used in population forecasting. It is essential for understanding the models introduced in the following sub-section. Therefore, a brief introduction of PCA is given here.
-
-Principal components analysis reorients multivariate data in a way that ensures that the first few dimensions (called components) summarize as much of the available information as possible [@LCG03]. More precisely, it uses an orthogonal transformation  to convert a set of possibly correlated variables into a set of linearly uncorrelated variables called \textit{principal components}. It is possible to reduce the dimensions (new uncorrelated variables) if substantial redundancy is present in the data set. The rearrangement of data allows researchers to decide ``how many principal components to retain for subsequent analysis, trading off simplicity (i.e., a small number of dimensions is easier to manage) against completeness (i.e., a large number of dimensions captures a greater amount of available information)'' [@LCG03, p83].
-
-The mathematical derivation of PCA is explained in detail by @LCG03. I have summarized the main ideas here. In PCA, the objective is to find a linear combination of original data with maximum variance, because the aim is to derive the component (which is the new variable after linear transformation) that summarizes as much information as possible. Suppose we have an $m\times n$ matrix $\bm{X}$ that contains $m$ observations of $n$ variables (dimensions) with a rank of $k$. If we denote linear combinations by the matrix $\bm{U}=[\bm{u_1},\bm{u_2},\bm{u_3},\dots,\bm{u_k}]$ where $\bm{u_i}=(u_{1i},u_{2i},u_{3i},\dots,u_{ni})'$ and denote the matrix of principal component scores by $\bm{Z}=[\bm{z_1},\bm{z_2},\bm{z_3},\dots,\bm{z_k}]$ where $\bm{z_i}=(z_{1i},z_{2i},z_{3i},\dots,z_{mi})'$
-, then our goal is to choose $\bm{u_i}$ to maximize the variance of the elements of $\bm{z_i}=\bm{X}\bm{u_i}$, which can be written as:
-\begin{equation} 
-  var(\bm{z_i})=\frac{1}{m-1}\bm{u_i}' \bm{X}' \bm{X}\bm{u_i}.
-\end{equation}
-This maximization will ensure that first principal component $\bm{z_1}$ captures the most information (variance) in the original data and every subsequent principal component captures the most information in the remaining variance. However, this maximization does not have a unique solution because the magnitude of $\bm{u}$ is arbitrary, thereby making $var(\bm{z_i})$ infinity. To achieve the maximization, we impose a constraint of unit magnitude on the vector $\bm{u_i} ~\forall i$. Thus, the completed maximization problem is as follows:
-\begin{equation}
-  \text{choose~} \bm{u} \text{~to maximize~} \frac{1}{m-1}\bm{u}' \bm{X}' \bm{X}\bm{u}
-\end{equation}
-subject to the constraint $\bm{u}'\bm{u} =1$.
-
-We can solve this constrained optimization problem using the Lagrangian multiplier method (see @LCG03 for a detailed mathematical proof). These authors demonstrate that the solved vectors $\bm{z_i}$ and $\bm{u_i}$ are eigenvectors of the matrices $\bm{X}\bm{X}'$ and $\bm{X}'\bm{X}$ respectively, and the corresponding Lagrangian multiplier $\lambda_i$ is the eigenvalue of $\bm{X}\bm{X}'$. The numbers $\lambda_1,\lambda_2,\dots\lambda_k$ are singular values of $\bm{X}$ and vectors $\bm{z_1},\bm{z_2},\dots,\bm{z_k}$ and $\bm{u_1},\bm{u_2},\dots,\bm{u_k}$ are right and left singular vectors. Also, it can be shown that $\lambda_i$ is equal to $var(\bm{z_i})$, which  implies that variance-covariance matrix of $\bm{Z}$ (denoted by $\Sigma$) is  a diagonal matrix with $\Sigma_{ii}=\lambda_i$. Therefore, the vector $\bm{z}$ associated with largest $\lambda$ is the first principal component, which capture the most variance in original data.
-
-The relationship $\bm{z_i}=\bm{X}\bm{u_i}$ can be written in matrix form as follows:
-\begin{equation}
-  \bm{Z}=\bm{X}\bm{U}
-\end{equation}
-With a little algebra, we can rearrange the above equation to express $\bm{X}$ as a function of $\bm{Z}$. We post multiplying $\bm{U}'$ of both sides (note that we have $\bm{U}\bm{U}'=\bm{I}$ because of the mutual orthogonality of eigenvectors) and the new equation is as follows:
-\begin{equation}
-  \bm{X}=\bm{Z}\bm{U}'
-\end{equation}
-Further, we can express $\bm{X}$ as a function of standardized matrix of principal components (denoted $\bm{Z_s}$) by decomposing $\bm{Z}$ into $\bm{Z^s}\Sigma^{1/2}$. Then, the equation becomes:
-\begin{equation}
-  \bm{X}=\bm{Z^s}\Sigma^{1/2}\bm{U}'
-\end{equation}
-Alternatively, it can be expressed as:
-\begin{equation}
-  \bm{X}=\bm{z^s_1}\sqrt{\lambda_1}\bm{u_1}'+\bm{z^s_2}\sqrt{\lambda_2}\bm{u_2}'+\dots+\bm{z^s_k}\sqrt{\lambda_k}\bm{u_k}'
-\end{equation}
-This way of expressing $\bm{X}$ is known as a singular value decomposition (SVD). It indicates that any data matrix $\bm{X}$ can be decomposed into three simpler matrices. $\bm{Z^s}$ is a standardized matrix of uncorrelated variables (each with unit variance), $\Sigma^{1/2}$ is a diagonal matrix which perform a stretching transformation of $\bm{Z^s}$ and $\bm{U}'$ performs an orthogonal rotation. Therefore, we can use singular value decomposition to undertake a PCA.
-
-### ARIMA and ARFIMA Model
-
-ARIMA and ARIFMA are essential mathematical models that is required to understand to perform the population forecasting method. I give a brief introduction of them based on the work of @fpp.
-
-\subparagraph{AR($p$) model}
-Autoregression models forecast the dependent variable using a linear combination of its past values. An autoregression model the order of $p$ (referred as AR$(p)$ model) can be written as:
-\begin{equation}
-y_t=c+\phi_1y_{t-1}+\phi_2y_{t-2}+\dots+\phi_py_{p-1}+e_t
-\end{equation}
-where $c$ is a constant and $e_t$ is white noise.
-
-\subparagraph{MA(q) model}
-A moving average model supposes that the variable of interest can be explained by past forecast errors. It can be written as:
-\begin{equation}
-y_t=c+e_t+\theta_1e_{t-1}+\theta_2e_{t-2}+\dots+\theta_qe_{t-q}
-\end{equation}
-where $e_t$ is white noise.
-
-\subparagraph{Non-seasonal ARIMA models}  A non-seasonal ARIMA model is a combination of differencing, autoregression and moveing average models. ARIMA is an acronym for AutoRegressive Integrated Moving Average model. An ARIMA model can be written as:
-\begin{equation}
-  y_t' = c + \phi_1y_{t-1}' + \dots + \phi_py_{t-p}' + \theta_1e_{t-1} + \dots + \theta_qe_{t-q} + e_t
-\end{equation}
-where $y_t'$ is the differenced series, which is differenced $d$ times. This regression is referred to as an ARIMA($p,d,q$) model, where $p$ is the order of the auotoregression part; $d$ is the degree of first differencing and $q$ is the order of the moving average part.
-
-In fact, the AR($p$) and MA($q$) models are ARIMA ($p$,0,0) and ARIMA (0,0,$q$) models respectively.
-ARIMA models can be written in backshift notation (i.e.$By_t=y_{t-1}$) as follows:
-\begin{equation}
-  (1-\phi_1B-\dots-\phi_pB^p)(1-B)^dy_t=c+(1+\theta_1B+\dots+\theta_qB^q)e_t
-\end{equation}
-\subparagraph{ARFIMA model}
-We can allow $d$ in the ARIMA model to be fractional in order to capture the long-memory property of some series. The ARIMA model with fractional differencing (i.e., $-\frac{1}{2}<d<\frac{1}{2}$) is called the ARFIMA model. The range $0<d<\frac{1}{2}$ gives long-memory process [@CM09].
-
-\subparagraph{Akaike's Information Criterion}
-
-AIC is a model-selection procedure which is useful to determine the order of an ARIMA model.
-It can be written as:
-\begin{equation}
-  AIC=-2log(L)+2(p+q+k+1)
-\end{equation}
-where $L$ is the likelihood of the data, $k=1$ if $c\neq0$ and $k=0$ if $c=0$.
-
-For ARIMA models, the corrected AIC [@fpp] can be written as
-\begin{equation}
-  AIC_c=\frac{AIC+2(p+q+k+1)(p+q+k+2)}{T-p-q-k-2}
-\end{equation}
-where the correction is to reduce small sample bias.
-The ARIMA model with minimum AIC or minimum $AIC_c$ is the optimal model. I prefer to use $AIC_c$ to reduce sample bias in this research.
-
-## Literature Review on Population forecasting methods
+## Population forecasting
 
 In population forecasting, two very different approaches: a deterministic approach (sometimes called a quasi-statistical approach) and a stochastic approach (a purely statistical approach) are frequently used. For instance, the Australian Bureau of Statistics is using a deterministic approach for its demographic projection, while some other countries or institutes forecast demographic trends based on purely statistical approaches such as Statistics New Zealand and the United States Census Bureau. In the deterministic approach, experts project future demographic changes using judgement-based scenarios. It ignores the non-demographic factors such as major pandemics or wars, although historically they are important factors that affect demographic behaviour [@PC13]. In stochastic approaches, the Lee-Carter (LC) method [@LC92] is the most prominent demographic forecasting method, which now has several variants and extensions that relax some of the assumptions of the basic Lee-Carter method. Although statistical forecasting models are rigorous, they still leave a basis for judgment-based adaptation, as they sometimes produce unrealistic projections of demographic factors such as long-run projections of mortality rates [@PC13].
 
@@ -251,9 +161,7 @@ where $\hat{\beta}_{n+h\mid n,j}$ denotes the $h$-step-ahead forecast of $\beta_
 where the parameters are estimated using maximum likelihood estimation.
 
 
-# Data and Methodology
-
-## Data
+# Data {#sec:data}
 
 We use the same notation and similar procedures to construct data as [@HB08], because the fundamental model for forecasting population for this study is the Hyndman and Ullah method. The data used to construct population age structure included: age and gender-specific birth and death numbers of each calendar year, age and gender-specific population members on 1\ January of each year, and age and gender-specific exposures to risk (i.e., population of age $x$ at 30 June) for each year. The notations are as follows:
 \begin{align*}
@@ -280,14 +188,13 @@ where $G_t(x,x+1)$ refers to net migration in calendar year $t$ of persons aged 
 
 Historical central death rates and start-year and mid-year populations of residents in Australia by sex and age in single years for age group 0-99 and 100+ have been sourced from the @HMD for 1921--2009. The start-year population for 2010 is also used to estimate net migration. Data for age-specific annual fertility rates by single years of age for 15-49 over the period 1950-2009 was obtained from the @ABS12. Even though annual mortality rates are available from 1921 to 2009, only data collected after 1950 is used for two reasons. First, the period between 1921-1950 has very different mortality patterns from later years because of wars and epidemics [@HB08]. Since the model for this study is valid under the assumption that extrapolative methods can be used, it seemed best to delete the less relevant data, which might influence estimations of parameters if we include them. Secondly, fertility rates are only available from 1950, so the mortality rate was cut to fit the same period.
 
-## Methodology
-
-### Forecasting Population Age Structure and OADR
+## Forecasting Population Age Structure and OADR {#sec:forecasting}
 
 In this study, three steps were taken to simulate OADR associated with a specific pension age scheme. A stochastic functional model was applied to five components of population change: female mortality rates, male mortality rates, female net migration, male net migration and fertility rates to simulate these five components over the prediction horizon (which is 50 years in this study). Age and gender-specific population paths over the prediction horizon were simulated using the demographic growth-balance equation. The Monte Carlo simulation method was used consistently in this research. Finally, calculation of OADR associated with a specific pension age scheme was performed by applying the OADR formula. Even though the process seems complicated, it is relatively resy to implement using \textit{R}. The detailed explanation of each step is as follows. The corresponding R code is attached in Appendix B.
 
+###Step 1 {-}
 
-\subparagraph{Step 1}The main procedure for forecasting the population age structure follows @HB08, except that the data is updated, and we incorporate the product-ratio method [@HBY13] to improve the accuracy of the forecast. The @HU07 model, introduced in section 2.3.2, is applied to the mortality rate, fertility rate and net migration separately, based on the assumption that they behave independently. Therefore, to fit the model to historical fertility rates, the $y_t(x)$ in equation (16) denotes the observed historical fertility data. However, for mortality rate by sex, the product-ratio method is used to ensure the forecast of females and males are non-divergent or coherent [@HBY13]. In the product-ratio method, after smoothing the female and male mortality rates, two other series were created: product series (denoted by $p_t(x)$) and ratio series (denoted by $r_t(x)$), which are defined as follows:
+The main procedure for forecasting the population age structure follows @HB08, except that the data is updated, and we incorporate the product-ratio method [@HBY13] to improve the accuracy of the forecast. The @HU07 model, introduced in section 2.3.2, is applied to the mortality rate, fertility rate and net migration separately, based on the assumption that they behave independently. Therefore, to fit the model to historical fertility rates, the $y_t(x)$ in equation (16) denotes the observed historical fertility data. However, for mortality rate by sex, the product-ratio method is used to ensure the forecast of females and males are non-divergent or coherent [@HBY13]. In the product-ratio method, after smoothing the female and male mortality rates, two other series were created: product series (denoted by $p_t(x)$) and ratio series (denoted by $r_t(x)$), which are defined as follows:
 \begin{align*}
   p_t(x)=\sqrt{s_{t,M}(x)s_{t,F}(x)},
   r_t(x)=\sqrt{\frac{s_{t,M}(x)}{s_{t,F}(x)}}
@@ -306,10 +213,13 @@ m_{n+h\mid n,F}(x)&=p_{n+h\mid n}(x)/r_{n+h\mid n}(x)
 \end{align*}
 The method for simulating $h$-step-ahead values of net migration by sex is similar to the above method used on mortality rates except no log scale is applied to net migration. A stationary constraint was imposed on the ARIMA model for net migration to make sure the difference between sexes did not diverge.
 
-\subparagraph{Step 2} After simulating paths for age-specific fertility rate, age and gender-specific mortality rate and age and gender-specific net migration, future population value were simulated using the demographic growth-balance equations over the prediction horizon. The future deaths and births in this equation are assumed to follow Poisson distribution, with parameters as a function of future mortality and fertility rates (see Hyndman and Booth, 2008 for the details of the functions). Hence, we can simulate $h$-step-ahead age and gender-specific births and deaths based on simulated mortality and fertility rates. According to the demographic growth-balance equation, one-step-ahead net migrations, deaths, births and population in the last year were simulated, allowing for the generation of one-step-ahead population predictions by sex and age. This simulation was repeated for years $t=n+1,\dots,n+h$ to obtain a path of population. The process was repeated and simulated $i$ paths of population based on Monte Carlo simulation method were created (we set $i=1000$ in these research). It should be noted that there are three types of randomness in the simulation: randomness from the second equation in the Hyndman-Ullah specification (i.e., $e_t(x)$ in equation (17)), randomness from the ARIMA model fitted to principal component scores and randomness from the Poisson distribution. It should be noted that the simulated population will be an array with 3 dimensions: age, year and simulation.
+### Step 2 {-}
 
+After simulating paths for age-specific fertility rate, age and gender-specific mortality rate and age and gender-specific net migration, future population value were simulated using the demographic growth-balance equations over the prediction horizon. The future deaths and births in this equation are assumed to follow Poisson distribution, with parameters as a function of future mortality and fertility rates (see Hyndman and Booth, 2008 for the details of the functions). Hence, we can simulate $h$-step-ahead age and gender-specific births and deaths based on simulated mortality and fertility rates. According to the demographic growth-balance equation, one-step-ahead net migrations, deaths, births and population in the last year were simulated, allowing for the generation of one-step-ahead population predictions by sex and age. This simulation was repeated for years $t=n+1,\dots,n+h$ to obtain a path of population. The process was repeated and simulated $i$ paths of population based on Monte Carlo simulation method were created (we set $i=1000$ in these research). It should be noted that there are three types of randomness in the simulation: randomness from the second equation in the Hyndman-Ullah specification (i.e., $e_t(x)$ in equation (17)), randomness from the ARIMA model fitted to principal component scores and randomness from the Poisson distribution. It should be noted that the simulated population will be an array with 3 dimensions: age, year and simulation.
 
-\subparagraph{Step 3} Even though the OADR is a simple function of the population age structure and pension age, the formula can't be directly applied to the simulated population array because the pension age changes over time. To overcome this problem, we assume that the pension age can only be adjusted at the beginning of a year for these calculations. Therefore, one pension age is applicable for a whole year and hence OADR is generated at the beginning of each year to show the trend. I will show the process of obtaining a one-step-ahead OADR (i.e., forecast of OADR in year 2011), given a specific pension age. The same method can be applied to all years over the prediction horizon, given their corresponding pension age. Further, the fractional pension age causes practical issues in calculating OADR, since ages are recorded as integers. I will also show how this issue was handled in the example below.
+### Step 3 {-}
+
+Even though the OADR is a simple function of the population age structure and pension age, the formula can't be directly applied to the simulated population array because the pension age changes over time. To overcome this problem, we assume that the pension age can only be adjusted at the beginning of a year for these calculations. Therefore, one pension age is applicable for a whole year and hence OADR is generated at the beginning of each year to show the trend. I will show the process of obtaining a one-step-ahead OADR (i.e., forecast of OADR in year 2011), given a specific pension age. The same method can be applied to all years over the prediction horizon, given their corresponding pension age. Further, the fractional pension age causes practical issues in calculating OADR, since ages are recorded as integers. I will also show how this issue was handled in the example below.
 
 Suppose the pension age for $n+1$ is $a.r$ where $a$ is the integer and and $r$ is the reminder of pension age. Recall that for $h=1$, we can express the simulated population paths as a matrix with age in the row and simulation in the column as follows:
 \begin{equation}
@@ -372,36 +282,7 @@ OADR_{n+50,1} & \cdots\cdots &OADR_{n+50,1000}
 \right]
 \end{equation}
 
-
-### Finding the Target Pension Age Scheme
-
-The goal of this research is to keep the pension age low, as long as OADR is lower than or equal to the desired OADR level. According to the formula of OADR, OADR at a given time can be written as a function of pension age, when the population age structure is given. Suppose we denote pension age schemes over the prediction horizon by $\bm{PA}=[PA_{n+1},PA_{n+2},\dots,PA_{n+H}]$. The OADR function of pension age over the prediction horizon is denoted as $OADR_h(PA_{n+h})$ for $h=1,2,3,\dots,H$. There is a negative relationship between pension age and OADR. The negative relationship implies that the higher the pension age, the lower the OADR. Therefore, our goal becomes finding the minimum pension age which has an OADR lower than desired OADR level. Several practical issues need to be considered to achieve this goal. First, only simulated forecasting values of future OADR are available, so it is assumed that the mean value of the simulated OADR is a good estimate of true underlying OADR. Second, pension age cannot be increased by more than one within a year or decreased because either one of the two actions will force some retirees back to the workforce, which is unreasonable in practical applications. Therefore, the target pension age scheme $\bm{PA}^{target}$ can be defined in the following way:
-for $h=1,2,\dots,H$
-\begin{equation}
-\text{minimise~} PA_{n+h}  \text{~such that~} OADR_h(PA_{n+h})\leq OADR^{desired}
-\end{equation}
-\begin{align*}
-\text{subject to the constraint~} 0\leq PA_{n+h}-PA_{n+h-1}\leq 1
-\end{align*}
-In order to achieve this maximization subject to constraint, these calculations assume that the adjustment unit of pension age is one month for practical convenience. It is also supposed that the set starting value of pension age is at 65 for all years\footnote{Even though pension age for males and females is 65 and 64.5 respectively. The same pension age for males and females was set to simplify the calculations. This simplification is reasonable because the pension age will be same in 2017 onward.}, which is:
-\begin{align*}
-  \bm{PA}=[PA_{n+1},PA_{n+2},\dots,PA_{n+H}] = [65,65,\dots,65]
-\end{align*}
-We take the following algorithm:
-For $h=1,2,\dots,H$,
-we keep increasing pension age vector $[PA_{n+h},PA_{n+h+1},\dots,PA_{n+H}]$ by a month at a time, unless we find that
-\begin{align}
- OADR^{mean}_h(PA_{n+h})> OADR^{desired} \text{~or~} PA_{n+h}-PA_{n+h-1}\geq 1
-\end{align}
-where $OADR^{mean}_h(PA_{n+h})$ is the mean value of $h$-step-ahead forecast of OADR with a pension age at the time $n+h$ equal to $PA_{n+h}$.
-
-In addition to finding the target pension age based on the mean value of OADR, the aim is to find plausible pension age schemes that could give the desired OADR level. To be more specific, ``plausible'', means finding a range of pension age schemes that could possibly lead to the desired OADR, contained by 80% prediction intervals of simulated OADR. Because of the monotonic relationship between pension age and OADR, we only need to find the upper (lower) boundary of plausible pension age schemes, at which the upper (lower) limit of 80% prediction intervals of OADR is equal to the desired OADR level. Hence, any pension age scheme within those two boundaries is plausible. The range of plausible pension age schemes can be thought of as 80% confidence interval of pension age scheme where we are 80% sure that there will be a desired outcome. In other words, any pension age scheme outside the range is undesirable to use, because we are 80% certain that the corresponding OADR will deviate from the desired level of OADR.
-
-The algorithm to find the upper and lower boundary of plausible pension age schemes is similar to the algorithm to find the target pension age scheme, except that the mean value of OADR in equation (28) is replaced by the boundary of the 80% prediction interval. Mean is replaced by the upper (lower) limit of the 80% prediction interval to find upper (lower) boundary for pension age schemes.
-
-# Empirical Results
-
-## Forecast in Population Age Structure and OADR
+## Results
 
 ```{r getdata, cache=TRUE}
 ############################
@@ -584,6 +465,99 @@ autoplot(oadp.f$x) +
 Analysis was performed by first generating an OADR associated with a fixed pension age of 65 and an OADR associated with pension age scheme with approved change, gradually increasing the pension age from 65 to 67 by mid-2023. Even though the government might further increase the pension age in future, I kept the pension age at 67 from 2024 to see what would happen if no further action was taken. Figure \ref{fig:OADRat65} shows the mean forecast and prediction interval of the old aged dependency ratio with a pension age of 65, along with the historical OADR for 1920-2010. A strong positive trend was observed, which indicates an increasing burden on the next working-age generation if the pension age is fixed at 65. This is consistent with the prediction by inter-generation reports in 2002 [@IGR02] and in 2007 [@IGR07].  According to former Australian Treasurer @Costello04, this could be a result of better health care and low fertility rates. These two reasons could be regarded as permanent change and therefore a persistent trend. In addition, there is a big jump from actual data to predicted data. This jump is possibly a result of the Baby Boomers’ retirement. Those born in 1946, the start of the baby boom, would begin retiring in 2011 when the pension age was 65.
 
 Figure \ref{fig:OADRcurrent} presents a comparison of the mean forecast of OADR with the pension age equal to 65 and a pension age equal to the pension age scheme with approved change, along with comparison of both forecasts with desired level of OADR, which has been set at 21%. It should be noted that OADR corresponding to pension age scheme with approved change is approaching the desired level, which suggests that the approved change does achieve the aim of providing an affordable financial burden, at least for a moment. However, once the pension age reaches 67, the OADR of the pension scheme with approved adjustment grows at nearly same rate as the OADR of a pension age equal of 65. This is consistent with the idea that there is a persistent positive trend in OADR associated with a constant pension age, due to low fertility rates and better health care. Therefore, \ref{fig:OADRcurrent} demonstrates that the pension age scheme requires constant review to ensure a stable OADR over the long term. However, the questions of when the action needs to be taken and how much of an adjustment needs to be made remain to be answered. This answer will allow us to respond to the recent proposal of further increasing pension age to 70 by 2035.
+
+
+## Evaluating Forecast Accuracy {#sec:accuracy}
+
+Since all the results and implications are dependent on the forecast accuracy, it is important to evaluate the accuracy of our forecast. It is not valid to assess the model's fit in terms of historical data. We are concerned with how well a model performs on out-of-sample data, which is known but not used to fit the model. Therefore, we will use a Cross-Validation procedure (Hyndman and Athanasopoulos, 2013) to evaluate the accuracy of the models used in this paper.
+
+The logic of a Cross-Validation test is to use a portion of available data for fitting, and use the remaining data to test. Suppose we need $k$ years' observations to produce a reliable forecast\footnote{$k$ can't be too small}, we are interested in the $F$ prediction horizon. Then we are allowed to repeat the test $n-F-k+1$ times, where $n$ is the number of total years of observation. The procedure is as follows:
+
+Let $i=1$, we first select historical data for a time interval of $[i,i+1,\dots,i+k-1]$ as "in sample data" to fit the model, and then forecast $H$ years' OADR\footnote{the OADR is generated based on a pension age equal to 65 for the purpose of test}. Then, we can calculate the difference of forecasted OADR over the period $[i+k,i+k+1,\dots,i+k+H-1]$ from the real OADR for the same period, which is known as absolute error. We repeat the following steps for $i=1,2,\dots,n-k-H+1$. Then, we can summary the information into a matrix as follows:
+\begin{equation}
+  \text{\textbf{Absolute Error}} = [\text{AE}_{h,i}] = 
+    \left[
+      \begin{array}{ccc}
+      \text{AE}_{1,1} & \cdots\cdots & \text{AE}_{1,n-k-H+1} \\
+      \vdots          & \ddots       & \vdots \\
+      \text{AE}_{H,1} & \cdots\cdots & \text{AE}_{H,n-k-H+1}
+      \end{array}
+    \right]
+\end{equation}
+where $h$ denotes for the forecast horizon and $\text{AE}_{h,i}=|OADR^{mean}_{h,i}-OADR^{real}_{h,i}|$. This process is also known as "rolling forecasting origin", because the "origin" ($k+i-1$) at which the forecast is based rolls forward in time. We take the average of each row to obtain an absolute mean error of $h$-step-ahead forecast of OADR  where $h=1,2,\dots,H$.
+
+```{r rollingtest, fig.cap="The mean absolute error of $h$-step-ahead forecast for $h=1,2,\\dots,25$.", warning=FALSE, message=FALSE, cache=TRUE}
+########Run a rolling forecast origin 
+t <- 2010-1950+1 
+H <- 25 ##forecast horizon for test
+k <- 25  ##years of data required to make a forecast
+oadrtest <- matrix(0,25,t-k-H)
+for (i in 1:(t-k-H))
+{
+  ausmort.short <- extract.years(ausmort.sm, years=1949+i+(0:(k-1))) 
+  ausfert.short <- extract.years(ausfert.sm, years=1949+i+(0:(k-1)))
+  ausmig.short <- extract.years(ausmig.sm, years=1949+i+(0:(k-1)))
+  pop.short <- extract.years(pop2010, years=1949+i+(0:k))
+  mort.fit.s <- coherentfdm(ausmort.short)
+  mortfs <- forecast(mort.fit.s , H)
+  fert.fit.s <- fdm(ausfert.short)
+  # Fix problem
+#  miss <- is.na(fert.fit.s$residuals$y)
+#  fert.fit.s$residuals$y[miss] <- 0
+  # End fix
+  fertfs <- forecast( fert.fit.s, H)
+  mig.fit.s <- coherentfdm(ausmig.short)
+  migfs <- forecast(mig.fit.s, H)
+  aus.sim.s <- pop.sim(mortfs, fertfs, migfs, firstyearpop=pop.short, N=3)
+  oadp.fs <- oadr(pop.short,aus.sim.s)
+  oadrtest[,i] <- oadp.fs$mean
+}
+oadrtest
+oadr.real<- oadr(pop2010,aus.sim)$x
+oadr.real.mat <- oadr.error <- matrix(NA, 25, 12)
+for(i in 1:25)
+  oadr.real.mat[i,] <- oadr.real[(i+59):(59+11+i)]
+
+oadr.error <- abs(oadrtest-oadr.real.mat[,1:11])
+oadrave <- apply(oadr.error,1,mean)
+oadrave
+               
+plot(oadrave,xlab="forecast horizon",ylab="mean ")
+
+
+
+```
+
+In our sample, $n=2010-1950+1=61$ and we set $k=25$ and $H=25$ to perform the test. The mean absolute error of $h$-step-ahead forecast of OADR for $h=1,2,\dots,25$ is shown in \ref{fig:rollingtest}. From this figure, we observe that the absolute mean error is increasing as $h$ increases, which is reasonable as we have less relevant information to make a forecast for further apart OADR. Overall, the mean absolute error is very small. For example, the mean absolute error for 25-step-ahead forecast is 1.5%, which is very small if compared to the desired level of OADR, which is at 21%.
+
+It would normally be ideal to compare the mean absolute error of the forecast from my model to other available models to measure the accuracy. For example, suppose we can take the population projections from ABS reports over the last few decades, their projection of population age structure reported in different years can be used to mimic the rolling origin test of OADR, because we now have the real OADR for those projected years. However, we are not able to actually perform it because full projection data is no longer available online and ABS projections have not used a consistent and replicate methodology.
+
+
+# Finding the Target Pension Age Scheme {#sec:target}
+
+The goal of this research is to keep the pension age low, as long as OADR is lower than or equal to the desired OADR level. According to the formula of OADR, OADR at a given time can be written as a function of pension age, when the population age structure is given. Suppose we denote pension age schemes over the prediction horizon by $\bm{PA}=[PA_{n+1},PA_{n+2},\dots,PA_{n+H}]$. The OADR function of pension age over the prediction horizon is denoted as $OADR_h(PA_{n+h})$ for $h=1,2,3,\dots,H$. There is a negative relationship between pension age and OADR. The negative relationship implies that the higher the pension age, the lower the OADR. Therefore, our goal becomes finding the minimum pension age which has an OADR lower than desired OADR level. Several practical issues need to be considered to achieve this goal. First, only simulated forecasting values of future OADR are available, so it is assumed that the mean value of the simulated OADR is a good estimate of true underlying OADR. Second, pension age cannot be increased by more than one within a year or decreased because either one of the two actions will force some retirees back to the workforce, which is unreasonable in practical applications. Therefore, the target pension age scheme $\bm{PA}^{target}$ can be defined in the following way:
+for $h=1,2,\dots,H$
+\begin{equation}
+\text{minimise~} PA_{n+h}  \text{~such that~} OADR_h(PA_{n+h})\leq OADR^{desired}
+\end{equation}
+\begin{align*}
+\text{subject to the constraint~} 0\leq PA_{n+h}-PA_{n+h-1}\leq 1
+\end{align*}
+In order to achieve this maximization subject to constraint, these calculations assume that the adjustment unit of pension age is one month for practical convenience. It is also supposed that the set starting value of pension age is at 65 for all years\footnote{Even though pension age for males and females is 65 and 64.5 respectively. The same pension age for males and females was set to simplify the calculations. This simplification is reasonable because the pension age will be same in 2017 onward.}, which is:
+\begin{align*}
+  \bm{PA}=[PA_{n+1},PA_{n+2},\dots,PA_{n+H}] = [65,65,\dots,65]
+\end{align*}
+We take the following algorithm:
+For $h=1,2,\dots,H$,
+we keep increasing pension age vector $[PA_{n+h},PA_{n+h+1},\dots,PA_{n+H}]$ by a month at a time, unless we find that
+\begin{align}
+ OADR^{mean}_h(PA_{n+h})> OADR^{desired} \text{~or~} PA_{n+h}-PA_{n+h-1}\geq 1
+\end{align}
+where $OADR^{mean}_h(PA_{n+h})$ is the mean value of $h$-step-ahead forecast of OADR with a pension age at the time $n+h$ equal to $PA_{n+h}$.
+
+In addition to finding the target pension age based on the mean value of OADR, the aim is to find plausible pension age schemes that could give the desired OADR level. To be more specific, ``plausible'', means finding a range of pension age schemes that could possibly lead to the desired OADR, contained by 80% prediction intervals of simulated OADR. Because of the monotonic relationship between pension age and OADR, we only need to find the upper (lower) boundary of plausible pension age schemes, at which the upper (lower) limit of 80% prediction intervals of OADR is equal to the desired OADR level. Hence, any pension age scheme within those two boundaries is plausible. The range of plausible pension age schemes can be thought of as 80% confidence interval of pension age scheme where we are 80% sure that there will be a desired outcome. In other words, any pension age scheme outside the range is undesirable to use, because we are 80% certain that the corresponding OADR will deviate from the desired level of OADR.
+
+The algorithm to find the upper and lower boundary of plausible pension age schemes is similar to the algorithm to find the target pension age scheme, except that the mean value of OADR in equation (28) is replaced by the boundary of the 80% prediction interval. Mean is replaced by the upper (lower) limit of the 80% prediction interval to find upper (lower) boundary for pension age schemes.
 
 ## Plausible Pension Age Schemes
 
@@ -808,83 +782,18 @@ However, it is interesting to note that the proposed pension age scheme does not
 Using the approach suggested in this paper, the target pension age associated with desired OADR equal to current level plus 1% has been found. We have shown the comparison of it and its 80% confidence level with real pension age scheme in Figure \ref{ComparisonwithOADR22}. When we allow 1% more in desired OADR, the real pension age becomes plausible. Figure \ref{OADR_realpensionage} shows simulated OADR associated with proposed pension age scheme\footnote{Since we don't know the change rate set by government for 2023-2035, we assume it follows increase rate for 2017-2023, which increase half year pension age in every two years}. It confirms that OADR is stable around a level higher than current level of OADR before 2035. This results suggest that pension age scheme with proposed change could be suitable if the government are targeting a slightly higher financial pressure than current level.
 
 
-
-## Evaluating Forecast Accuracy
-
-Since all the results and implications are dependent on the forecast accuracy, it is important to evaluate the accuracy of our forecast. It is not valid to assess the model's fit in terms of historical data. We are concerned with how well a model performs on out-of-sample data, which is known but not used to fit the model. Therefore, we will use a Cross-Validation procedure (Hyndman and Athanasopoulos, 2013) to evaluate the accuracy of the models used in this paper.
-
-The logic of a Cross-Validation test is to use a portion of available data for fitting, and use the remaining data to test. Suppose we need $k$ years' observations to produce a reliable forecast\footnote{$k$ can't be too small}, we are interested in the $F$ prediction horizon. Then we are allowed to repeat the test $n-F-k+1$ times, where $n$ is the number of total years of observation. The procedure is as follows:
-
-Let $i=1$, we first select historical data for a time interval of $[i,i+1,\dots,i+k-1]$ as "in sample data" to fit the model, and then forecast $H$ years' OADR\footnote{the OADR is generated based on a pension age equal to 65 for the purpose of test}. Then, we can calculate the difference of forecasted OADR over the period $[i+k,i+k+1,\dots,i+k+H-1]$ from the real OADR for the same period, which is known as absolute error. We repeat the following steps for $i=1,2,\dots,n-k-H+1$. Then, we can summary the information into a matrix as follows:
-\begin{equation}
-  \text{\textbf{Absolute Error}} = [\text{AE}_{h,i}] = 
-    \left[
-      \begin{array}{ccc}
-      \text{AE}_{1,1} & \cdots\cdots & \text{AE}_{1,n-k-H+1} \\
-      \vdots          & \ddots       & \vdots \\
-      \text{AE}_{H,1} & \cdots\cdots & \text{AE}_{H,n-k-H+1}
-      \end{array}
-    \right]
-\end{equation}
-where $h$ denotes for the forecast horizon and $\text{AE}_{h,i}=|OADR^{mean}_{h,i}-OADR^{real}_{h,i}|$. This process is also known as "rolling forecasting origin", because the "origin" ($k+i-1$) at which the forecast is based rolls forward in time. We take the average of each row to obtain an absolute mean error of $h$-step-ahead forecast of OADR  where $h=1,2,\dots,H$.
-
-```{r rollingtest, fig.cap="The mean absolute error of $h$-step-ahead forecast for $h=1,2,\\dots,25$.", warning=FALSE, message=FALSE, cache=TRUE}
-########Run a rolling forecast origin 
-t <- 2010-1950+1 
-H <- 25 ##forecast horizon for test
-k <- 25  ##years of data required to make a forecast
-oadrtest <- matrix(0,25,t-k-H)
-for (i in 1:(t-k-H))
-{
-  ausmort.short <- extract.years(ausmort.sm, years=1949+i+(0:(k-1))) 
-  ausfert.short <- extract.years(ausfert.sm, years=1949+i+(0:(k-1)))
-  ausmig.short <- extract.years(ausmig.sm, years=1949+i+(0:(k-1)))
-  pop.short <- extract.years(pop2010, years=1949+i+(0:k))
-  mort.fit.s <- coherentfdm(ausmort.short)
-  mortfs <- forecast(mort.fit.s , H)
-  fert.fit.s <- fdm(ausfert.short)
-  # Fix problem
-#  miss <- is.na(fert.fit.s$residuals$y)
-#  fert.fit.s$residuals$y[miss] <- 0
-  # End fix
-  fertfs <- forecast( fert.fit.s, H)
-  mig.fit.s <- coherentfdm(ausmig.short)
-  migfs <- forecast(mig.fit.s, H)
-  aus.sim.s <- pop.sim(mortfs, fertfs, migfs, firstyearpop=pop.short, N=3)
-  oadp.fs <- oadr(pop.short,aus.sim.s)
-  oadrtest[,i] <- oadp.fs$mean
-}
-oadrtest
-oadr.real<- oadr(pop2010,aus.sim)$x
-oadr.real.mat <- oadr.error <- matrix(NA, 25, 12)
-for(i in 1:25)
-  oadr.real.mat[i,] <- oadr.real[(i+59):(59+11+i)]
-
-oadr.error <- abs(oadrtest-oadr.real.mat[,1:11])
-oadrave <- apply(oadr.error,1,mean)
-oadrave
-               
-plot(oadrave,xlab="forecast horizon",ylab="mean ")
-
-
-
-```
-
-In our sample, $n=2010-1950+1=61$ and we set $k=25$ and $H=25$ to perform the test. The mean absolute error of $h$-step-ahead forecast of OADR for $h=1,2,\dots,25$ is shown in \ref{fig:rollingtest}. From this figure, we observe that the absolute mean error is increasing as $h$ increases, which is reasonable as we have less relevant information to make a forecast for further apart OADR. Overall, the mean absolute error is very small. For example, the mean absolute error for 25-step-ahead forecast is 1.5%, which is very small if compared to the desired level of OADR, which is at 21%.
-
-It would normally be ideal to compare the mean absolute error of the forecast from my model to other available models to measure the accuracy. For example, suppose we can take the population projections from ABS reports over the last few decades, their projection of population age structure reported in different years can be used to mimic the rolling origin test of OADR, because we now have the real OADR for those projected years. However, we are not able to actually perform it because full projection data is no longer available online and ABS projections have not used a consistent and replicate methodology.
-
-
-
-
-
-# Conclusions
+# Conclusions {#sec:conclusions}
 
 The ageing of population is expected to become a critical issue in Australia due to the increase in life expectancy and the retirement of baby boomers. The fiscal cost of the age pension is projected to sharply increase as a result. For the purpose of sustainability of the welfare system in Australia, the government has announced an increase in the pension age to 67 in 2023 and 70 in 2035 to reduce the financial burden on society.
 
 In this paper, I have suggested a statistical and demographic approach to address the issue. I attempt to quantify the effects of changes in the pension age on financial burdens using an old aged dependency ratio as a measure of financial burden on Australian society. The quantification process involves applying stochastic models to forecast future population age structure and then using those future age structure projections to find the most appropriate pension age scheme that will ensure stable old age dependency ratio around the desired level. To forecast population age structure, three demographic components of population were modelled separately using @HU07 functional time series method, with an extension of the product-ratio method [@HBY13]. Next, future age structures were used to simulate OADR associated with different pension age schemes until the minimum pension age scheme was found, which ensures the old age dependency ratio no greater than desired level. This approach is proposed to find target pension age scheme based on a given desired level of OADR.
 
 I undertake the approach based on assuming the desired level of OADR is at current level of 21%. Using the historical data from 1950 to 2010, the forecast of future populations suggests a substantial increase in total population, and confirms the inherent ageing trend. It was found that pension age should not be fixed, but instead should grow at a rate that will ensure a stable old aged dependency ratio at a level which can be affordable to Australians of working age. Findings indicate that the pension age scheme with proposed change was not too high, as it is still lower than the target pension age scheme and outside its confidence interval. It was concluded that the pension age set by government should be adjusted slight quicker to be in line with our target pension age, which ensures a stable OADR of around 21%.
+
+The empirical analysis presented in this paper shows the adjustment of the pension age announced in 2009 was effective in reducing the financial burden to the desired level, which was set at 21%. However, a one-time adjustment is not sufficient to ensure a stable OADR in the long term, due to ongoing changes in the population age structure. T
+
+herefore, we recommend consistently reviewing the pension age according to the presented statistical approach. This approach has been used to calculate the target pension age from now until 2060 and its 80% confidence interval. The target pension age found in this research increases to 67 by 2023, 70 by 2032 and 75 by 2058. This generates a stable OADR of around 21%. The rate of growth in the pension age as proposed by the government in 2014 is slightly lower than the target pension age found in this study, which suggests that the government may need to slightly accelerate the growth of the pension age to maintain an OADR at the current level.
+
 
 Although my results are promising, there are still grounds for further research. First, my research results are based on forecasts from one particular model. Further studies can apply the same approach but with different models of population forecasting, which allows for enhanced credibility of results. Moreover, my research addresses the issue from a purely demographic perspective. It is possible to include an economic perspective. For example, the economic implications of retaining older workers in workforce can be considered. Second, my research uses an old age dependency ratio as a single measurement of financial burden. Further research should allow the effect of other economic factors to be taken into account. For instance,
 the effect of growth in superannuation can be considered in a way that the effects of high OADR can be offset by the growth in superannuation.
