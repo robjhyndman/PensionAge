@@ -10,10 +10,10 @@ author:
   othernames: Yijun
   address: Monash University
 - familyname: Shang
-  othernames: Hanlin
+  othernames: Han Lin
   address: Australian National University
 abstract: "We forecast the old-aged dependency ratio for Australia under various pension age proposals, and estimate a pension age scheme that will provide a stable old aged dependency ratio at a specified level. Our approach involves a stochastic population forecasting method based on coherent functional data models for mortality, fertility and net migration, which we use to simulate future age-structures of the population. We apply these ideas to Australian historical demographic data and the results suggest that the pension age should be increased to 67 by 2021, 70 by 2032 and 75 by 2058 in order to maintain the old aged dependency ratio at the current level, which is 21%. This approach can easily be extended to other target levels of the old-aged dependency ratio and to other countries."
-keywords: "blah, blah"
+keywords: "functional time series model, coherent forecasts, demographic components, pension and insurance"
 wpnumber: no/yr
 jelcodes: C10,C14,C22
 blind: false
@@ -78,7 +78,7 @@ Currently, the age pension is the primary source of income for 70% -80% of Austr
 
 The ageing trend in Australia, along with retirees' dependence on the age pension, has dramatically increased the fiscal cost of the age pension. For instance, the fiscal cost of the age pension is currently around at 2.5% of Gross Domestic Profit (GDP), but is expected to increase to 4.4% by the 2050s (Australian Government, 2007). The @PC13 also indicates the government will need to raise taxes by 21% to pay for extra aged care and health costs, which is caused by longer life expectancies in newer generations.
 
-The issue is not only a problem for the government, but also for future retirees. Given children born today are expected to live up to their 90s on average, the @PC13 suggests that Australians won't be able to afford to spend 35 years in retirement (i.e., retire around 65). They have predicted that a third of baby boomers are expected to spend all their money and assets before they die\footnote{Baby Boomers are people born during the Post-World War II baby boom between the years 1946 and 1964}. This problem might eventually deteriorate the sustainability of the age pension, although the welfare system works well at the moment, because demographic changes often have delayed effects [@IGR03].
+The issue is not only a problem for the government, but also for future retirees. Given children born today are expected to live up to their 90s on average, the @PC13 suggests that Australians won't be able to afford to spend 35 years in retirement (i.e., retire around 65). They have predicted that a third of baby boomers are expected to spend all their money and assets before they die\footnote{Baby Boomers are people born during the Post-World War II baby boom between the years 1946 and 1964}. This problem might eventually deteriorate the sustainability of the age pension, although the welfare system works well at the moment, because demographic changes often have delayed effects [@IGR02].
 
 ```{r changespension, echo=FALSE, fig.cap="Government's adjustments on pension age scheme.", fig.height=4, fig.width=8, message=FALSE, warning=FALSE}
 year <- 2065 - 2007
@@ -154,7 +154,7 @@ We chose $J$ in a way that we believe the majority of information for $s_t(x)-\m
 
 In terms of forecasting, by conditioning on the observed data $\bm{I}=\left\{{y_1(x),\dots,y_n(x)}\right\}$ and the set of functional principal components $\bm{B}=\left\{{\phi_1(x),\phi_2(x),\dots,\phi_j(x)}\right\}$, the $h$-step-ahead forecast of log rate $y_{n+h}(x)$ can be acquired by:
 \begin{equation}
-  \hat{y}_{n+h\mid n}(x)=\hat{s}_{n+h\mid n}(x) = \E[\hat{s}_{n+h\mid n}(x)\mid \bm{I, B}] = \hat{\mu}(x)+\sum_{j=1}^{J}\phi_j(x)\hat{\beta}_{n+h\mid n,j}
+  \hat{y}_{n+h\mid n}(x)=\hat{s}_{n+h\mid n}(x) = \text{E}[\hat{s}_{n+h\mid n}(x)\mid \bm{I, B}] = \hat{\mu}(x)+\sum_{j=1}^{J}\phi_j(x)\hat{\beta}_{n+h\mid n,j}
 \end{equation}
 where $\hat{\beta}_{n+h\mid n,j}$ denotes the $h$-step-ahead forecast of $\beta_{n+h\mid n,j}$. Because of the time-varying property of $\left\{\beta_{t,j}\right\}$, it controls the dynamics of the process. For every component series $\left\{\beta_{t,j}\right\}$, we fit them with an ARIMA$(p_j,d_j,q_j)$ process, where $p_j,d_j,q_j$ are determined by minimizing the Akaike Information Criterion (Booth, Hyndman \& Tickle, 2014). The fitted process as follows:
 \begin{equation}
@@ -202,8 +202,8 @@ The main procedure for forecasting the population age structure follows @HB08, e
 \end{align*}
 Then, @HU07 was applied to these two new variables instead of male and female mortality rate as follows:
 \begin{align*}
-  log[p_t(x)]=\mu_p(x)+\sum_{j=1}^{J}\beta_{t,j}\phi_j(x)+e_t(x)\\
-  log[r_t(x)]=\mu_r(x)+\sum_{l=1}^{L}\gamma_{t,l}\psi_l(x)+z_t(x)
+  \ln[p_t(x)]=\mu_p(x)+\sum_{j=1}^{J}\beta_{t,j}\phi_j(x)+e_t(x)\\
+  \ln[r_t(x)]=\mu_r(x)+\sum_{l=1}^{L}\gamma_{t,l}\psi_l(x)+z_t(x)
 \end{align*}
 where time series $\left\{\beta_{t,j}\right\}$ are fitted with an ARIMA model while $\left\{\gamma_{t,l}\right\}$ are fitted by stationary ARFIMA model (i.e., $d$ in ARIMA($p,d,q$) constrained to $0<d<\frac{1}{2}$). It is the stationary constraint on $\gamma_{t,l}$ that ensures the forecast of male and female do not diverge. Then, simulation h-step-ahead forecast values of product variable and ratio variable was performed (denoted by $p_{n+h\mid n}(x)$ and $r_{n+h\mid n}(x)$ respectively) according to equation (18) and (19). From here, obtaining h-step-ahead forecast of sex-specific coherent mortality rates (denoted $m_{n+h\mid n,M}(x)$ and $m_{n+h\mid n,F}(x)$) was performed using a back-transformation:
 \begin{align*}
@@ -239,11 +239,11 @@ When $r=0$, then the simulation of a population aged 15 to pension age is a subs
 \end{equation}
 To calculate the total number of working age, we take a column sum of the trimmed matrix (22). The simulations of total number of work age become a vector:
 \begin{equation}
-  \bm{p}^{work}_{n+1} = [\sum_{m=15}^{a-1}p_{m,1},\sum_{m=15}^{a-1}p_{m,2},\dots,\sum_{m=15}^{a-1}p_{m,1000}]
+  \bm{p}^{work}_{n+1} = \left[\sum_{m=15}^{a-1}p_{m,1},\sum_{m=15}^{a-1}p_{m,2},\dots,\sum_{m=15}^{a-1}p_{m,1000}\right]
 \end{equation}
 Using the same method, the simulations of total number of aged pensioners in the population can be shown as:
 \begin{equation}
-  \bm{p}^{aged}_{n+1}=[\sum_{m=a}^{100^+}p_{m,1},\sum_{m=a}^{100^+}p_{m,2},\dots,\sum_{m=a}^{100^+}p_{m,1000}]
+  \bm{p}^{aged}_{n+1} = \left[\sum_{m=a}^{100^+}p_{m,1},\sum_{m=a}^{100^+}p_{m,2},\dots,\sum_{m=a}^{100^+}p_{m,1000}\right]
 \end{equation}
 
 When $r\neq0$, the vector of total number of work age (23) is added, and the vecor of total number of aged population is subtracted with an adjustment:
@@ -285,11 +285,89 @@ The same algorithm is applied to the simulation matrix of the population age str
 ############################
 
 # HMD credentials
-username <- "rob.hyndman@buseco.monash.edu.au"
-password <- "Q234.,mnb"
+username <- "shl8858@telstra.com"
+password <- "hshang85"
+
+hmd.pop <- function (country, username, password, label = country) 
+{
+    path <- paste("https://www.mortality.org/hmd/", country, "/STATS/", 
+        "Population.txt", sep = "")
+    userpwd <- paste(username, ":", password, sep = "")
+    txt <- RCurl::getURL(path, userpwd = userpwd)
+    con <- textConnection(txt)
+    pop <- try(utils::read.table(con, skip = 2, header = TRUE, 
+        na.strings = "."), TRUE)
+    close(con)
+    if (class(pop) == "try-error") 
+        stop("Population file not found at www.mortality.org")
+    obj <- list(type = "population", label = label, lambda = 0)
+    obj$year = sort(unique(pop[, 1]))
+    n <- length(obj$year)
+    m <- length(unique(pop[, 2]))
+    obj$age <- pop[1:m, 2]
+    mnames <- names(pop)[-c(1, 2)]
+    n.pop <- length(mnames)
+    obj$pop <- list()
+    for (i in 1:n.pop) {
+        obj$pop[[i]] <- matrix(pop[, i + 2], nrow = m, ncol = n)
+        obj$pop[[i]][obj$pop[[i]] < 0] <- NA
+        dimnames(obj$pop[[i]]) <- list(obj$age, obj$year)
+    }
+    names(obj$pop) <- tolower(mnames)
+    obj$age <- as.numeric(as.character(obj$age))
+    if (is.na(obj$age[m])) 
+        obj$age[m] <- 2 * obj$age[m - 1] - obj$age[m - 2]
+    return(structure(obj, class = "demogdata"))
+}
+
+hmd.mx <- function (country, username, password, label = country) 
+{
+    path <- paste("https://www.mortality.org/hmd/", country, "/STATS/", 
+        "Mx_1x1.txt", sep = "")
+    userpwd <- paste(username, ":", password, sep = "")
+    txt <- RCurl::getURL(path, userpwd = userpwd)
+    con <- textConnection(txt)
+    mx <- try(utils::read.table(con, skip = 2, header = TRUE, 
+        na.strings = "."), TRUE)
+    close(con)
+    if (class(mx) == "try-error") 
+        stop("Connection error at www.mortality.org. Please check username, password and country label.")
+    path <- paste("https://www.mortality.org/hmd/", country, "/STATS/", 
+        "Exposures_1x1.txt", sep = "")
+    userpwd <- paste(username, ":", password, sep = "")
+    txt <- RCurl::getURL(path, userpwd = userpwd)
+    con <- textConnection(txt)
+    pop <- try(utils::read.table(con, skip = 2, header = TRUE, 
+        na.strings = "."), TRUE)
+    close(con)
+    if (class(pop) == "try-error") 
+        stop("Exposures file not found at www.mortality.org")
+    obj <- list(type = "mortality", label = label, lambda = 0)
+    obj$year <- sort(unique(mx[, 1]))
+    n <- length(obj$year)
+    m <- length(unique(mx[, 2]))
+    obj$age <- mx[1:m, 2]
+    mnames <- names(mx)[-c(1, 2)]
+    n.mort <- length(mnames)
+    obj$rate <- obj$pop <- list()
+    for (i in 1:n.mort) {
+        obj$rate[[i]] <- matrix(mx[, i + 2], nrow = m, ncol = n)
+        obj$rate[[i]][obj$rate[[i]] < 0] <- NA
+        obj$pop[[i]] <- matrix(pop[, i + 2], nrow = m, ncol = n)
+        obj$pop[[i]][obj$pop[[i]] < 0] <- NA
+        dimnames(obj$rate[[i]]) <- dimnames(obj$pop[[i]]) <- list(obj$age, 
+            obj$year)
+    }
+    names(obj$pop) = names(obj$rate) <- tolower(mnames)
+    obj$age <- as.numeric(as.character(obj$age))
+    if (is.na(obj$age[m])) 
+        obj$age[m] <- 2 * obj$age[m - 1] - obj$age[m - 2]
+    return(structure(obj, class = "demogdata"))
+}
+
 
 # Get population data for 1 Jan 2015
-auspop <- hmd.pop("AUS", username, password, "Australia")
+auspop <- hmd.pop(country = "AUS", username = username, password = password, label = "Australia")
 auspop <- extract.ages(auspop, age = 0:100)
 
 # Get mortality data
@@ -331,8 +409,10 @@ aus.fert$rate$female <- births / fpop
 aus.fert$pop$female <- fpop
 aus.fert$year <- 1921:2015
 
+aus.fert_v0 = extract.years(aus.fert, 1921:2014)
+
 ##### MIGRATION
-aus.mig <- netmigration(aus.mort, aus.fert, startyearpop = auspop, mfratio = 1.05)
+aus.mig <- netmigration(mort = aus.mort, fert = aus.fert_v0, mfratio = 1.05)
 ```
 
 ```{r smoothing, dependson='getdata'}
@@ -341,7 +421,7 @@ aus.mig <- netmigration(aus.mort, aus.fert, startyearpop = auspop, mfratio = 1.0
 ################################################
 
 ausmort.sm <- smooth.demogdata(aus.mort, obs.var = "theoretical")
-ausfert.sm <- smooth.demogdata(aus.fert, obs.var = "theoretical")
+ausfert.sm <- smooth.demogdata(aus.fert_v0, obs.var = "theoretical")
 ausmig.sm <- smooth.demogdata(aus.mig)
 ```
 
@@ -373,12 +453,13 @@ plot(fertf, "c", comp = 2)
 
 The first basis function $\phi_1(x)$ measures the different effects of the trend over time across ages. It indicates the general pattern of fertility has very little effect on females of age 15. This makes intuitive sense because most early pregnancies are accidental, therefore, any of previously discussed events has no effect on early pregnancies. In addition, there are two spikes in the first basic function, which suggests that the historical trend has a distinct impact on females aged around their 20s and 40s. Furthermore, the blue line is the fitted value of future coefficients (i.e., $\beta_{n+h,1}$, for $h=1,2,\dots,50$) and the yellow shading shows their 80% prediction interval according to the fitted ARIMA model of first coefficients $\left\{\beta_{t,1}\right\}$. Other terms further explain variation that has not been captured by first term, but less economic explanations can be given for them.
 
+
 ```{r simulation, dependson='models'}
 ############### SIMULATION STEP #################
 # This takes a while!
 set.seed(2019-01-04)
 nsim <- 20 # Change to 2000 or higher to get better estimates
-aus.sim <- pop.sim(mortf, fertf, migf, firstyearpop = auspop, N = nsim)
+aus.sim <- pop.sim(mort = mortf, fert = fertf, mig = migf, firstyearpop = auspop, N = nsim)
 ```
 
 ```{r simulationresults}
@@ -524,7 +605,8 @@ for (i in 1:(t - k - H))
   fertfs <- forecast(fert.fit.s, H)
   mig.fit.s <- coherentfdm(ausmig.short)
   migfs <- forecast(mig.fit.s, H)
-  aus.sim.s <- pop.sim(mortfs, fertfs, migfs, firstyearpop = pop.short, N = 3)
+  aus.sim.s <- pop.sim(mort = mortfs, fert = fertfs, mig = migfs, firstyearpop = pop.short, 
+                       N = 3)
   oadp.fs <- oadr(pop.short, aus.sim.s)
   oadrtest[, i] <- oadp.fs$mean
 }
