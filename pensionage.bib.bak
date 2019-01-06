@@ -1056,13 +1056,16 @@ volume = {13},
 year = {2005}
 }
 
-@Book{Swan2010,
-  title =     {{Australia to 2050: Future challenges}},
-  publisher = {Commonwealth of Australia},
-  year =      {2010},
-  author =    {Swan, Wayne},
-  address =   {Canberra},
-  url =       {http://archive.treasury.gov.au/igr/igr2010/}
+
+
+
+@BOOK{Swan2010,
+  title     = {Australia to 2050: future challenges},
+  author    = "Swan, Wayne",
+  publisher = "Commonwealth of Australia",
+  year      =  2010,
+  url       = "http://archive.treasury.gov.au/igr/igr2010/",
+  address   = "Canberra"
 }
 @article{TLB00,
 annote = {File 1474},
