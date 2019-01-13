@@ -905,15 +905,13 @@ year = {2001}
   note = {Commission Research Paper}
 }
 
-
-
-@BOOK{PC13,
-  title   = {An ageing Australia: preparing for the future},
-  author  = "{Productivity Commission}",
-  year    =  2013,
-  url     = "http://www.pc.gov.au/__data/assets/pdf_file/0005/129749/ageing-australia.pdf",
-  address = "Canberra, Australia",
-  note = {Commission Research Paper}
+@Book{PC13,
+  title =   {An ageing Australia: preparing for the future},
+  year =    {2013},
+  author =  {{Productivity Commission}},
+  address = {Canberra, Australia},
+  note =    {Commission Research Paper},
+  url =     {https://www.pc.gov.au/research/completed/ageing-australia}
 }
 @article{Pedroza06,
 annote = {File 0445},
@@ -1056,16 +1054,13 @@ volume = {13},
 year = {2005}
 }
 
-
-
-
-@BOOK{Swan2010,
-  title     = {Australia to 2050: future challenges},
-  author    = "Swan, Wayne",
-  publisher = "Commonwealth of Australia",
-  year      =  2010,
-  url       = "http://archive.treasury.gov.au/igr/igr2010/",
-  address   = "Canberra"
+@Book{Swan2010,
+  title =     {{Australia to 2050: Future challenges}},
+  publisher = {Commonwealth of Australia},
+  year =      {2010},
+  author =    {Swan, Wayne},
+  address =   {Canberra},
+  url =       {http://archive.treasury.gov.au/igr/igr2010/}
 }
 @article{TLB00,
 annote = {File 1474},
