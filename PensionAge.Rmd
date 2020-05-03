@@ -39,8 +39,8 @@ library(tidyverse)
 library(demography)
 #remotes::install_github("robjhyndman/addb")
 library(addb)
-library(kableExtra)
 library(patchwork)
+library(kableExtra)
 source("functions-v4.R")
 source("hmd.R")
 ```
@@ -79,26 +79,26 @@ The issue is not only a problem for the government, but also for future retirees
 
 ```{r changespension, echo=FALSE, fig.cap="Government's adjustments on pension age scheme.", fig.height=4, fig.width=8, message=FALSE, warning=FALSE}
 # Policies obtained from https://www.dss.gov.au/seniors/benefits-payments/age-pension
+# Law: https://guides.dss.gov.au/guide-social-security-law/3/4/1/10 
+# History: https://nationalseniors.com.au/news/campaign/a-short-history-of-the-age-pension-section
 pension_age <- tibble(
-    year = 2008:2068,
-    current = 65
+    Year = 1920:2068,
+    Current = 65
   ) %>%
   mutate(
-    proposed = pmin(70, current + 0.5*pmax(0, trunc((year - 2015)/2))),
-    approved = pmin(proposed, 67),
+    Proposed = pmin(70, Current + 0.5*pmax(0, trunc((Year - 2015)/2))),
+    Approved = pmin(Proposed, 67),
   ) %>%
-  pivot_longer(-year, values_to="age", names_to="policy")
+  pivot_longer(-Year, values_to="Age", names_to="Policy")
 
 pension_age %>%
-  filter(year <= 2050) %>%
-  ggplot(aes(x=year, y=age, group=policy)) +
-    geom_line(aes(col=policy)) +
-    xlab("Year") + ylab("Age of retirement") +
-    scale_color_manual(
-      values = c(current = "#1b9e77", approved = "#d95f02", proposed = "#7570b3"),
-      name = " ",
-      breaks = c("current", "approved", "proposed"),
-      labels = c("Pension age at 65", "Approved change", "Proposed further change")
+  filter(Year >= 2008, Year <= 2050) %>%
+  ggplot(aes(x=Year, y=Age, group=Policy, col=Policy)) +
+    geom_line() + 
+    ylab("Age of retirement") +
+    scale_color_brewer(palette="Dark2",
+      breaks = c("Proposed", "Approved", "Current"),
+      labels = c("Proposed further change",  "Approved change", "Pension age at 65")
     )
 ```
 
@@ -195,7 +195,7 @@ In addition, the net migration\footnote{Net migration is the difference between 
 \end{align*}
 where $G_t(x,x+1)$ refers to net migration in calendar year $t$ of persons aged $x$ at beginning of year $t$, $G_t(p-1^+,p)$ \todo{should it be $p^+$} refers to migration in calendar year $t$ of persons aged $p-1$ and older at beginning of year $t$, and $G_t(B,0)$ refers to deaths in calendar year $t$ of births during year $t$; and similarly for deaths, $D_t(x,x+1), D_t(p-1^+,p^+), D_t(B,0)$. The deaths are estimated using the standard life table approach of population projection. It should be noted that the estimated net migration includes errors in data recording.
 
-Historical central death rates and start-year and mid-year populations of residents in Australia by sex and age in single years for age group 0-99 and 100+ have been sourced from the @HMD for 1921--2014.\todo{Han has updated the data period.} The start-year population for 2015 is also used to estimate net migration. Data for age-specific annual fertility rates by single years of age for 15-49 over the period 1950-2014 was obtained from the @ABS12. Even though annual mortality rates are available from 1921 to 2014, only data collected after 1950 is used for two reasons. First, the period between 1921-1950 has very different mortality patterns from later years because of wars and epidemics [@HB08]. Since the model for this study is valid under the assumption that extrapolative methods can be used, it seemed best to delete the less relevant data, which might influence estimations of parameters if we include them. Secondly, fertility rates are only available from 1950, so the mortality rate was cut to fit the same period. 
+Historical central death rates and start-year and mid-year populations of residents in Australia by sex and age in single years for age group 0-99 and 100+ have been sourced from the @HMD for 1921--2014.\todo{Han has updated the data period.} The start-year population for 2015 is also used to estimate net migration. Data for age-specific annual fertility rates by single years of age for 15-49 over the period 1950-2014 was obtained from the @ABS12. Even though annual mortality rates are available from 1921 to 2014, only data collected after 1950 is used for two reasons. First, the period between 1921-1950 has very different mortality patterns from later years because of wars and epidemics [@HB08]. Since the model for this study is valid under the assumption that extrapolative methods can be used, it seemed best to delete the less relevant data, which might influence estimations of parameters if we include them. Secondly, fertility rates are only available from 1950, so the mortality rate was cut to fit the same period.
 
 ## Forecasting Population Age Structure and OADR {#sec:forecasting}
 
@@ -262,7 +262,7 @@ When $r\neq0$, the vector of total number of working age population in \eqref{eq
 \begin{equation}
   \text{adjustment}=0.r\times100\%[p_{a,1},p_{a,2},\dots,p_{a,1000}]
 \end{equation}
-This adjustment is based on the assumption that the birthday of population is uniformly distributed over the year. Then, $r\times100\%$ of population with a recorded integer age of $a$ at beginning of the year is actually younger than $a.r$, so they are still under the pension age. In other words, $(1-r\times100\%)$ of population with recorded integer age $a$ at beginning of the year is actually older than $a.r$, so they should be counted as the aged population. The simulation vectors of total work age population and total aged population should then be: 
+This adjustment is based on the assumption that the birthday of population is uniformly distributed over the year. Then, $r\times100\%$ of population with a recorded integer age of $a$ at beginning of the year is actually younger than $a.r$, so they are still under the pension age. In other words, $(1-r\times100\%)$ of population with recorded integer age $a$ at beginning of the year is actually older than $a.r$, so they should be counted as the aged population. The simulation vectors of total work age population and total aged population should then be:
 \begin{align*}
   \bm{p}^{\text{work}}_{n+1}
     & = \left[p^{\text{work}}_{n+1,1},p^{\text{work}}_{n+1,2},\dots,p^{\text{work}}_{n+1,1000}\right]\\
@@ -298,8 +298,8 @@ The same algorithm is applied to the simulation matrix of the population age str
 ################################################
 
 # Get population data to 1 Jan 2019
-auspop <- hmd.pop(country = "AUS", username = username, password = password, label = "Australia")
-auspop <- extract.ages(auspop, ages = 0:100)
+aus.pop <- hmd.pop(country = "AUS", username = username, password = password, label = "Australia")
+aus.pop <- extract.ages(aus.pop, ages = 0:100)
 
 # Get mortality data to 2018
 aus.mort <- hmd.mx("AUS", username, password, "Australia")
@@ -320,7 +320,7 @@ ausf <- readr::read_csv("FERTILITY_AGE_STATE_30042020143630412.csv") %>%
     Year = Time,
     Age = as.numeric(Age)
   ) %>%
-  select(Year, Age, Measure, Value) 
+  select(Year, Age, Measure, Value)
 # Extract births and population values
 newbirths <- ausf %>%
   filter(Measure == "Births") %>%
@@ -341,29 +341,30 @@ rownames(newbirths) <- rownames(newpop) <- 15:49
 # Use ABS data where available
 births <- cbind(births[, 1:54], newbirths)
 fpop <- cbind(aus.fert$pop$female[, 1:54], newpop)
-# Use populations in ausf rather than auspop to get the same rates
+# Use populations in ausf rather than aus.pop to get the same rates
 aus.fert$rate$female <- births / fpop
 aus.fert$pop$female <- fpop
 aus.fert$year <- 1920 + seq(NCOL(births))
 
 # Compute migration data
-aus.mig <- netmigration(mort = aus.mort, fert = aus.fert, startyearpop = auspop, mfratio = 1.05)
-save(aus.fert, aus.mort, aus.mig, file="ausdata.Rdata")
+aus.mig <- netmigration(mort = aus.mort, fert = aus.fert, startyearpop = aus.pop, mfratio = 1.05)
+save(aus.fert, aus.mort, aus.mig, aus.pop, file="ausdata.Rdata")
+rm(ausf,births,fpop,newbirths,newpop)
 ```
 
 ```{r maketibble}
 load("ausdata.Rdata")
 
 auspop_df <- bind_rows(
-  as_tibble(auspop$pop$male / 1000) %>%
+  as_tibble(aus.pop$pop$male / 1000) %>%
     mutate(
-      Age = auspop$age,
+      Age = aus.pop$age,
       Sex = "Male"
     ) %>%
     pivot_longer(c(-Age, -Sex), names_to = "Year", values_to = "Population"),
-  as_tibble(auspop$pop$female / 1000) %>%
+  as_tibble(aus.pop$pop$female / 1000) %>%
     mutate(
-      Age = auspop$age,
+      Age = aus.pop$age,
       Sex = "Female"
     ) %>%
     pivot_longer(c(-Age, -Sex), names_to = "Year", values_to = "Population"),
@@ -413,10 +414,8 @@ Both Figures \ref{fig:totalpopulationbyyears} and \ref{fig:totalpopulationin2034
 # This takes a while!
 set.seed(2020-05-02)
 nsim <- 20 # Change to 2000 or higher to get better estimates
-aus.sim <- pop.sim(mort = mortf, fert = fertf, mig = migf, firstyearpop = auspop, N = nsim)
-```
+aus.sim <- pop.sim(mort = mortf, fert = fertf, mig = migf, firstyearpop = aus.pop, N = nsim)
 
-```{r simtibble, dependson = 'simulation}
 # Combine simulation results into one tibble
 dimnames(aus.sim[["male"]]) <- dimnames(aus.sim[["female"]]) <- list(
   Age = dimnames(aus.sim[[1]])[[1]],
@@ -424,9 +423,9 @@ dimnames(aus.sim[["male"]]) <- dimnames(aus.sim[["female"]]) <- list(
   Rep = dimnames(aus.sim[[1]])[[3]]
 )
 aussim_df <- bind_rows(
-  as.tbl_cube(aus.sim[["male"]]/1e3, met_name = "Population") %>% 
+  as.tbl_cube(aus.sim[["male"]]/1e3, met_name = "Population") %>%
     as_tibble() %>% mutate(Sex = "Male"),
-  as.tbl_cube(aus.sim[["female"]]/1e3, met_name = "Population") %>% 
+  as.tbl_cube(aus.sim[["female"]]/1e3, met_name = "Population") %>%
     as_tibble() %>% mutate(Sex = "Female")
 )
 #rm(aus.sim)
@@ -439,6 +438,25 @@ future_pop <- aussim_df %>%
     Upper = quantile(Population, prob=0.9)
   ) %>%
   ungroup()
+# Historical data as a tibble
+history_pop <- bind_rows(
+  as_tibble(aus.pop$pop$male / 1000) %>%
+    mutate(
+      Age = aus.pop$age,
+      Sex = "Male"
+    ) %>%
+    pivot_longer(c(-Age, -Sex), names_to = "Year", values_to = "Population"),
+  as_tibble(aus.pop$pop$female / 1000) %>%
+    mutate(
+      Age = aus.pop$age,
+      Sex = "Female"
+    ) %>%
+    pivot_longer(c(-Age, -Sex), names_to = "Year", values_to = "Population"),
+  ) %>%
+  mutate(Year = as.numeric(Year))
+```
+
+```{r totalpopulationbyyears, fig.cap="Fifty-year forecasts of total population for each sex, along with 80% prediction intervals. The actually population from 1950 to 2015 is shown using circles.", fig.height=4, dependson='simulationresults'}
 future_tot_pop <- aussim_df %>%
   group_by(Rep, Sex, Year) %>%
   summarise(Population = sum(Population)/1e3) %>%
@@ -452,39 +470,19 @@ future_tot_pop <- aussim_df %>%
     Up80 = quantile(Population, prob=0.9)
   ) %>%
   ungroup()
-# Historical data as a tibble
-history_pop <- bind_rows(
-  as_tibble(auspop$pop$male / 1000) %>%
-    mutate(
-      Age = auspop$age,
-      Sex = "Male"
-    ) %>%
-    pivot_longer(c(-Age, -Sex), names_to = "Year", values_to = "Population"),
-  as_tibble(auspop$pop$female / 1000) %>%
-    mutate(
-      Age = auspop$age,
-      Sex = "Female"
-    ) %>%
-    pivot_longer(c(-Age, -Sex), names_to = "Year", values_to = "Population"),
-  ) %>%
-  mutate(Year = as.numeric(Year))
-history_tot_pop <- history_pop %>%
+history_pop %>%
   group_by(Sex, Year) %>%
-  summarise(Population = sum(Population)/1e3)
-```
-
-```{r totalpopulationbyyears, fig.cap="Fifty-year forecasts of total population for each sex, along with 80% prediction intervals. The actually population from 1950 to 2015 is shown using circles.", fig.height=4, dependson='simulationresults'}
-history_tot_pop %>% 
+  summarise(Population = sum(Population)/1e3) %>%
   ggplot(aes(x=Year, y=Population, group=Sex)) +
     geom_line(size=1) +
-    ylab("Population (millions)") + 
+    ylab("Population (millions)") +
     ggtitle("Total population") +
     facet_grid(. ~ Sex) +
     geom_ribbon(aes(y=Mean, ymin=Lo80, ymax=Up80), fill='#7d7def', data=future_tot_pop) +
-    geom_line(data=future_tot_pop, col='blue', mapping=aes(y=Mean), size=1) 
+    geom_line(data=future_tot_pop, col='#0000cc', mapping=aes(y=Mean), size=1)
 ```
 
-```{r totalpopulationin2034, fig.cap="Forecast population pyramid for 2034, along with 80% pointwise prediction intervals. The actual pyramid for 2015 is shown using dashed lines.", , dependson='simulationresults'}
+```{r totalpopulationin2034, fig.cap="Forecast population pyramid for 2034, along with 80% pointwise prediction intervals. The actual pyramid for 2015 is shown using dashed lines.", warnings=FALSE, dependson='simulationresults'}
 pyramid <- function(history, future) {
   data <- bind_rows(history, future)
   p_male <- data %>%
@@ -492,7 +490,7 @@ pyramid <- function(history, future) {
     ggplot(aes(x = Age, y = Population, group=Year)) +
       labs(y = "Population ('000)") +
       geom_ribbon(aes(x=Age, ymin=Lower, ymax=Upper, y=Mean), fill='#7d7def') +
-      geom_line(linetype=2) + geom_line(aes(y=Mean), col='blue') + 
+      geom_line(linetype=2) + geom_line(aes(y=Mean), col='#0000cc') +
       coord_flip() +
       scale_y_reverse(expand=c(0.012, 0.012)) +
       scale_x_continuous(expand=c(0.012,0.012)) +
@@ -502,7 +500,7 @@ pyramid <- function(history, future) {
     ggplot(aes(x = Age, y = Population, group=Year)) +
       labs(y = "Population ('000)") +
       geom_ribbon(aes(x=Age, ymin=Lower, ymax=Upper, y=Mean), fill='#7d7def') +
-      geom_line(linetype=2) + geom_line(aes(y=Mean), col='blue') + 
+      geom_line(linetype=2) + geom_line(aes(y=Mean), col='#0000cc') +
       coord_flip() +
       scale_y_continuous(expand=c(0.012,0.012)) +
       theme(axis.title.y.left=element_blank(),
@@ -510,53 +508,50 @@ pyramid <- function(history, future) {
         axis.ticks.y.left=element_blank()) +
       scale_x_continuous(position="top", sec.axis = sec_axis(~ .), expand=c(0.012,0.012)) +
       facet_grid(. ~ Sex)
-  
-  (p_male | p_female) 
+
+  (p_male | p_female)
 }
 pyramid(
   history_pop %>% filter(Year == max(Year)),
-  future_pop %>% filter(Year == max(history_pop$Year) + 20) 
+  future_pop %>% filter(Year == max(history_pop$Year) + 20)
 )
 ```
 
 Figure \ref{fig:totalpopulationin2034} shows the mean and the 80% pointwise prediction interval of simulated population paths for year 2034, along with the 2015 base population. It can be observed that overall population size is expected to increase substantially.  The uncertainty of population of infant is much higher than other ages, which reflects the higher forecast variation of fertility rates than mortality rates. The uncertainty of the young age population is mainly due to migration [@HB08].
 
 ```{r OADRat65, fig.cap="Fifty-year forecasts of the OADR with assumption of pension age equal to 65 for both sexes, along with 80% pointwise prediction interval.", dependson='simulationresults'}
-current <- pension_age %>% 
-  filter(policy=="current", year %in% unique(tot_pop$Year) ) %>% 
-  arrange(year) %>% pull(age)
-proposed <- pension_age %>% 
-  filter(policy=="proposed", year %in% unique(tot_pop$Year) ) %>% 
-  arrange(year) %>% pull(age)
-approved <- pension_age %>% 
-  filter(policy=="approved", year %in% unique(tot_pop$Year) ) %>% 
-  arrange(year) %>% pull(age)
-OADR.65 <- oadr(history, aussim_df, pension.age = current) %>% mutate(policy="Pension age 65")
+OADR_history <- oadr(history_pop, filter(pension_age, Policy=='Current'))
+OADR.65 <- oadr_sim(aussim_df, filter(pension_age, Policy=='Current')) %>%
+  mutate(Policy="Pension age 65")
 OADR.65 %>%
-  ggplot(aes(x=Year, y=OADP, group=Sex)) +
+  ggplot(aes(x=Year, y=OADR)) +
     geom_ribbon(aes(ymin=Lo, ymax=Hi), fill='#7d7def') +
-    geom_line(col='blue', size=1) +
-    facet_grid(. ~ Sex) +
+    geom_line(col='#0000aa', size=.75) +
+    geom_line(col='black', size=.75, data=OADR_history) +
     xlab("year") + ylab("ratio") +
     ggtitle("OADR forecasts with pension age=65")
 ```
 
 ```{r OADRcurrent, fig.cap="Fifty-year forecasts of the OADR associated with a pension age equal to 65 (green line) and equal to the pension age scheme with approved change (orange line) respectively, along with the desired OADR level in purple. The actual OADRs for 1950-2014 are shown in black.", dependson='OADRat65'}
-OADR.67 <- oadr(history, aussim_df, pension.age = approved) %>% 
-  mutate(policy="Current policy")
-OADR.prop <- oadr(history, aussim_df, pension.age = proposed) %>% 
-  mutate(policy="Proposed policy")
-bind_rows(OADR.65,OADR.67,OADR.prop) %>%
-  mutate(policy = factor(policy, 
-    levels = c("Pension age 65","Current policy","Proposed policy"))) %>%
-  ggplot(aes(x=Year, y=OADP, group=policy)) +
-    geom_ribbon(aes(ymin=Lo, ymax=Hi, fill=policy), alpha=0.5) +
-    geom_line(aes(col=policy), size=1) +
+df <- bind_rows(
+  OADR.65,
+  oadr_sim(aussim_df, filter(pension_age, Policy=='Approved')) %>%
+    mutate(Policy="Current policy"),
+  oadr_sim(aussim_df, filter(pension_age, Policy=='Proposed')) %>%
+    mutate(Policy="Proposed policy")
+) %>%
+  mutate(Policy = factor(Policy,
+    levels = c("Pension age 65","Current policy","Proposed policy")))
+df %>%
+  ggplot(aes(x=Year, y=OADR)) +
     geom_hline(yintercept = 0.21, col = "gray") +
-    facet_grid(. ~ Sex) +
+    geom_ribbon(aes(ymin=Lo, ymax=Hi, fill=Policy, group=Policy), alpha=0.5) +
+    geom_line(aes(col=Policy, group=Policy), size=.75) +
+    geom_line(col='black', size=.75, data=OADR_history) +
     xlab("year") + ylab("ratio") +
     ggtitle("OADR forecasts with pension age=65") +
-    scale_color_brewer(palette="Dark2") + scale_fill_brewer(palette="Dark2")
+    scale_color_brewer(palette="Dark2") +
+    scale_fill_brewer(palette="Dark2")
 ```
 
 Analysis was performed by first generating an OADR associated with a fixed pension age of 65 and an OADR associated with pension age scheme with approved change, gradually increasing the pension age from 65 to 67 by mid-2023. Even though the government might further increase the pension age in future, we kept the pension age at 67 from 2024 to see what would happen if no further action was taken. Figure \ref{fig:OADRat65} shows the mean forecast and pointwise prediction interval of the OADR with a pension age of 65, along with the historical OADR for 1921-2014. A strong positive trend was observed, which indicates an increasing burden on the next working-age generation if the pension age is fixed at 65. This is consistent with the prediction by inter-generation reports in 2002 [@IGR02] and in 2007 [@IGR07].  According to former Australian Treasurer @Costello04, this could be a result of better health care and low fertility rates. These two reasons could be regarded as permanent change and therefore a persistent trend. In addition, there is a big jump from actual data to predicted data. This jump is possibly a result of the Baby Boomers’ retirement. Those born in 1946, the start of the baby boom, would begin retiring in 2011 when the pension age was 65.
@@ -587,13 +582,13 @@ In our sample, $n=2014-1950+1=65$ and we set $k=25$ and $H=25$ to perform the te
 t <- 2014 - 1950 + 1
 H <- 25 ## forecast horizon for test
 k <- 25 ## years of data required to make a forecast
-oadrtest <- matrix(0, 25, t - k - H)
-for (i in 1:(t - k - H))
+rolling_sim <- NULL
+for (i in seq(t - k - H))
 {
     ausmort.short <- extract.years(ausmort.sm, years = 1949 + i + (0:(k - 1)))
     ausfert.short <- extract.years(ausfert.sm, years = 1949 + i + (0:(k - 1)))
     ausmig.short <- extract.years(ausmig.sm, years = 1949 + i + (0:(k - 1)))
-    pop.short <- extract.years(auspop, years = 1949 + i + (0:k))
+    pop.short <- extract.years(aus.pop, years = 1949 + i + (0:k))
     mort.fit.s <- coherentfdm(ausmort.short)
     mortfs <- forecast(mort.fit.s, H)
     fert.fit.s <- fdm(ausfert.short)
@@ -604,20 +599,40 @@ for (i in 1:(t - k - H))
     fertfs <- forecast(fert.fit.s, H)
     mig.fit.s <- coherentfdm(ausmig.short)
     migfs <- forecast(mig.fit.s, H)
-    aus.sim.s <- pop.sim(mort = mortfs, fert = fertfs, mig = migfs, firstyearpop = pop.short, 
-                         N = 3)
-    OADR.fs <- oadr(pop.short, aus.sim.s)
-    oadrtest[, i] <- OADR.fs$mean
+    aus.sim.s <- pop.sim(mort = mortfs, fert = fertfs, mig = migfs,
+                         firstyearpop = pop.short, N = 3)
+    # Combine simulation results into one tibble
+    dimnames(aus.sim.s[["male"]]) <-
+      dimnames(aus.sim.s[["female"]]) <-
+      list(
+        Age = dimnames(aus.sim.s[[1]])[[1]],
+        Year = dimnames(aus.sim.s[[1]])[[2]],
+        Rep = dimnames(aus.sim.s[[1]])[[3]]
+    )
+    rolling_sim <- bind_rows(
+      rolling_sim,
+      as.tbl_cube(aus.sim.s[["male"]]/1e3, met_name = "Population") %>%
+        as_tibble() %>% mutate(Sex = "Male", id=i),
+      as.tbl_cube(aus.sim.s[["female"]]/1e3, met_name = "Population") %>%
+        as_tibble() %>% mutate(Sex = "Female", id=i)
+    )
 }
-oadr.real <- oadr(auspop, aus.sim)$x
-oadr.real.mat <- oadr.error <- matrix(NA, 25, 15)
-for (i in 1:25)
-  oadr.real.mat[i, ] <- oadr.real[(i + 56):(56 + 14 + i)]
+```
 
-oadr.error <- abs(oadrtest - oadr.real.mat)
-oadrave <- apply(oadr.error, 1, mean)
-
-plot(oadrave, xlab = "forecast horizon", ylab = "mean", ylim = c(0, 0.02))
+```{r rmseplot, dependson="rollingtest"}
+oadr_rolling_sim(rolling_sim, 
+    filter(pension_age, Policy=='Approved')) %>%
+  group_by(id) %>%
+  mutate(h = row_number()) %>%
+  ungroup() %>%
+  select(Year, h, OADR) %>% 
+  rename(Forecast = OADR) %>%
+  left_join(OADR_history, by="Year") %>%
+  mutate(e = OADR-Forecast) %>%
+  group_by(h) %>%
+  summarise(RMSE = sqrt(mean(e^2))) %>%
+  ggplot(aes(x=h, y=RMSE)) +
+    geom_point()
 ```
 
 It would normally be ideal to compare the mean absolute error of the forecast from our model to other available models to measure the accuracy. For example, suppose we can take the population projections from ABS reports over the last few decades, their projection of population age structure reported in different years can be used to mimic the rolling origin test of OADR, because we now have the real OADR for those projected years. However, we are not able to actually perform it because full projection data is no longer available online and ABS projections have not used a consistent and replicate methodology.
@@ -651,132 +666,110 @@ The algorithm to find the upper and lower boundary of plausible pension age sche
 
 ## Plausible Pension Age Schemes
 
-```{r pension, dependson="OADRat65"}
-### find the optimal scheme of pension.age based on mean forecast
-target <- OADR.f$mean[4]
+```{r optimal_pension, dependson="OADRat65"}
+### find the pension.age scheme with OADR closest to target
+### find upper boundary of pension ages whose OADR PI contains target
+### find Lower boundary of pension ages whose OADR PI contains target
+### Constrained such that solution is in minimum jumps of 1 month
+### and the pension age can't change until 2023
 
-pension.age <- proposed
-for (i in 6:50)
-{
-  current <- oadr(auspop, aus.sim,
-    pension.age = pension.age
-  )$mean[i]
-  while ((current > target) &
-    (max(diff(pension.age[(i - 1):50])) <= (1 - 1 / 12))) {
-    pension.age[i:50] <- pension.age[i:50] + 1 / 12
-    current <- oadr(auspop, aus.sim,
-      pension.age = pension.age
-    )$mean[i]
+# Chosen target OADR
+target <- 0.22
+
+# Lower bound (starting at age 65)
+pension_age_lower <- pension_age %>%
+  filter(Policy == "Current", Year >= 2019) %>% select(-Policy) 
+for (i in seq(5,50)) {
+  current <- oadr_sim(aussim_df, pension_age_lower)$Lo[i]
+  while ((current > target) & 
+         (max(diff(pension_age_lower$Age[(i-1):50])) <= (1 - 1/12))) {
+    pension_age_lower$Age[i:50] <- pension_age_lower$Age[i:50] + 1/12
+    current <- oadr_sim(aussim_df, pension_age_lower)$Lo[i]
   }
 }
-OADR.f.optimal <- oadr(auspop,
-  aus.sim,
-  pension.age = pension.age
-)
-```
-
-```{r pensionupper, dependson="simulationresults"}
-### find the upper boundary of pension ages whose prediction interval contains target
-pension.age.upper <- proposed
-for (i in 6:50)
-{
-  current.upper <- oadr(auspop, aus.sim,
-    pension.age = pension.age.upper
-  )$upper[i]
-  while ((current.upper > target) &
-    (max(diff(pension.age.upper[(i - 1):50])) <= (1 - 1 / 12))) {
-    pension.age.upper[i:50] <- pension.age.upper[i:50] + 1 / 12
-    current.upper <- oadr(auspop, aus.sim,
-      pension.age = pension.age.upper
-    )$upper[i]
+# Mean (start at lower bound)
+pension_age_optimal <- pension_age_lower
+for (i in seq(5,50)) {
+  current <- oadr_sim(aussim_df, pension_age_optimal)$OADR[i]
+  while ((current > target) & 
+         (max(diff(pension_age_optimal$Age[(i-1):50])) <= (1 - 1/12))) {
+    pension_age_optimal$Age[i:50] <- pension_age_optimal$Age[i:50] + 1/12
+    current <- oadr_sim(aussim_df, pension_age_optimal)$OADR[i]
   }
 }
-OADR.f.upper <- oadr(auspop,
-  aus.sim,
-  pension.age = pension.age.upper
-)
-```
-
-```{r pensionlower, dependson="simulationresults"}
-##### find the lower boundary of pension ages whose prediction interval contains target
-pension.age.lower <- proposed
-for (i in 6:20)
-{
-  current.lower <- oadr(auspop, aus.sim,
-    pension.age = pension.age.lower
-  )$lower[i]
-  while ((current.lower > target) &
-    (max(diff(pension.age.lower[(i - 1):20])) <= (1 - 1 / 12))) {
-    pension.age.lower[i:20] <- pension.age.lower[i:20] + 1 / 12
-    current.lower <- oadr(auspop, aus.sim,
-      pension.age = pension.age.lower
-    )$lower[i]
+# Upper bound (start at mean)
+pension_age_upper <- pension_age_optimal
+for (i in seq(5,50)) {
+  current <- oadr_sim(aussim_df, pension_age_upper)$Hi[i]
+  while ((current > target) & 
+         (max(diff(pension_age_upper$Age[(i-1):50])) <= (1 - 1/12))) {
+    pension_age_upper$Age[i:50] <- pension_age_upper$Age[i:50] + 1/12
+    current <- oadr_sim(aussim_df, pension_age_upper)$Hi[i]
   }
 }
-OADR.f.lower <- oadr(auspop, 
-    aus.sim, 
-    pension.age = pension.age.lower
-)
-```
-
-```{r pension forecast, dependson="simulationresults"}
-pension.fc <- structure(list(
-  mean = ts(pension.age, start = 2015),
-  upper = pension.age.upper,
-  lower = pension.age.lower,
-  level = 80,
-  x = ts(rep(65, 50), end = 2014)
-), class = "forecast")
+# Final results
+OADR_optimal <- oadr_sim(aussim_df, pension_age_optimal) 
+pension_age_optimal <- pension_age_optimal %>%
+  mutate(
+    Lo80 = pension_age_lower$Age,
+    Hi80 = pension_age_upper$Age
+  )
 ```
 
 Table 1 shows the target pension age scheme, which is properly defined in section 3.2.2. It is assumed that it is impractical to change the pension age during 2011--2014, so the pension age has to be set at 65 for those years. Figure \ref{fig:OADRwithoptimal} provides a visible comparison of the desired OADR level of 21% and the mean forecast of the OADR corresponding to the target pension age. Note that the OADR associated with target pension age scheme has nearly overlapped the desired OADR level, which indicates that we have successfully found the pension age with stable OADR at the desired levels.\todo{In the table, I set the beginning year to 2015 instead of 2016.}
 
-```{r pensionagetables, dependson="OADRat65"}
-year <- time(OADR.f$mean) - 1
-yr <- trunc(pension.age)
-mth <- trunc((pension.age - trunc(pension.age)) * 12)
-agechar <- paste(yr, "Y", ifelse(mth > 0, paste("+", mth, "M", sep = ""), ""), sep = "")
-
-tab <- matrix(NA, nrow = 10, ncol = 10)
-for (i in 1:5)
-{
-  tab[, (i - 1) * 2 + 1] <- as.character(year[(10 * (i - 1)) + (1:10)])
-  tab[, (i - 1) * 2 + 2] <- agechar[(10 * (i - 1)) + (1:10)]
-}
-colnames(tab) <- rep(c("Year", "Age"), 5)
-knitr::kable(format(tab),
-  booktabs = TRUE,
-  caption = "Fifty-year target pension age scheme with stable OADR around desired OADR. Y denotes years and M denotes months."
-)
+```{r pensionagetables, dependson="optimal_pension", message=FALSE}
+pension_age_optimal %>%
+  mutate(
+    Month = round((Age - trunc(Age)) * 12),
+    Agestring = paste0(trunc(Age),"Y",
+      if_else(Month > 0, paste0("+", Month, "M"), "")),
+    Column = trunc((Year - 2019) / 10) + 1,
+  ) %>% 
+  select(Year, Agestring, Column) %>%
+  nest(data=c(Year=Year, Age=Agestring)) %>%
+  pivot_wider(names_from=Column, values_from=data) %>%
+  unnest(cols=paste(1:5), names_repair='unique') %>%
+  knitr::kable(
+    format="latex",
+    col.names = rep(c("Year","Age"),5),
+    booktabs = TRUE,
+    caption = "Fifty-year target pension age scheme with stable OADR around desired OADR. Y denotes years and M denotes months."
+  )
 ```
 
 ```{r pensionagetables2, dependson="OADRat65"}
-year <- time(OADR.f$mean) - 1
-yr <- trunc(pension.age.lower)
-mth <- trunc((pension.age.lower - trunc(pension.age.lower)) * 12)
-age.lo <- paste(yr, "Y", ifelse(mth > 0, paste("+", mth, "M", sep = ""), ""), sep = "")
-yr <- trunc(pension.age.upper)
-mth <- trunc((pension.age.upper - trunc(pension.age.upper)) * 12)
-age.up <- paste(yr, "Y", ifelse(mth > 0, paste("+", mth, "M", sep = ""), ""), sep = "")
-
-tab <- matrix("", nrow = 10, ncol = 15)
-for (i in 1:5)
-{
-  tab[, (i - 1) * 3 + 1] <- as.character(year[(10 * (i - 1)) + (1:10)])
-  tab[, (i - 1) * 3 + 2] <- age.lo[(10 * (i - 1)) + (1:10)]
-  tab[, (i - 1) * 3 + 3] <- age.up[(10 * (i - 1)) + (1:10)]
-}
-colnames(tab) <- rep(c("Year", "Lo", "Hi"), 5)
-kable_output = knitr::kable(format(tab),
-  booktabs = TRUE,
-  caption = "Fifty-year lower and higher boundary of pension age scheme with 80\\% confidence. Y denotes years and M denotes months."
-)
+pension_age_optimal %>%
+  mutate(
+    MonthLo = round((Lo80 - trunc(Lo80)) * 12),
+    MonthHi = round((Hi80 - trunc(Hi80)) * 12),
+    AgeLo = paste0(trunc(Lo80),"Y",
+      if_else(MonthLo > 0, paste0("+", MonthLo, "M"), "")),
+    AgeHi = paste0(trunc(Hi80),"Y",
+      if_else(MonthHi > 0, paste0("+", MonthHi, "M"), "")),
+    Column = trunc((Year - 2019) / 10) + 1,
+  ) %>% 
+  select(Year, AgeLo, AgeHi, Column) %>%
+  nest(data=c(Year=Year, Lo=AgeLo, Hi = AgeHi)) %>%
+  pivot_wider(names_from=Column, values_from=data) %>%
+  unnest(cols=paste(1:5), names_repair='unique') %>%
+  knitr::kable(
+    format="latex",
+    col.names = rep(c("Year","Lo","Hi"),5),
+    booktabs = TRUE,
+    caption = "Fifty-year lower and higher boundary of pension age scheme with 80\\% confidence. Y denotes years and M denotes months."
+  )
 kable_styling(kable_output, font_size = 7)
 ```
 
 
 ```{r OADRwithoptimal, fig.cap="The mean forecast of OADR associated with target pension age scheme (listed in Table 1) shown in blue, along with the desired OADR level in red (i.e., mean forecast of OADR in 2014). The 80% prediction interval of the forecast of OADR is shown as blue shading.", dependson="OADRat65"}
 ## plots of OADR with plausible pension age schemes
+OADR_optimal %>%
+  ggplot(aes(x=Year)) +
+  geom_ribbon(aes(ymin=Lo, ymax=Hi), fill="#7d7def") +
+  
+
 autoplot(OADR.f.optimal$x) +
   geom_hline(yintercept = OADR.f$mean[4], col = "red") +
   autolayer(OADR.f.optimal) +
@@ -817,7 +810,7 @@ ggplot() +
 ```{r OADR_realpensionage, fig.cap="The mean forecast of OADR associated with different pension age schemes under investigation, along with the desired OADR level in grey (i.e., mean forecast of OADR in 2014). The 80% prediction interval of the forecast of OADR is shown as shading.", dependson="OADRat65"}
 ```
 
-The upper and lower boundaries of the plausible pension age schemes (also called the 80 % confidence interval of the target pension age scheme in this paper) are reported in Table 2, and their corresponding OADR simulation results are shown in Figure \ref{fig:OADRboundaries}. It can be seen that the lower (upper) limit of the 80% prediction interval of OADR associated with lower (upper) boundary of the 80% confidence interval  pension age scheme is entirely stable around the desired level. Note the negative relationship between OADR and pension age. It suggests, on one hand, that any pension age higher than the upper boundary in table 2 is deemed to be undesirable because the age is too high to allow the age pension to provide enough welfare support or insurance to the aged. On the other hand, any pension age scheme lower than the lower boundary of the pension age reported in Table 2 will also be regarded as unreasonable, because it sacrifices the interests of the next generation to provide a very generous age pension immediately. 
+The upper and lower boundaries of the plausible pension age schemes (also called the 80 % confidence interval of the target pension age scheme in this paper) are reported in Table 2, and their corresponding OADR simulation results are shown in Figure \ref{fig:OADRboundaries}. It can be seen that the lower (upper) limit of the 80% prediction interval of OADR associated with lower (upper) boundary of the 80% confidence interval  pension age scheme is entirely stable around the desired level. Note the negative relationship between OADR and pension age. It suggests, on one hand, that any pension age higher than the upper boundary in table 2 is deemed to be undesirable because the age is too high to allow the age pension to provide enough welfare support or insurance to the aged. On the other hand, any pension age scheme lower than the lower boundary of the pension age reported in Table 2 will also be regarded as unreasonable, because it sacrifices the interests of the next generation to provide a very generous age pension immediately.
 
 Figure \ref{fig:comparisonofpensionages} compares the target pension age scheme and its 80% confidence interval with the pension age scheme with proposed further change. It was found that the target pension age increases at higher rate than the proposed new pension age scheme. Reported in Table 1, the target pension age is supposed to reach 67 by 2021 and 70 by 2032, while pension age has been proposed to change to 67 by 2023 and 70 by 2035. Moreover, the proposed pension age scheme is below the lower boundary of plausible pension age schemes, which means we are 80% sure that it will cause an OADR higher than desired level. From this result, it is concluded that government will need to adjust  pension age slightly quicker than proposed pace to ensure we have a stable OADR around desired level at 21%.
 
