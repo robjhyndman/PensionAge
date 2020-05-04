@@ -42,7 +42,6 @@ library(addb)
 library(patchwork)
 library(kableExtra)
 source("functions-v4.R")
-source("hmd.R")
 ```
 
 # Introduction
@@ -286,7 +285,9 @@ $$
 ################################################
 
 # Get population data to 1 Jan 2019
-aus.pop <- hmd.pop(country = "AUS", username = username, password = password, label = "Australia")
+source("hmd.R") # File only stores username and password
+aus.pop <- hmd.pop(country = "AUS", username = username, password = password, 
+                   label = "Australia")
 aus.pop <- extract.ages(aus.pop, ages = 0:100)
 
 # Get mortality data to 2018
@@ -335,7 +336,8 @@ aus.fert$pop$female <- fpop
 aus.fert$year <- 1920 + seq(NCOL(births))
 
 # Compute migration data
-aus.mig <- netmigration(mort = aus.mort, fert = aus.fert, startyearpop = aus.pop, mfratio = 1.05)
+aus.mig <- netmigration(mort = aus.mort, fert = aus.fert, 
+                        startyearpop = aus.pop, mfratio = 1.05)
 save(aus.fert, aus.mort, aus.mig, aus.pop, file="ausdata.Rdata")
 rm(ausf,births,fpop,newbirths,newpop)
 ```
