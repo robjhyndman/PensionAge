@@ -716,6 +716,8 @@ for (i in seq(5, 50)) {
 }
 # Final results
 OADR_optimal <- oadr_sim(aussim_df, pension_age_optimal)
+OADR_lower <- oadr_sim(aussim_df, pension_age_lower)
+OADR_upper <- oadr_sim(aussim_df, pension_age_upper)
 pension_age_optimal <- pension_age_optimal %>%
   mutate(
     Lo80 = pension_age_lower$Age,
@@ -747,7 +749,7 @@ pension_age_optimal %>%
   )
 ```
 
-```{r pensionagetables2, dependson="OADRat65"}
+```{r pensionagetables2, dependson="OADRat65", message=FALSE}
 pension_age_optimal %>%
   mutate(
     MonthLo = round((Lo80 - trunc(Lo80)) * 12),
@@ -771,8 +773,8 @@ pension_age_optimal %>%
     col.names = rep(c("Year", "Lo", "Hi"), 5),
     booktabs = TRUE,
     caption = "Fifty-year lower and higher boundary of pension age scheme with 80\\% confidence. Y denotes years and M denotes months."
-  )
-kable_styling(kable_output, font_size = 7)
+  ) %>%
+  kable_styling(font_size = 7)
 ```
 
 
@@ -780,41 +782,47 @@ kable_styling(kable_output, font_size = 7)
 ## plots of OADR with plausible pension age schemes
 OADR_optimal %>%
   ggplot(aes(x = Year)) +
+  geom_hline(yintercept = target, col = "red") +
   geom_ribbon(aes(ymin = Lo, ymax = Hi), fill = "#7d7def") +
-  autoplot(OADR.f.optimal$x) +
-  geom_hline(yintercept = OADR.f$mean[4], col = "red") +
-  autolayer(OADR.f.optimal) +
+  geom_line(aes(y=OADR), col="#0000cc") +
+  geom_line(data=OADR_history, aes(y=OADR)) +
   ggtitle("OADR forecast estimates for optimal pension ages") +
-  xlab("year") +
-  ylab("ratio")
+  ylab("Old age dependency ratio") 
 ```
 
 ```{r OADRboundaries, fig.cap="The 80% prediction interval forecast of OADR (in blue) associated with upper and lower boundary of plausible pension age schemes (listed in Table.2), along with desired OADR level (in red).", dependson="OADRat65"}
-p1 <- autoplot(OADR.f.upper$x) +
-  geom_hline(yintercept = OADR.f$mean[4], col = "red") +
-  autolayer(OADR.f.upper) +
-  ggtitle("OADR for upper boundary pension ages") +
-  xlab("Year") + ylab("ratio") +
-  ylim(0.07, 0.27)
-p2 <- autoplot(OADR.f.lower$x) +
-  geom_hline(yintercept = OADR.f$mean[4], col = "red") +
-  autolayer(OADR.f.lower) +
-  ggtitle("OADR for lower boundary pension ages") +
-  xlab("Year") + ylab("ratio") +
-  ylim(0.07, 0.27)
-gridExtra::grid.arrange(p1, p2, ncol = 2)
+bind_rows(
+    OADR_upper %>% mutate(Series="Upper boundary"),
+    OADR_lower %>% mutate(Series="Lower boundary"),
+  ) %>%
+  ggplot(aes(x = Year)) +
+  geom_hline(yintercept = target, col = "red") +
+  geom_ribbon(aes(ymin = Lo, ymax = Hi), fill = "#7d7def") +
+  geom_line(aes(y=OADR), col="#0000cc") +
+  geom_line(data=OADR_history, aes(y=OADR)) +
+  facet_grid(. ~ Series) +
+  ggtitle("OADR forecasts for boundary pension age schemes") +
+  ylab("Old age dependency ratio") 
 ```
 
 ```{r comparisonofpensionages, fig.cap="The comparison between the target pension age scheme (in green) and real pension age scheme that has been set or proposed by government, along with the 80% confidence interval of the target pension age shown in green shade. The red solid line indicates the changes to the pension age from 65 to 67, announced in 2009.", dependson="OADRat65"}
+pension.fc <- structure(
+  list(mean=ts(pension_age_optimal$Age, start=min(pension_age_optimal$Year)),
+       lower=ts(pension_age_optimal$Lo80, start=min(pension_age_optimal$Year)),
+       upper=ts(pension_age_optimal$Hi80, start=min(pension_age_optimal$Year)),
+       level=80),
+  class="forecast")
 ggplot() +
   autolayer(pension.fc, series = "Pension age to give OADR=0.21") +
-  #  geom_hline(yintercept=65, color='black') +
-  autolayer(ts(c(rep(65, 7), c(65.5, 65.5, 66.5, 66.5, 67, 67), rep(67, 37))[1:50],
-    start = 2015
-  ), series = "Approved change") +
-  autolayer(ts(c(rep(65, 50)), start = 1990), series = "Pension age at 65") +
-  xlab("Year") +
-  ylab("Age of retirement")
+  autolayer(
+    ts(pension_age %>% filter(Policy=="Approved", Year >= 1995) %>% pull(Age), 
+       start=1995), series = "Approved change"
+  ) +
+  autolayer(
+    ts(pension_age %>% filter(Policy=="Current", Year >= 1995) %>% pull(Age), 
+       start=1995), series = "Pension age at 65"
+  )  +
+  xlab("Year") + ylab("Age of retirement")
 ```
 
 ```{r ComparisonwithOADR22, fig.cap="The comparison between the target pension age scheme (in green) associated with desired level equal to current level plus $1%$ (i.e., 22%) and real pension age scheme that has been set or proposed by government, along with the 80% confidence interval of the target pension age shown in green shade.", dependson="OADRat65"}
