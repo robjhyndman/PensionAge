@@ -35,12 +35,11 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, messages = FALSE, warning = FALSE, cache = TRUE)
-library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
 library(demography)
-# remotes::install_github("robjhyndman/addb")
-library(addb)
 library(patchwork)
-library(kableExtra)
 source("functions-v4.R")
 ```
 
@@ -300,7 +299,7 @@ aus.mort <- aus.mort %>%
   extract.years(years = 1950:max(aus.mort$year))
 
 # Get fertility data for 1921-2006
-aus.fert <- aus.fertility
+aus.fert <- addb::aus.fertility
 births <- aus.fert$rate$female * aus.fert$pop$female
 # Get latest fertility data from ABS (downloaded 30 April 2020)
 ausf <- readr::read_csv("FERTILITY_AGE_STATE_30042020143630412.csv") %>%
@@ -774,7 +773,7 @@ pension_age_optimal %>%
     booktabs = TRUE,
     caption = "Fifty-year lower and higher boundary of pension age scheme with 80\\% confidence. Y denotes years and M denotes months."
   ) %>%
-  kable_styling(font_size = 7)
+  kableExtra::kable_styling(font_size = 7)
 ```
 
 
@@ -787,7 +786,7 @@ OADR_optimal %>%
   geom_line(aes(y=OADR), col="#0000cc") +
   geom_line(data=OADR_history, aes(y=OADR)) +
   ggtitle("OADR forecast estimates for optimal pension ages") +
-  ylab("Old age dependency ratio") 
+  ylab("Old age dependency ratio")
 ```
 
 ```{r OADRboundaries, fig.cap="The 80% prediction interval forecast of OADR (in blue) associated with upper and lower boundary of plausible pension age schemes (listed in Table.2), along with desired OADR level (in red).", dependson="OADRat65"}
@@ -802,7 +801,7 @@ bind_rows(
   geom_line(data=OADR_history, aes(y=OADR)) +
   facet_grid(. ~ Series) +
   ggtitle("OADR forecasts for boundary pension age schemes") +
-  ylab("Old age dependency ratio") 
+  ylab("Old age dependency ratio")
 ```
 
 ```{r comparisonofpensionages, fig.cap="The comparison between the target pension age scheme (in green) and real pension age scheme that has been set or proposed by government, along with the 80% confidence interval of the target pension age shown in green shade. The red solid line indicates the changes to the pension age from 65 to 67, announced in 2009.", dependson="OADRat65"}
@@ -815,11 +814,11 @@ pension.fc <- structure(
 ggplot() +
   autolayer(pension.fc, series = "Pension age to give OADR=0.21") +
   autolayer(
-    ts(pension_age %>% filter(Policy=="Approved", Year >= 1995) %>% pull(Age), 
+    ts(pension_age %>% filter(Policy=="Approved", Year >= 1995) %>% pull(Age),
        start=1995), series = "Approved change"
   ) +
   autolayer(
-    ts(pension_age %>% filter(Policy=="Current", Year >= 1995) %>% pull(Age), 
+    ts(pension_age %>% filter(Policy=="Current", Year >= 1995) %>% pull(Age),
        start=1995), series = "Pension age at 65"
   )  +
   xlab("Year") + ylab("Age of retirement")
@@ -851,3 +850,26 @@ We undertake the approach based on assuming the desired level of OADR is at curr
 The empirical analysis presented in this paper shows the adjustment of the pension age announced in 2009 was effective in reducing the financial burden to the desired level, which was set at 21%. However, a one-time adjustment is not sufficient to ensure a stable OADR in the long term, due to ongoing changes in the population age structure. Therefore, we recommend consistently reviewing the pension age according to the presented statistical approach. This approach has been used to calculate the target pension age from now until 2060 and its 80% confidence interval. The target pension age found in this research increases to 67 by 2023, 70 by 2032 and 75 by 2058. This generates a stable OADR of around 21%. The rate of growth in the pension age as proposed by the government in 2014 is slightly lower than the target pension age found in this study, which suggests that the government may need to slightly accelerate the growth of the pension age to maintain an OADR at the current level.
 
 Although our results are promising, there are still grounds for further research. First, our research results are based on forecasts from one particular model. Further studies can apply the same approach but with different models of population forecasting, which allows for enhanced credibility of results. Moreover, our research addresses the issue from a purely demographic perspective. It is possible to include an economic perspective. For example, the economic implications of retaining older workers in workforce can be considered. Second, Our research uses an OADR as a single measurement of financial burden. Further research should allow the effect of other economic factors to be taken into account. For instance, the effect of growth in superannuation can be considered in a way that the effects of high OADR can be offset by the growth in superannuation.
+
+\newpage
+
+### Colophon {-}
+
+This report was generated on `r Sys.time()`.
+
+The current Git commit details are:
+
+```{r}
+## Which commit is this file at?
+git2r::repository(here::here())
+```
+
+We used the following computational environment and dependencies:
+
+```{r colophon, cache=FALSE}
+options(width=100)
+## Which R packages and versions?
+devtools::session_info()
+```
+
+\newpage
