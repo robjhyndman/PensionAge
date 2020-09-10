@@ -43,6 +43,9 @@ library(patchwork)
 source("functions-v4.R")
 ```
 
+
+\todo[inline]{Adjust numbers in abstract as per Figure 9}
+
 # Introduction
 
 Australia's ageing population is a result of three factors: (1) significant technological advances in medical care leading to longer life spans; (2) high fertility rates after World War II resulting in the "baby-boomer" generation; and (3) a large decline in fertility rates over the past twenty or so years [@Fehr2008].  Consequently, there are many older people leaving the workforce, and fewer workers replacing them. Similar demographic challenges face many other countries. One way of measuring this problem is via the old-age dependency ratio (OADR): the number of people post-retirement to the number of people of working age [@Walker1982]. The OADR has been increasing for many decades, but recently the rate of increase has jumped markedly, and we show that it will continue to increase at a rapid rate if there are no age-related policy changes.
@@ -145,11 +148,13 @@ The model proposed by @HU07 is as follows:
   y_t(x) & = s_t(x) + \sigma_t(x)\epsilon_{t,x}\label{eq:HU_1}\\
   s_t(x) & = \mu(x) + \sum_{j=1}^{J}\beta_{t,j}\phi_j(x) + e_t(x)\label{eq:HU_2}
 \end{align}
-Equation \eqref{eq:HU_1} describes the smoothing process. $y_t(x)$ is the observed data in year $t$ and age $x$, and $s_t(x)$ is the smoothed function of $y_t(x)$, estimated by constrained weighted penalized regression splines [@BHT14]. $\sigma_t(x)$ allows the variance to be a function of time and age; and $\epsilon_{t,x}$ is independent and identically distributed standard normal error terms. Equation \eqref{eq:HU_2} has a similar structure to the LC method, except that it incorporates more than one principal component and score. It describes the dynamics of $s_t(x)$ over time. The $\phi_j(x)$ for every $j$ and $\mu(x)$ are sets of age-specific constants, and $\beta_{t,j}$ for every $j$ is a time-varying index. The $e_t(x)$ is the model error, which is the residual function with mean zero and no serial correlation. The $\mu(x)$ is estimated by the average of $s_t(x)$ across years, which measures the general shape of the observed data $y_t(x)$. The estimates of $\phi_j(x)$ and $\beta_{t,j}$ are the $j$th principal component and scores of $s_t(x)-\mu(x)$ respectively. In other words, we take singular value decomposition of $s_t(x)-\mu(x)$, then \eqref{eq:HU_2} now becomes
+Equation \eqref{eq:HU_1} describes the smoothing process. $y_t(x)$ is the observed data in year $t$ and age $x$, and $s_t(x)$ is the smoothed function of $y_t(x)$, estimated by constrained weighted penalized regression splines [@BHT14]. $\sigma_t(x)$ allows the variance to be a function of time and age; and $\epsilon_{t,x}$ is independent and identically distributed standard normal error terms. Equation \eqref{eq:HU_2} has a similar structure to the LC method, except that it incorporates more than one principal component and score. It describes the dynamics of $s_t(x)$ over time. The $\phi_j(x)$ for every $j$ and $\mu(x)$ are sets of age-specific constants, and $\beta_{t,j}$ for every $j$ is a time-varying index. The $e_t(x)$ is the model error, which is the residual function with mean zero and no serial correlation. The $\mu(x)$ is estimated by the average of $s_t(x)$ across years, which measures the general shape of the observed data $y_t(x)$. The estimates of $\phi_j(x)$ and $\beta_{t,j}$ are the $j^{th}$ principal component and scores of $s_t(x)-\mu(x)$ respectively. In other words, we take singular value decomposition of $s_t(x)-\mu(x)$, then \eqref{eq:HU_2} now becomes
 $$
   s_t(x)-\mu(x) = \phi_1(x)\beta_{t,1}+\phi_2(x)\beta_{t,2}+\dots+\phi_J(x)\beta_{t,J}
 $$
 We chose $J$ in a way that we believe the majority of information for $s_t(x)-\mu(x)$ has been captured by the first $J$ components.
+
+\todo[inline]{Add comment on choosing $J$}
 
 In terms of forecasting, by conditioning on the observed data $\bm{I}=\left\{{y_1(x),\dots,y_n(x)}\right\}$ and the set of functional principal components $\bm{B}=\left\{{\phi_1(x),\phi_2(x),\dots,\phi_j(x)}\right\}$, the $h$-step-ahead forecast of log rate $y_{n+h}(x)$ can be acquired by:
 \begin{equation}
@@ -395,7 +400,7 @@ migf <- forecast(mig.fit, h = 50)
 We use the fitted model of fertility rates as an example to interpret the results of fitted models. It should be noted that models fitted to product and ratio series are less likely to be interpreted in an economic sense. Figure \@ref(fig:componentsfertility) shows the estimated mean age pattern $\widehat{\mu}(x)$, the first two estimated basis functions, $\widehat{\phi}_1(x)$ and $\widehat{\phi}_2(x)$, and first two estimated coefficients (i.e., estimated principal component scores $\widehat{\beta}_{t,1}$ and $\widehat{\beta}_{t,2}$) for fertility rates. The first term ($\widehat{\phi}_1(x)\times \widehat{\beta}_{t,1}$) accounts for the most variation in fertility, so a relatively sensible interpretation can be given to the first term. In the plot of the first coefficient, estimated historical first principal component scores $\widehat{\beta}_{t,1}$ are shown in black for 1950--2018. It captures the general trend of fertility change over time. It indicates a sharp increase between 1950--1960, followed by a rapid decline in fertility rates from 1961. This increase of fertility is linked to the Post-World War II baby boom^[Between the years 1946 and 1964.] in Australia, resulting from the recovery from war and the Great Depression^[The Great Depression was a severe economic depression in the decade before World War II.]. The dramatic decrease from 1960 was due to the availability of contraception pills in Australia. A noticeable further reduction of fertility rates in the late 1960s may be due to a change in the law allowing abortion in some states in Australia.
 
 
-```{r componentsfertility, fig.cap="Fitted basis functions and coefficients for Australian age-specific fertility rates.", dependson='models'}
+```{r componentsfertility, fig.cap="Fitted basis functions and coefficients for Australian age-specific fertility rates.", dependson='models', message=FALSE}
 autoplot(fertf)
 ```
 
