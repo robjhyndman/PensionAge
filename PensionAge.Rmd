@@ -110,55 +110,62 @@ All supportive arguments for increasing the pension age in Australia have only j
 
 ## Population forecasting
 
-In population forecasting, two different approaches --- a deterministic approach (sometimes called a quasi-statistical approach) and a stochastic approach (a purely statistical approach) --- are frequently used. For instance, the Australian Bureau of Statistics (ABS) is using a deterministic approach for its demographic projection, while some other countries or institutes forecast demographic trends based on purely statistical approaches such as Statistics New Zealand and the United States Census Bureau. In the deterministic approach, experts project future demographic changes using judgement-based scenarios. It ignores the non-demographic factors such as major pandemics or wars, although historically they are important factors that affect demographic behaviour [@PC13]. In stochastic approaches, the Lee-Carter (LC) method [@LC92] is the most prominent demographic forecasting method. It now has several variants and extensions that relax some of the assumptions of the basic Lee-Carter method [see, e.g., @SBH11]. Although statistical forecasting models are rigorous, they still leave a basis for judgment-based adaptation, as they sometimes produce unrealistic projections of demographic factors such as long-run projections of mortality rates [@PC13].
-
-Therefore, some official agencies decide to mix the two approaches in their forecasts in order to provide a supplement to both approaches. For instance, the most recent forecast of the population in Australia by the @PC13 was based on basic Lee-Carter methods plus some judgement-based adaptations to address the characteristics of demographic trends that the Lee-Carter method failed to capture. The approach of forecasting used in this study is similar to the @PC13. The Hyndman-Ullah method (2007) is used as a basic forecasting approach, which is a comprehensive extension of the Lee-Carter method. In addition, an adapted product-ratio method is used to eliminate the potential long-term divergence between female and male mortality rates. A more detailed review of forecasting methods is given below.
-
-### Deterministic methods used by the ABS {-}
-
-The deterministic method is judgment-based. The Australian Bureau of Statistics formulates assumptions on the basis of demographic trends, in conjunction with advice from individual experts or government departments. The projections are not predictions or forecasts, "but are simply illustrations of the growth and change in population which would occur if certain assumptions about future levels of fertility, mortality, internal migration and overseas migration were to prevail over the projection period" [@ABS12, p.2]. In addition, they do not attempt to take into account of non-demographic factors, such as major government policy changes and catastrophes. Therefore, they normally report multiple (usually three) series based on different levels of assumptions of demographic factors to allow for a variety of population projections.
+Variants of the Lee-Carter method [@LC92] are frequently used for demographic forecasting [see, e.g., @SBH11]. The most recent forecast of the population in Australia by the @PC13 was based on basic Lee-Carter methods plus some judgement-based adaptations to address the characteristics of demographic trends that the Lee-Carter method failed to capture. The approach of forecasting used in this study is similar to the @PC13. The Hyndman-Ullah method (2007) is used as a basic forecasting approach, which is a comprehensive extension of the Lee-Carter method. In addition, an adapted product-ratio method [@HBY13] is used to eliminate the potential long-term divergence between female and male mortality rates.
 
 ### Lee-Carter method {-}
 
-The Lee-Carter method [@LC92] is a significant milestone in demographic forecasting. It has been widely used to forecast mortality rates across various countries, including Australia.
-
-The model proposed by @LC92 is
+The Lee-Carter (LC) method has been widely used to forecast mortality rates across various countries, including Australia. The model proposed by @LC92 is
 \begin{equation}\label{eq:lc}
   \log(m_{x,t})=a_x+b_xk_t+\varepsilon_{x,t},
 \end{equation}
 where $m_{x,t}$ is the central death rate (properly defined in Section \@ref(sec:data)) for age $x$ in year $t$. This model involves fitting a matrix of log central death rates with sets of age-specific constants, {$a_x$} and {$b_x$}, and a time-varying index $k_t$. $b_x$ is a set of parameters that tell us the rate at which each age responds to changes in $k_t$. $k_t$ measures the general level of the log death rates; $a_x$ is the general pattern across the age of the log mortality rate and $\varepsilon_{x,t}$ is an error term with zero mean and constant variance, reflecting the randomness that can't be captured by the model.
 
-The model is over-parameterised. For example, if the vector $a,b,k$ is one solution, then for any scalar $c$, $a, b/c, kc$ or $a - bc, b, k+c$ also must be two possible solutions. Therefore, Lee and Carter (1992) impose the following constraints:
+The model is over-parameterised. For example, if the vector $a,b,k$ is one solution, then for any scalar $c$, $a, b/c, kc$ or $a - bc, b, k+c$ also must be two possible solutions. Therefore,  the constraints
 \begin{equation}
-  \sum_{t=1}^{n}k_t=0, \qquad \sum_{x=x_1}^{x_m}b_x=1
+  \sum_{t=1}^{n}k_t=0, \qquad\text{and}\qquad \sum_{x=x_1}^{x_m}b_x=1
 \end{equation}
-@LC92 use a singular value decomposition (SVD) method to find the least squares solution of \eqref{eq:lc} [@Good1969]. The estimates of $b_x$ and $k_t$ are therefore the first principal component and scores of $\bm{X}$ with $(i,t)$th element $[\log(m_{x_i,t})-a_{x_i}]$, where $a_{x_i}$ is the sample mean of $\log(m_{x_i,t})$ over $t$. The log transformation introduces some bias, so the LC method adjusts $k_t$ such that for each year, the implied number of deaths will be equal to the actual number of deaths. The adjusted $k_t$ is then extrapolated using a random walk with drift model, which is equivalent to an ARIMA ($0,1,0$) model with a drift parameter.
+are imposed, and a singular value decomposition is used to find the least squares solution of \eqref{eq:lc} [@Good1969]. The estimates of $b_x$ and $k_t$ are therefore the first principal component and scores of $\bm{X}$ with $(i,t)$th element $[\log(m_{x_i,t})-a_{x_i}]$, where $a_{x_i}$ is the sample mean of $\log(m_{x_i,t})$ over $t$. The log transformation introduces some bias, so the LC method adjusts $k_t$ such that for each year, the implied number of deaths will be equal to the actual number of deaths. The adjusted $k_t$ is then extrapolated using a random walk with drift model, which is equivalent to an ARIMA ($0,1,0$) model with a drift parameter.
 
 ### Hyndman-Ullah method \label{sec:HU} {-}
 
 @HU07 proposed a nonparametric method for demographic modelling and forecasting that extended the LC model in four ways:
 
-  1. The demographic rates are smoothed using penalized regression splines [@BHT14] before modeling.
+  1. The demographic rates are smoothed before modeling.
   2. It uses functional principal components analysis, which is a continuous version of PCA.
   3. It uses more than one principal component, which addresses the main weakness of the LC method.
   4. The forecasting models for the principal component scores are more complex than the random walk with drift model used in the LC model.
 
-The model proposed by @HU07 is as follows:
+The Hyndman-Ullah (HU) model can be written as
 \begin{align}
   y_t(x) & = s_t(x) + \sigma_t(x)\varepsilon_{t,x}\label{eq:HU_1}\\
-  s_t(x) & = \mu(x) + \sum_{j=1}^{J}\beta_{t,j}\phi_j(x) + e_t(x)\label{eq:HU_2}
+  s_t(x) & = \mu(x) + \sum_{j=1}^{J}\beta_{t,j}\phi_j(x) + e_t(x)\label{eq:HU_2},
 \end{align}
-Equation \eqref{eq:HU_1} describes the smoothing process. $y_t(x)$ is the observed data in year $t$ and age $x$, and $s_t(x)$ is the smoothed function of $y_t(x)$, estimated by constrained weighted penalized regression splines [@BHT14]. $\sigma_t(x)$ allows the variance to be a function of time and age; and $\varepsilon_{t,x}$ is independent and identically distributed standard normal error terms. Equation \eqref{eq:HU_2} has a similar structure to the LC method, except that it incorporates more than one principal component and score. It describes the dynamics of $s_t(x)$ over time. The $\phi_j(x)$ for every $j$ and $\mu(x)$ are sets of age-specific constants, and $\beta_{t,j}$ for every $j$ is a time-varying index. The $e_t(x)$ is the model error, which is the residual function with mean zero and no serial correlation. The $\mu(x)$ is estimated by the average of $s_t(x)$ across years, which measures the general shape of the observed data $y_t(x)$. The estimates of $\phi_j(x)$ and $\beta_{t,j}$ are the $j^{th}$ principal component and scores of $s_t(x)-\mu(x)$ respectively. In other words, we take singular value decomposition of $s_t(x)-\mu(x)$, then \eqref{eq:HU_2} now becomes
-$$
-  s_t(x)-\mu(x) = \phi_1(x)\beta_{t,1}+\phi_2(x)\beta_{t,2}+\dots+\phi_J(x)\beta_{t,J}
-$$
-We choose $J$ in a way that we believe the majority of information for $s_t(x)-\mu(x)$ has been captured by the first $J$ components. Following @HB08, we select $J=6$ which has been found empirically to be large enough for demographic applications.
+where $y_t(x)$ may be log mortality, log fertility or net migration [@HB08] in year $t$ and age $x$. Here $s_t(x)$ is a smoothed version of the observed data $y_t(x)$, smoothed over age but not time, and estimated by constrained weighted penalized regression splines; and $\{\varepsilon_{t,x}\}$ are independent and identically distributed standard normal error terms. Equation \eqref{eq:HU_2} has a similar structure to the LC method, except that it is applied to smoothed data and incorporates more than one principal component and score. The $e_t(x)$ is the model error having mean zero and no serial correlation, while $\mu(x)$ is estimated as the average of $s_t(x)$ across years. Estimates of $\phi_j(x)$ and $\beta_{t,j}$ are the $j^{th}$ principal components and scores of $s_t(x)-\mu(x)$ respectively. Following @HB08, we select $J=6$ which we have found to be large enough for demographic applications.
 
-Ty conditioning on the observed data $\bm{I}=\left\{{y_1(x),\dots,y_n(x)}\right\}$ and the set of functional principal components $\bm{B}=\left\{{\phi_1(x),\phi_2(x),\dots,\phi_j(x)}\right\}$, the $h$-step-ahead forecast of log rate $y_{n+h}(x)$ are given by
+By conditioning on the observed data $\bm{I}=\left\{{y_1(x),\dots,y_n(x)}\right\}$ and the set of functional principal components $\bm{B}=\left\{{\phi_1(x),\phi_2(x),\dots,\phi_j(x)}\right\}$, the $h$-step-ahead forecast of $y_{n+h}(x)$ are given by
 \begin{equation}
   \widehat{y}_{n+h\mid n}(x)=\widehat{s}_{n+h\mid n}(x) = \text{E}[\widehat{s}_{n+h\mid n}(x)\mid \bm{I, B}] = \widehat{\mu}(x)+\sum_{j=1}^{J}\phi_j(x)\widehat{\beta}_{n+h\mid n,j},
 \end{equation}
 where $\widehat{\beta}_{n+h\mid n,j}$ denotes the $h$-step-ahead forecast of $\beta_{n+h\mid n,j}$. Because $\left\{\beta_{t,j}\right\}$ is time-varying, it controls the dynamics of the process. Each component series $\left\{\beta_{t,j}\right\}$ is modelled with an ARIMA$(p_j,d_j,q_j)$ process, where $p_j,d_j,q_j$ are determined by minimizing the Akaike Information Criterion [@forecastpackage], and the parameters are estimated using maximum likelihood estimation.
+
+## Product-ratio method
+
+When we apply the @HU07 model to data on males and females, we need to constrain the resulting forecasts so they do not diverge [@HBY13]. In the product-ratio method, we apply the HU model to the geometric mean of male and female log mortality data, and the ratio of male and female log mortality data, rather than to each series independently. That is, we define
+\begin{align}
+  p_t(x)&=\sqrt{s_{t}^{\text{M}}(x)s_{t}^{\text{F}}(x)}, \label{eq:coherent_1}\\
+  r_t(x)&=\sqrt{\frac{s_{t}^{\text{M}}(x)}{s_{t}^{\text{F}}(x)}}. \label{eq:coherent_2}
+\end{align}
+Then, the HU method is applied to these two new variables instead of male and female series:
+\begin{align*}
+  \log[p_t(x)]=\mu_p(x)+\sum_{j=1}^{J}\beta_{t,j}\phi_j(x)+e_t(x)\\
+  \log[r_t(x)]=\mu_r(x)+\sum_{l=1}^{L}\gamma_{t,l}\psi_l(x)+z_t(x)
+\end{align*}
+where time series $\left\{\beta_{t,j}\right\}$ are fitted with an ARIMA model while $\left\{\gamma_{t,l}\right\}$ are fitted by stationary ARFIMA model (i.e., $d$ in ARIMA($p,d,q$) constrained to $0<d<\frac{1}{2}$). It is the stationary constraint on $\gamma_{t,l}$ that ensures the forecasts of male and female do not diverge. Then, forecasts of sex-specific data are obtained using
+\begin{align*}
+  m_{n+h\mid n}^{\text{M}}(x) & = p_{n+h\mid n}(x)r_{n+h\mid n}(x)\\
+  m_{n+h\mid n}^{\text{F}}(x) & = p_{n+h\mid n}(x)/r_{n+h\mid n}(x)
+\end{align*}
+The method for forecasting net migration by sex is similar to the above method used on mortality rates except no log scale is applied to net migration, and a sum and difference is used rather than a product and ratio.
 
 # Data {#sec:data}
 
@@ -193,22 +200,9 @@ In this study, three steps were taken to simulate OADR associated with a specifi
 
 ### Step 1 {-}
 
-The main procedure for forecasting the population age structure follows @HB08, except that the data are updated, and we incorporate the product-ratio method [@HBY13] to improve the accuracy of the forecast. The @HU07 model, introduced in section \@ref(sec:HU), is applied to the mortality rate, fertility rate and net migration separately, based on the assumption that they behave independently. Therefore, to fit the model to historical fertility rates, let $y_t(x)$ in equation \eqref{eq:HU_1} denote the observed historical fertility data. However, for the mortality rate by sex, the product-ratio method is used to ensure the forecast of females and males are non-divergent or coherent [@HBY13]. In the product-ratio method, after smoothing the female and male mortality rates, two other series were created: product series (denoted by $p_t(x)$) and ratio series (denoted by $r_t(x)$), which are defined as follows:
-\begin{align}
-  p_t(x)&=\sqrt{s_{t}^{\text{M}}(x)s_{t}^{\text{F}}(x)}, \label{eq:coherent_1}\\
-  r_t(x)&=\sqrt{\frac{s_{t}^{\text{M}}(x)}{s_{t}^{\text{F}}(x)}}. \label{eq:coherent_2}
-\end{align}
-Then, @HU07 was applied to these two new variables instead of male and female mortality rate as follows:
-\begin{align*}
-  \log[p_t(x)]=\mu_p(x)+\sum_{j=1}^{J}\beta_{t,j}\phi_j(x)+e_t(x)\\
-  \log[r_t(x)]=\mu_r(x)+\sum_{l=1}^{L}\gamma_{t,l}\psi_l(x)+z_t(x)
-\end{align*}
-where time series $\left\{\beta_{t,j}\right\}$ are fitted with an ARIMA model while $\left\{\gamma_{t,l}\right\}$ are fitted by stationary ARFIMA model (i.e., $d$ in ARIMA($p,d,q$) constrained to $0<d<\frac{1}{2}$). It is the stationary constraint on $\gamma_{t,l}$ that ensures the forecast of male and female do not diverge. Then, simulating $h$-step-ahead forecast values of product variable and ratio variable was performed (denoted by $p_{n+h\mid n}(x)$ and $r_{n+h\mid n}(x)$ respectively) according to \eqref{eq:coherent_1} and \eqref{eq:coherent_2}. From here, obtaining $h$-step-ahead forecast of sex-specific coherent mortality rates (denoted $m_{n+h\mid n,M}(x)$ and $m_{n+h\mid n,F}(x)$) was performed using a back-transformation:
-\begin{align*}
-  m_{n+h\mid n}^{\text{M}}(x) & = p_{n+h\mid n}(x)r_{n+h\mid n}(x)\\
-  m_{n+h\mid n}^{\text{F}}(x) & = p_{n+h\mid n}(x)/r_{n+h\mid n}(x)
-\end{align*}
-The method for simulating $h$-step-ahead values of net migration by sex is similar to the above method used on mortality rates except no log scale is applied to net migration. A stationary constraint was imposed on the ARIMA model for net migration to make sure the difference between sexes did not diverge.
+The main procedure for forecasting the population age structure follows @HB08, except that the data are updated, and we incorporate the product-ratio method [@HBY13] to improve the accuracy of the forecast.
+
+, introduced in section \@ref(sec:HU), is applied to the mortality rate, fertility rate and net migration separately, based on the assumption that they behave independently. Therefore, to fit the model to historical fertility rates, let $y_t(x)$ in equation \eqref{eq:HU_1} denote the observed historical fertility data.
 
 ### Step 2 {-}
 
