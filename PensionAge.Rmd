@@ -58,7 +58,7 @@ In this paper, we use the OADR as a measure of the financial burden on the Austr
 \begin{equation}
   \text{OADR} = \frac{\text{number of people aged over pension age}}{\text{number of people aged 15 to pension age}}*100\%
 \end{equation}
-We provide forecasts of future population age structures over the next 50 years. We then use those forecasts to compute the OADR associated with pension age both before and after the adjustments. One contribution of the current study is the combined use of the Hyndman-Ullah forecasting method [@HU07] and the product-ratio method [@HBY13] to forecast a population age structure. Forecasts of population structure have been built on forecasts of age- and gender-specific mortality rates, fertility rates and net migration using this method. These forecasts presuppose that the historical trends of past years will continue. Historical data of those rates have thus been used as input to simulate future paths of age- and gender-specific population structure.
+We provide forecasts of future population age structures over the next 50 years. We then use those forecasts to compute the OADR associated with pension age both before and after the adjustments. One contribution of the current study is the combined use of the Hyndman-Ullah forecasting method [@HU07] and the product-ratio method [@HBY13] to forecast a population age structure. Forecasts of population structure have been built on forecasts of age- and sex-specific mortality rates, fertility rates and net migration using this method. These forecasts presuppose that the historical trends of past years will continue. Historical data of those rates have thus been used as input to simulate future paths of age- and sex-specific population structure.
 
 Using these predicted population paths, we can calculate the average OADR and predict the levels of old-age dependency that correspond to different pension age schemes. By testing different pension age schemes, we aim to find the pension age with the desired OADR outcome. Therefore, other contributions of this research are (1) to examine the effect of adjusting pension ages by comparing OADR before and after adjustment; and (2) to suggest a suitable pension age scheme to ensure that the economic burden will remain relatively constant at the desired level in the future. It should be noted that the desired level has been set at 21%, the estimated level of OADR in 2018. Whether this OADR level is the most appropriate level for Australia remains to be examined and is not the focus of this paper. This paper concentrates on providing a framework for policymakers to find a target pension age for a given desired level of OADR.
 
@@ -114,17 +114,17 @@ Variants of the Lee-Carter method [@LC92] are frequently used for demographic fo
 
 ### Lee-Carter method {-}
 
-The Lee-Carter (LC) method has been widely used to forecast mortality rates across various countries, including Australia. The model proposed by @LC92 is
+The Lee-Carter (LC) method has been widely used to forecast mortality rates across various countries, including Australia. The model proposed by @LC92 (but using our notation) is
 \begin{equation}\label{eq:lc}
-  \log(m_{x,t})=a_x+b_xk_t+\varepsilon_{x,t},
+  \log m_{t}(x)=\mu(x)+\phi(x)\beta_{t}+\varepsilon_{t,x},
 \end{equation}
-where $m_{x,t}$ is the central death rate (properly defined in Section \@ref(sec:data)) for age $x$ in year $t$. This model involves fitting a matrix of log central death rates with sets of age-specific constants, {$a_x$} and {$b_x$}, and a time-varying index $k_t$. $b_x$ is a set of parameters that tell us the rate at which each age responds to changes in $k_t$. $k_t$ measures the general level of the log death rates; $a_x$ is the general pattern across the age of the log mortality rate and $\varepsilon_{x,t}$ is an error term with zero mean and constant variance, reflecting the randomness that can't be captured by the model.
+where $m_{t}(x)$ is the central death rate (properly defined in Section \@ref(sec:data)) for age $x$ in year $t$. This model involves fitting a matrix of log central death rates with sets of age-specific constants, {$\mu(x)$} and {$\phi(x)$}, and a time-varying index $\beta_{t}$. $\phi(x)$ is a set of parameters that tell us the rate at which each age responds to changes in $\beta_{t}$. $\beta_{t}$ measures the general level of the log death rates; $\mu(x)$ is the general pattern across the age of the log mortality rate and $\varepsilon_{t,x}$ is an error term with zero mean and constant variance, reflecting the randomness that can't be captured by the model.
 
-The model is over-parameterised. For example, if the vector $a,b,k$ is one solution, then for any scalar $c$, $a, b/c, kc$ or $a - bc, b, k+c$ also must be two possible solutions. Therefore,  the constraints
+The model is over-parameterised. Therefore, the constraints
 \begin{equation}
-  \sum_{t=1}^{n}k_t=0, \qquad\text{and}\qquad \sum_{x=x_1}^{x_m}b_x=1
+  \sum_{t=1}^{n}\beta_t=0, \qquad\text{and}\qquad \int_x \phi(x)=1
 \end{equation}
-are imposed, and a singular value decomposition is used to find the least squares solution of \eqref{eq:lc} [@Good1969]. The estimates of $b_x$ and $k_t$ are therefore the first principal component and scores of $\bm{X}$ with $(i,t)$th element $[\log(m_{x_i,t})-a_{x_i}]$, where $a_{x_i}$ is the sample mean of $\log(m_{x_i,t})$ over $t$. The log transformation introduces some bias, so the LC method adjusts $k_t$ such that for each year, the implied number of deaths will be equal to the actual number of deaths. The adjusted $k_t$ is then extrapolated using a random walk with drift model, which is equivalent to an ARIMA ($0,1,0$) model with a drift parameter.
+are imposed, and a singular value decomposition is used to find the least squares solution of \eqref{eq:lc} [@Good1969]. The estimates of $\phi(x)$ and $\beta_t$ are therefore the first principal component and scores of $\bm{X}$ with $(i,t)$th element $[\log(m_{t}(x))-\mu(x)]$, where $\mu(x)$ is the sample mean of $\log(m_{t}(x))$ over $t$. The log transformation introduces some bias, so the LC method adjusts $\beta_t$ such that for each year, the implied number of deaths will be equal to the actual number of deaths. The adjusted $\beta_t$ is then extrapolated using a random walk with drift model, which is equivalent to an ARIMA ($0,1,0$) model with a drift parameter.
 
 ### Hyndman-Ullah method \label{sec:HU} {-}
 
@@ -150,7 +150,7 @@ where $\widehat{\beta}_{n+h\mid n,j}$ denotes the $h$-step-ahead forecast of $\b
 
 ## Product-ratio method
 
-When we apply the @HU07 model to data on males and females, we need to constrain the resulting forecasts so they do not diverge [@HBY13]. In the product-ratio method, we apply the HU model to the geometric mean of male and female log mortality data, and the ratio of male and female log mortality data, rather than to each series independently. That is, we define
+When we apply the @HU07 model to data on males and females, we need to constrain the resulting forecasts so they do not diverge. In the product-ratio method [@HBY13], we apply the HU model to the geometric mean of male and female log mortality data, and the ratio of male and female log mortality data, rather than to each series independently. That is, we define
 \begin{align}
   p_t(x)&=\sqrt{s_{t}^{\text{M}}(x)s_{t}^{\text{F}}(x)}, \label{eq:coherent_1}\\
   r_t(x)&=\sqrt{\frac{s_{t}^{\text{M}}(x)}{s_{t}^{\text{F}}(x)}}. \label{eq:coherent_2}
@@ -160,23 +160,25 @@ Then, the HU method is applied to these two new variables instead of male and fe
   \log[p_t(x)]=\mu_p(x)+\sum_{j=1}^{J}\beta_{t,j}\phi_j(x)+e_t(x)\\
   \log[r_t(x)]=\mu_r(x)+\sum_{l=1}^{L}\gamma_{t,l}\psi_l(x)+z_t(x)
 \end{align*}
-where time series $\left\{\beta_{t,j}\right\}$ are fitted with an ARIMA model while $\left\{\gamma_{t,l}\right\}$ are fitted by stationary ARFIMA model (i.e., $d$ in ARIMA($p,d,q$) constrained to $0<d<\frac{1}{2}$). It is the stationary constraint on $\gamma_{t,l}$ that ensures the forecasts of male and female do not diverge. Then, forecasts of sex-specific data are obtained using
+where time series $\left\{\beta_{t,j}\right\}$ are fitted with an ARIMA model while $\left\{\gamma_{t,l}\right\}$ are fitted by stationary ARFIMA model (i.e., the order of differencing is constrained to $0<d<\frac{1}{2}$). It is the stationary constraint on $\gamma_{t,l}$ that ensures the forecasts of male and female do not diverge. Then, forecasts of sex-specific data are obtained using
 \begin{align*}
   m_{n+h\mid n}^{\text{M}}(x) & = p_{n+h\mid n}(x)r_{n+h\mid n}(x)\\
   m_{n+h\mid n}^{\text{F}}(x) & = p_{n+h\mid n}(x)/r_{n+h\mid n}(x)
 \end{align*}
 The method for forecasting net migration by sex is similar to the above method used on mortality rates except no log scale is applied to net migration, and a sum and difference is used rather than a product and ratio.
 
-# Data {#sec:data}
+## Stochastic population forecasting
 
-We use the same notation and similar procedures to construct data as in @HB08. The data used to construct population age structure included: age- and gender-specific birth and death numbers of each calendar year, age- and gender-specific population members on 1\ January of each year, and age- and gender-specific exposures to risk (i.e., the population of age $x$ at 30 June) for each year. The notations are as follows:
+We follow the general procedure proposed in @HB08, except that we use the product-ratio method rather than the HU method for mortality and net-migration.
+
+The data used are age- and sex-specific birth and death numbers of each calendar year, age- and sex-specific population members on 1&nbsp;January of each year, and age- and sex-specific exposures to risk (i.e., the population of age $x$ at 30&nbsp;June) for each year. Let
 \begin{align*}
-  B_t(x) &= \text{Births in calendar year $t$ to females of age $x$}\\
-  D_t(x) &= \text{Deaths in calendar year $t$ of persons of age $x$}\\
-  P_t(x) &= \text{Population of age $x$ at 1 January of year $t$}\\
-  E_t(x) &= \text{Population of age $x$ exposed to risk at 30 June of year $t$}
+  B_t(x) &= \text{Births in calendar year $t$ to females of age $x$},\\
+  D_t(x) &= \text{Deaths in calendar year $t$ of persons of age $x$},\\
+  P_t(x) &= \text{Population of age $x$ at 1 January of year $t$},\\
+  E_t(x) &= \text{Population of age $x$ exposed to risk at 30 June of year $t$},
 \end{align*}
-where $x=0,1,2,\dots,p-1,p^+$ denotes age with $p^+$ the open-ended upper age group, set to 100$^+$ in this study. The years is denoted by $t=1,2,\dots,n$, and superscripts M and F denote male and female respectively.
+where $x=0,1,2,\dots,p-1,p^+$ denotes age with $p^+$ the open-ended upper age group, set to 100$^+$ in this study. The year is denoted by $t=1,2,\dots,n$, and superscripts $M$ and $F$ denote male and female respectively.
 
 We can obtain historical mortality rates $m_t(x)$ (also called central death rates) and fertility rates $f_t(x)$ as follows:
 \begin{align*}
@@ -192,23 +194,19 @@ In addition, the net migration^[Net migration is the difference between immigrat
 \end{align*}
 where $G_t(x,x+1)$ refers to net migration in calendar year $t$ of persons aged $x$ at the beginning of year $t$, $G_t(p-1^+,p^+)$ refers to migration in calendar year $t$ of persons aged $p-1$ and older at the beginning of year $t$, and $G_t(B,0)$ refers to deaths in calendar year $t$ of births during year $t$; and similarly for deaths, $D_t(x,x+1)$, $D_t(p-1^+,p^+)$, and $D_t(B,0)$. The deaths are estimated using the standard life table approach of population projection. It should be noted that the estimated net migration includes errors in data recording.
 
+A stochastic functional data model was applied to the five components of population change: female mortality rates, male mortality rates, female net migration, male net migration and fertility rates to simulate these five components into the future.
+
+We use the HU method applied to log-fertility, and the product-ratio method applied to log-mortality and net-migration. From these models, sample paths are simulated for age-specific fertility rates, age- and sex-specific mortality rates and age- and sex-specific net migration. Then future population values are simulated using the demographic growth-balance equations. The future deaths and births in this equation are assumed to follow a Poisson distribution, with parameters as a function of future mortality and fertility rates. We bootstrap the residuals of the net-migration model to simulate future net-migration numbers (see @HB08 for the details). Hence, we can simulate $h$-step-ahead age- and sex-specific population numbers based on simulated births, deaths and net-migrants.
+
+This simulation was repeated for years $t=n+1,\dots,n+h$ to obtain a sample path of the age-specific population. Many simulated population paths were obtained in this way.
+
+It should be noted that there are three types of randomness in the simulation: randomness from the second equation in the Hyndman-Ullah specification (i.e., $e_t(x)$ in \eqref{eq:HU_1}), randomness from the ARIMA model fitted to principal component scores, and randomness from the Poisson distribution for births and deaths or the bootstrap for migrants.
+
+# Data {#sec:data}
+
 Historical central death rates and start-year and mid-year populations of residents in Australia by sex and age in single years for age group 0--99 and 100+ have been sourced from the @HMD for 1921--2018. The start-year population for 2019 is also used to estimate net migration. Data for age-specific annual fertility rates by single years of age for 15--49 over the period 1950--2018 was obtained from the @ABS12. Even though annual mortality rates are available from 1921 to 2018, only data collected after 1950 is used for two reasons. First, the period between 1921--1950 has different mortality patterns from later years because of wars and epidemics [@HB08]. Since the model for this study is valid under the assumption that extrapolative methods can be used, it seemed best to delete the less relevant data, which might influence estimations of parameters if we include them. Second, fertility rates are only available from 1950, so the mortality rate was cut to fit the same period.
 
-## Forecasting population age structure and OADR {#sec:forecasting}
-
-In this study, three steps were taken to simulate OADR associated with a specific pension age scheme. A stochastic functional data model was applied to five components of population change: female mortality rates, male mortality rates, female net migration, male net migration and fertility rates to simulate these five components over the prediction horizon (which is 50 years in this study). Age- and gender-specific population paths over the prediction horizon were simulated using the demographic growth-balance equation. The Monte Carlo simulation method was used consistently in this research. Finally, calculation of OADR associated with a specific pension age scheme was performed by applying the OADR formula. Even though the process seems complicated, it is relatively easy to implement using \textit{R} [@Team18]. The detailed explanation of each step is as follows. The corresponding R code is attached as a supplement.
-
-### Step 1 {-}
-
-The main procedure for forecasting the population age structure follows @HB08, except that the data are updated, and we incorporate the product-ratio method [@HBY13] to improve the accuracy of the forecast.
-
-, introduced in section \@ref(sec:HU), is applied to the mortality rate, fertility rate and net migration separately, based on the assumption that they behave independently. Therefore, to fit the model to historical fertility rates, let $y_t(x)$ in equation \eqref{eq:HU_1} denote the observed historical fertility data.
-
-### Step 2 {-}
-
-After simulating paths for age-specific fertility rate, age- and gender-specific mortality rate and age- and gender-specific net migration, future population value was simulated using the demographic growth-balance equations over the prediction horizon. The future deaths and births in this equation are assumed to follow a Poisson distribution, with parameters as a function of future mortality and fertility rates (see Hyndman and Booth, 2008 for the details of the functions). Hence, we can simulate $h$-step-ahead age- and gender-specific births and deaths based on simulated mortality and fertility rates. According to the demographic growth-balance equation, one-step-ahead net migrations, deaths, births and population in the last year were simulated, allowing for the generation of one-step-ahead population predictions by sex and age. This simulation was repeated for years $t=n+1,\dots,n+h$ to obtain a path of population. The process was repeated and simulated $i$ paths of population based on Monte Carlo simulation method were created (we set $i=1000$ in this research). It should be noted that there are three types of randomness in the simulation: randomness from the second equation in the Hyndman-Ullah specification (i.e., $e_t(x)$ in \eqref{eq:HU_1}), randomness from the ARIMA model fitted to principal component scores and randomness from the Poisson distribution. It should be noted that the simulated population will be an array with three dimensions: age, year and simulation.
-
-### Step 3 {-}
+## Forecasting OADR {#sec:forecasting}
 
 Even though the OADR is a simple function of the population age structure and pension age, the formula can't be directly applied to the simulated population array because the pension age changes over time. To overcome this problem, we assume that the pension age can only be adjusted at the beginning of a year for these calculations. Therefore, one pension age is applicable for a whole year and hence OADR is generated at the beginning of each year to show the trend. We will show the process of obtaining a one-step-ahead OADR (i.e., forecast of OADR in the year 2019), given a specific pension age. The same method can be applied to all years over the prediction horizon, given their corresponding pension age. Further, the fractional pension age causes practical issues in calculating OADR, since ages are recorded as integers. We will also show how this issue was handled in the example below.
 
@@ -394,7 +392,7 @@ autoplot(fertf)
 
 The first estimated basis function $\widehat{\phi}_1(x)$ measures the different effects of the trend over time across ages. It indicates the general pattern of fertility has little effect on females of age 15. This makes intuitive sense because most early pregnancies are accidental. Therefore, any of the previously discussed events has no effect on early pregnancies. In addition, there are two spikes in the first basic function, which suggests that the historical trend has a distinct impact on females aged around their 20s and 40s. Furthermore, the blue line is the fitted value of future coefficients (i.e., $\widehat{\beta}_{n+h,1}$, for $h=1,2,\dots,50$) and the yellow shading shows their 80% pointwise prediction interval according to the fitted ARIMA model of first coefficients $\left\{\widehat{\beta}_{t,1}\right\}$. Other terms further explain variation that has not been captured by the first term, but less economic explanations can be given for them.
 
-Figures \@ref(fig:totalpopulationbyyears) and \@ref(fig:totalpopulationin2034) show the forecast results of population. Figure \@ref(fig:totalpopulationbyyears) shows the forecast of the total population by gender over the prediction horizon, while Figure \@ref(fig:totalpopulationin2028) shows the forecast of population age structure in a specific year, 2038. Figure \@ref(fig:totalpopulationbyyears) indicates that both the female and male population are expected to increase to around 27 million by 2068. Since the fertility rate is expected to remain low, the possible reason for the significant increase in population size is net migration. We can also observe that the further the projected year is, the bigger the forecast variation of a population. This increase in variation shows that we have less relevant information for further apart prediction horizons.
+Figures \@ref(fig:totalpopulationbyyears) and \@ref(fig:totalpopulationin2034) show the forecast results of population. Figure \@ref(fig:totalpopulationbyyears) shows the forecast of the total population by sex over the prediction horizon, while Figure \@ref(fig:totalpopulationin2028) shows the forecast of population age structure in a specific year, 2038. Figure \@ref(fig:totalpopulationbyyears) indicates that both the female and male population are expected to increase to around 27 million by 2068. Since the fertility rate is expected to remain low, the possible reason for the significant increase in population size is net migration. We can also observe that the further the projected year is, the bigger the forecast variation of a population. This increase in variation shows that we have less relevant information for further apart prediction horizons.
 
 ```{r simulation, dependson='models'}
 ############### SIMULATION STEP #################
