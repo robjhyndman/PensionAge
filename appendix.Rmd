@@ -1,0 +1,26 @@
+
+# Appendix: Evaluating forecast accuracy {-}
+
+Since all the results and implications are dependent on the forecast accuracy, it is important to evaluate the accuracy of our forecast. We will use a cross-validation procedure [@fpp2] to evaluate the accuracy of the models used in this paper.
+
+The logic of a cross-validation test is to use a portion of available data for fitting, and use the remaining data to test. Suppose we need $k$ years' observations to produce a reliable forecast^[$k$ can't be too small], we are interested in the $H$ prediction horizon. Then we are allowed to repeat the test $T-H-k+1$ times, where $T$ is the number of total years of observation. The procedure is as follows:
+
+  Let $\omega=1$, we first select historical data for a time interval of $[\omega,\omega+1,\dots,\omega+k-1]$ as "in sample data" to fit the model, and then forecast $H$ years' OADR^[The OADR is generated based on a pension age equal to 65 for the purpose of test.]. Then, we can calculate the difference of forecasted OADR over the period $[\omega+k,\omega+k+1,\dots,\omega+k+H-1]$ from the real OADR for the same period, which is known as absolute error. We repeat the following steps for $\omega=1,2,\dots,T-k-H+1$. Then, we can summarize the information into a matrix as follows:
+$$
+  \text{\textbf{Absolute Error}} = [\text{AE}_{h,\omega}] =
+    \begin{bmatrix}
+      \text{AE}_{1,1} & \cdots\cdots & \text{AE}_{1,T-k-H+1} \\
+      \vdots          & \ddots       & \vdots \\
+      \text{AE}_{H,1} & \cdots\cdots & \text{AE}_{H,T-k-H+1}
+    \end{bmatrix}
+$$
+where $h$ denotes for the forecast horizon and $\text{AE}_{h,\omega}=\left|\text{OADR}^{\text{mean}}_{h,\omega}-\text{OADR}^{\text{real}}_{h,\omega}\right|$. This process is also known as "rolling forecasting origin", because the "origin" ($k+\omega-1$) at which the forecast is based rolls forward in time. We take the average of each row to obtain an absolute mean error of $h$-step-ahead forecast of OADR where $h=1,2,\dots,H$.
+
+In our sample, $T=2018-1950+1=69$ and we set $k=25$ and $H=25$ to perform the test. The mean absolute error of $h$-step-ahead forecast of OADR for $h=1,2,\dots,25$ is shown in Figure \@ref(fig:rmseplot). From this Figure, we observe that the mean absolute error is increasing as $h$ increases, which is reasonable as we have less relevant information to make a forecast for further apart OADR. Overall, the mean absolute error is small. For example, the mean absolute error for 25-step-ahead forecast is 1.6%, which is small if compared to the desired level of OADR, which is at 25%.
+
+```{r rmseplot}
+loadd(oadr_rolling_rmse_plot)
+oadr_rolling_rmse_plot
+```
+
+It would normally be ideal for comparing the mean absolute error of the forecast from our model to other available models to measure the accuracy. For example, suppose we can take the population projections from ABS reports over the last few decades, their projection of population age structure reported in different years can be used to mimic the rolling origin test of OADR, because we now have the real OADR for those projected years. However, we are not able to perform it because full projection data is no longer available online and ABS projections have not used a consistent and replicate methodology.
