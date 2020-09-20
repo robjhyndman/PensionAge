@@ -29,8 +29,6 @@ output:
     keep_tex: yes
     number_sections: yes
     citation_package: biblatex
-header-includes:
-  - \usepackage{todonotes, xcolor}
 ---
 
 ```{r setup, include=FALSE}
@@ -238,13 +236,13 @@ oadr_plots
 
 Once the pension age reaches 67, the OADR under the current policy grows at nearly the same rate as the OADR of a pension age equal of 65. This is consistent with the idea that there is a persistent positive trend in OADR associated with a constant pension age, due to low fertility rates and better health care. Even the proposal to raise the pension age incrementally to 70 by 2035 leads to a similar increasing trend beyond 2035. This proposal also leads to a slow decline in the OADR over the next 15 years. Figure \@ref(fig:OADRcurrent) demonstrates that the pension age scheme requires constant review to ensure a stable OADR over the long term.
 
-# Sustainable pension age schemes
+# Sustainable pension age schemes {#sec:target}
 
 Our aim is to determine a pension age scheme that would lead to the OADR being below a desired threshold, thus imposing a sustainability constraint.
 
 Let $a_t$ denote the pension age in year $t$, and we denote a pension age scheme over the prediction horizon by $\bm{P}=[a_{T+1},\dots,a_{T+H}]'$, with the corresponding OADR values given by $O_{T+1},\dots,O_{T+H}$. Our goal is to find the minimum pension age in each year that gives an OADR lower than the desired OADR threshold.  We impose the constraint $0 \le a_t - a_{t-1} < 1$ to prevent two undesirable situations: (a) years where no-one is able to retire; and (b) years where retired people become ineligible for the pension. We also assume that the adjustment unit of the pension age is one month, for easier implementation.
 
-## Finding the target pension age scheme {#sec:target}
+## Finding the target pension age scheme
 
 Let $O^*$ denote the desired OADR threshold. Because we do not observe the population in future years, we must estimate $O_{T+h}$ from the simulated populations. Then we compute the pension age scheme $\bm{P}$ using the following algorithm. Starting with $h=1$:
 
