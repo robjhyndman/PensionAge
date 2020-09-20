@@ -344,7 +344,7 @@ This research addresses the pension age issue from a purely demographic perspect
 
 Finally, we have not allowed for the impact of COVID-19 in this analysis as it is too early to properly estimate its impact on mortality rates and future age structures. It is known that the mortality rates from COVID-19 are greater amongst older people, so it should lead to a decrease in the OADR. However, the relatively small number of deaths in Australia mean that the effect of the pandemic will probably not substantially change our recommendations.
 
-## Reproducibility {-}
+# Reproducibility {-}
 
 The data and code to fully reproduce our results is available at [`https://github.com/robjhyndman/PensionAge`](https://github.com/robjhyndman/PensionAge). We used R [@RCore], along with the drake [@Rdrake], tidyverse [@Rtidyverse], demography [@Rdemography] and forecast [@Rforecast] packages.
 
