@@ -1,0 +1,46 @@
+%% Any special functions or other packages can be loaded here.
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{float, bm}
+\usepackage{moreverb}
+\usepackage{url}
+\usepackage{grffile}
+\usepackage{lineno}
+\usepackage[UKenglish]{isodate}
+\usepackage{hyperref}
+
+\let\origfigure\figure
+\let\endorigfigure\endfigure
+\renewenvironment{figure}[1][2] {
+    \expandafter\origfigure\expandafter[tbp]
+} {
+    \endorigfigure
+}
+
+\let\origtable\table
+\let\endorigtable\endtable
+\renewenvironment{table}[1][2] {
+    \expandafter\origtable\expandafter[tbp]
+} {
+    \endorigtable
+}
+
+\runningheads{Forecasting the OADR to determine a sustainable pension age}{HYNDMAN, ZENG, SHANG}
+
+\def\volumeyear{2020}
+\let\oldmaketitle\maketitle
+\def\maketitle{\cleanlookdateon\oldmaketitle}
+\linenumbers
+
+\usepackage{titling}
+\pretitle{\begin{center}\Large\bfseries}
+\posttitle{\end{center}\vspace{0.5cm}}
+\preauthor{\begin{center}\large}
+\postauthor{\end{center}\begin{center}
+$^1$\emph{Department of Econometrics \& Business Statistics, Monash University, Clayton, Australia}\\
+$^2$\emph{Shanghai, China}\\
+$^3$\emph{Macquarie University, Sydney, Australia}
+\footnotetext{$^*$Corresponding author. Email: \texttt{Rob.Hyndman@monash.edu}}\end{center}}
+
+\usepackage{mathptmx}
