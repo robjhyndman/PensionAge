@@ -109,13 +109,13 @@ In addition, the net migration^[Net migration is the difference between immigrat
   G_t(p-1^+,p^+) & =P_{t+1}(p^+)-P_t(p^+)-P_t(p-1)+D_t(p-1^+,p^+),\\
   G_t(B,0)       & =P_{t+1}(0)-B_t+D_t(B,0),
 \end{align*}
-where $G_t(x,x+1)$ refers to net migration in calendar year $t$ of persons aged $x$ at the beginning of year $t$, $G_t(p-1^+,p^+)$ refers to migration in calendar year $t$ of persons aged $p-1$ and older at the beginning of year $t$, and $G_t(B,0)$ refers to deaths in calendar year $t$ of births during year $t$; and similarly for deaths, $D_t(x,x+1)$, $D_t(p-1^+,p^+)$, and $D_t(B,0)$. The deaths are estimated using the standard life table approach of population projection. It should be noted that the estimated net migration includes errors in data recording.
+where $G_t(x,x+1)$ refers to net migration in calendar year $t$ of persons aged $x$ at the beginning of year $t$, $G_t(p-1^+,p^+)$ refers to migration in calendar year $t$ of persons aged $p-1$ and older at the beginning of year $t$, and $G_t(B,0)$ refers to migration in calendar year $t$ of persons born during year $t$; and similarly for deaths, $D_t(x,x+1)$, $D_t(p-1^+,p^+)$, and $D_t(B,0)$. The deaths are estimated using the standard life table approach of population projection [@Preston2000]. It should be noted that the estimated net migration includes errors in data recording.
 
 ## Old-Age Dependency Ratio
 
 Using this notation, the OADR in year $t$ is given by
 \begin{equation}\label{eq:oadr}
-O_t = \frac{\displaystyle\sum_{x=15}^{\lfloor a_t\rfloor-1} P_t(x) + r_t P_t(\lfloor a_t\rfloor)}{\displaystyle\sum_{x\ge \lfloor a_t\rfloor} P_t(x) - r_t P_t(\lfloor a_t\rfloor)},
+O_t = \frac{\displaystyle\sum_{x\ge \lfloor a_t\rfloor} P_t(x) - r_t P_t(\lfloor a_t\rfloor)}{\displaystyle\sum_{x=15}^{\lfloor a_t\rfloor-1} P_t(x) + r_t P_t(\lfloor a_t\rfloor)},
 \end{equation}
 where $a_t$ is the pension age in year $t$ and $r_t = a_t - \lfloor a_t \rfloor$ is the non-integer part of $a_t$. This assumes that the pension age can only be adjusted at the beginning of a year, and that the birthday of the population is uniformly distributed over the year.
 

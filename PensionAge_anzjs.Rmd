@@ -1,6 +1,6 @@
 ---
 title: "Forecasting the old-age dependency ratio to determine a sustainable pension age"
-author: Rob J Hyndman$^{1*}$, Yijun Zeng^2, Han Lin Shang^3
+author: Rob J Hyndman$^{1*}$, Yijun Zeng$^2$, Han Lin Shang$^3$
 documentclass: anzsauth
 classoption: doublespace
 bibliography: pensionage.bib
@@ -102,7 +102,7 @@ In addition, the net migration^[Net migration is the difference between immigrat
   G_t(p-1^+,p^+) & =P_{t+1}(p^+)-P_t(p^+)-P_t(p-1)+D_t(p-1^+,p^+),\\
   G_t(B,0)       & =P_{t+1}(0)-B_t+D_t(B,0),
 \end{align*}
-where $G_t(x,x+1)$ refers to net migration in calendar year $t$ of persons aged $x$ at the beginning of year $t$, $G_t(p-1^+,p^+)$ refers to migration in calendar year $t$ of persons aged $p-1$ and older at the beginning of year $t$, and $G_t(B,0)$ refers to deaths in calendar year $t$ of births during year $t$; and similarly for deaths, $D_t(x,x+1)$, $D_t(p-1^+,p^+)$, and $D_t(B,0)$. The deaths are estimated using the standard life table approach of population projection. It should be noted that the estimated net migration includes errors in data recording.
+where $G_t(x,x+1)$ refers to net migration in calendar year $t$ of persons aged $x$ at the beginning of year $t$, $G_t(p-1^+,p^+)$ refers to migration in calendar year $t$ of persons aged $p-1$ and older at the beginning of year $t$, and $G_t(B,0)$ refers to migration in calendar year $t$ of persons born during year $t$; and similarly for deaths, $D_t(x,x+1)$, $D_t(p-1^+,p^+)$, and $D_t(B,0)$. The deaths are estimated using the standard life table approach of population projection [@Preston2001]. It should be noted that the estimated net migration includes errors in data recording.
 
 ## Old-Age Dependency Ratio
 
