@@ -1,49 +1,59 @@
 ---
 title: Response to reviewers
 author: "Forecasting the old-age dependency ratio to determine a sustainable pension age"
-output: MonashEBSTemplates::memo
+bibliography: ../pensionage.bib
+output: 
+  MonashEBSTemplates::memo:
+    includes:
+      in_header: preamble.tex
 ---
 
-We thank the reviewers for their careful reading of our paper; their comments have led to several improvements and corrections.
+We thank the reviewers for their careful reading of our paper; their comments have led to several improvements and corrections. Reviewer comments are in black, our responses are in green.
 
 # Reviewer 1
 
-> This paper applies functional data models to mortality, fertility and net migration, and
+This paper applies functional data models to mortality, fertility and net migration, and
 use the models to simulate future age-structure of the population. The paper then forecast
 old-age dependency ratio for Australia under various pension age schemes, and propose
 some pension age schemes with given targets. The application is interesting.
 
-> Comments:
+Comments:
 
-> 1. Page 5, 2nd to last line. $G_t(B, 0)$ should refer to net migration rather than deaths?
-> 2. Last line of Page 5 and first line of Page 6. What does the following sentence mean
+1. Page 5, 2nd to last line. $G_t(B, 0)$ should refer to net migration rather than deaths?
+
+> Thanks. Now fixed.
+
+2. Last line of Page 5 and first line of Page 6. What does the following sentence mean
 in its context: “The deaths are estimated using the standard life table approach of
 population projection.”
-> 3. Page 6, the numerator and denominator of equation (2) should be flipped?
-> 4. Page 8, after equation (9), it is mentioned that “the HU method is applied to these
+
+> We have added a reference to @Preston2000 who discuss this method.
+
+3. Page 6, the numerator and denominator of equation (2) should be flipped?
+4. Page 8, after equation (9), it is mentioned that “the HU method is applied to these
 two new variables.” In the previous description of the HU method, smoothed version
 of $y_t(x)$ is modelled in the form of equation (6), whereas here the non-smoothed
 $\log[p_t(x)]$ and $\log[r_t(x)]$ are modelled in the form of equation (6). Please clarify.
-> 5. Page 9. It is mentioned that “The future deaths and births in this equation are
+5. Page 9. It is mentioned that “The future deaths and births in this equation are
 assumed to follow a Poisson distribution, with parameters as a function of future
 mortality and fertility rates.” In the observed data, is the Poisson variation in the
 deaths and births modelled?
-> 6. Page 14. In the second step of computing the pension age scheme $P$, what does “or
+6. Page 14. In the second step of computing the pension age scheme $P$, what does “or
 $a_{T+1} - a_T = 1$” mean? Why is $h$ not involved?
 
 # Reviewer 2
 
-> What this paper has done is to calculate the right pension age to lead to a given OADR. The calculation is based on a careful and skillful projection on future population, which is described nicely in the first half of the title “Forecasting the old-age dependency ratio”. This part seems to be the main contribution of the paper.
+What this paper has done is to calculate the right pension age to lead to a given OADR. The calculation is based on a careful and skillful projection on future population, which is described nicely in the first half of the title “Forecasting the old-age dependency ratio”. This part seems to be the main contribution of the paper.
 
-> However, it is dubious whether this calculation help “to determine a sustainable pension age”, as stated in the second half of the title. The main problem is, even if the targeted pension age keeps the OADR from rising above the current level at 23%, the fiscal burden may or may not stay acceptable, or “sustainable”. The reasons are elaborated below.
+However, it is dubious whether this calculation help “to determine a sustainable pension age”, as stated in the second half of the title. The main problem is, even if the targeted pension age keeps the OADR from rising above the current level at 23%, the fiscal burden may or may not stay acceptable, or “sustainable”. The reasons are elaborated below.
 
-> First, the calculated pension age is based on number of those above a certain age. A related question is how many of those above 65 years old receive Age Pension, and whether the ratio is expected to remain stable. In Power (2014), as cited on p.3, the portion of Australians over pension age receive age pension was 80%. But the number was 67% in 2018 (p.3) according to Australian Institute of Health and Welfare (2019). This portion may have gone further down to 45% since December 2018, due perhaps to the success of Superannuation, by the estimate of a private firm (https://www.nestegg.com.au/retirement/planning/australians-super-ready). If this figure indeed goes down over time, the financial burden will be lighter and the rise of the target pension age can be slower. The authors may want to check and discuss whether the percentage of Age Pensioners is expected to stabilize around 67% in the future.
+First, the calculated pension age is based on number of those above a certain age. A related question is how many of those above 65 years old receive Age Pension, and whether the ratio is expected to remain stable. In Power (2014), as cited on p.3, the portion of Australians over pension age receive age pension was 80%. But the number was 67% in 2018 (p.3) according to Australian Institute of Health and Welfare (2019). This portion may have gone further down to 45% since December 2018, due perhaps to the success of Superannuation, by the estimate of a private firm (https://www.nestegg.com.au/retirement/planning/australians-super-ready). If this figure indeed goes down over time, the financial burden will be lighter and the rise of the target pension age can be slower. The authors may want to check and discuss whether the percentage of Age Pensioners is expected to stabilize around 67% in the future.
 
-> Second, what does “sustainable” mean here? In Australia, the age pension is financed by general taxes. Therefore, growth of GDP, which finances the pension, seems important. In fact, the percentage of total pension payment in GDP may be a more meaningful policy target to examine than the percentage of elderly in total population for policy makers. The authors may want to give some thoughts here.
+Second, what does “sustainable” mean here? In Australia, the age pension is financed by general taxes. Therefore, growth of GDP, which finances the pension, seems important. In fact, the percentage of total pension payment in GDP may be a more meaningful policy target to examine than the percentage of elderly in total population for policy makers. The authors may want to give some thoughts here.
 
-> Third, do labor force participation and technological growth matter at all? In most rich countries, the long-term growth rate of per capita GDP is lower over time. Hence even if the pension age is raised, the burden of pension payment, which comes from general taxes, may still become heavier if GDP does not grow as fast in the future. A decline in labor force participation rate may have similar effects. The authors may want to consider these extra factors, though they have stated that the approach of this paper is to “illustrate how population forecasting can be used to explore the pension age issue in a simple context” (p.3), and “whether this OADR is the most appropriate level for Australia remains to be examined and is not the focus of this paper” (p.2).
+Third, do labor force participation and technological growth matter at all? In most rich countries, the long-term growth rate of per capita GDP is lower over time. Hence even if the pension age is raised, the burden of pension payment, which comes from general taxes, may still become heavier if GDP does not grow as fast in the future. A decline in labor force participation rate may have similar effects. The authors may want to consider these extra factors, though they have stated that the approach of this paper is to “illustrate how population forecasting can be used to explore the pension age issue in a simple context” (p.3), and “whether this OADR is the most appropriate level for Australia remains to be examined and is not the focus of this paper” (p.2).
 
-> A minor point here. there are some typos to correct, such as (1) The definitions of OADR are opposite in Eq. 1 and Eq. 2. (2) Should “Gross Domestic Profit” on p.3 be “Gross Domestic Product”?
+A minor point here. there are some typos to correct, such as (1) The definitions of OADR are opposite in Eq. 1 and Eq. 2. (2) Should “Gross Domestic Profit” on p.3 be “Gross Domestic Product”?
 
-> To sum up, the technical parts are nicely done, and the calculation of pension age to keep OADR constant can serve as a nice first step for policy decision. But more have to be done to improve the contribution of the paper.
+To sum up, the technical parts are nicely done, and the calculation of pension age to keep OADR constant can serve as a nice first step for policy decision. But more have to be done to improve the contribution of the paper.
 
