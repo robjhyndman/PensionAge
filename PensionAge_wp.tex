@@ -1,57 +1,39 @@
-% Options for packages loaded elsewhere
-\PassOptionsToPackage{unicode}{hyperref}
-\PassOptionsToPackage{hyphens}{url}
-%
-\documentclass[
-  doublespace]{anzsauth}
-\usepackage{amsmath,amssymb}
+\documentclass[11pt,a4paper,]{article}
 \usepackage{lmodern}
+
+\usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
-  \usepackage{textcomp} % provide euro and other symbols
-\else % if luatex or xetex
+\else % if luatex or xelatex
   \usepackage{unicode-math}
-  \defaultfontfeatures{Scale=MatchLowercase}
-  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
 \fi
-% Use upquote if available, for straight quotes in verbatim environments
+% use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-\IfFileExists{microtype.sty}{% use microtype if available
-  \usepackage[]{microtype}
-  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\makeatletter
-\@ifundefined{KOMAClassName}{% if non-KOMA class
-  \IfFileExists{parskip.sty}{%
-    \usepackage{parskip}
-  }{% else
-    \setlength{\parindent}{0pt}
-    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
-}{% if KOMA class
-  \KOMAoptions{parskip=half}}
-\makeatother
-\usepackage{xcolor}
-\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
+\usepackage[unicode=true]{hyperref}
 \hypersetup{
-  pdftitle={Forecasting the old-age dependency ratio to determine a sustainable pension age},
-  pdfauthor={Rob J Hyndman\^{}\{1*\}, Yijun Zeng\^{}2, Han Lin Shang\^{}3},
-  hidelinks,
-  pdfcreator={LaTeX via pandoc}}
-\urlstyle{same} % disable monospaced font for URLs
-\usepackage{longtable,booktabs,array}
-\usepackage{calc} % for calculating minipage widths
-% Correct order of tables after \paragraph or \subparagraph
-\usepackage{etoolbox}
-\makeatletter
-\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
-\makeatother
-% Allow footnotes in longtable head/foot
-\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
-\makesavenoteenv{longtable}
-\usepackage{graphicx}
+            pdftitle={Forecasting the old-age dependency ratio to determine a sustainable pension age},
+            pdfkeywords={coherent forecasts, demographic components, functional time series, pension age},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{geometry}
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+\usepackage[style=authoryear-comp,]{biblatex}
+\addbibresource{pensionage.bib}
+\usepackage{longtable,booktabs}
+% Fix footnotes in tables (requires footnote package)
+\IfFileExists{footnote.sty}{\usepackage{footnote}\makesavenoteenv{long table}}{}
+\usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
 \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
@@ -60,100 +42,284 @@
 % margins by default, and it is still possible to overwrite the defaults
 % using explicit options in \includegraphics[width, height, ...]{}
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-% Set default figure placement to htbp
-\makeatletter
-\def\fps@figure{htbp}
-\makeatother
-\setlength{\emergencystretch}{3em} % prevent overfull lines
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 \setcounter{secnumdepth}{5}
-%% Any special functions or other packages can be loaded here.
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{Forecasting the old-age dependency ratio to determine a sustainable pension age}
+
+%% MONASH STUFF
+
+%% CAPTIONS
+\RequirePackage{caption}
+\DeclareCaptionStyle{italic}[justification=centering]
+ {labelfont={bf},textfont={it},labelsep=colon}
+\captionsetup[figure]{style=italic,format=hang,singlelinecheck=true}
+\captionsetup[table]{style=italic,format=hang,singlelinecheck=true}
+
+%% FONT
+\RequirePackage{bera}
+\RequirePackage{mathpazo}
+
+%% HEADERS AND FOOTERS
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}
+\rfoot{\Large\sffamily\raisebox{-0.1cm}{\textbf{\thepage}}}
+\makeatletter
+\lhead{\textsf{\expandafter{\@title}}}
+\makeatother
+\rhead{}
+\cfoot{}
+\setlength{\headheight}{15pt}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancypagestyle{plain}{%
+\fancyhf{} % clear all header and footer fields
+\fancyfoot[C]{\sffamily\thepage} % except the center
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}}
+
+%% MATHS
+\RequirePackage{bm,amsmath}
+\allowdisplaybreaks
+
+%% GRAPHICS
+\RequirePackage{graphicx}
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.15}
+\renewcommand{\floatpagefraction}{0.8}
+
+%\RequirePackage[section]{placeins}
+
+%% SECTION TITLES
+\RequirePackage[compact,sf,bf]{titlesec}
+\titleformat{\section}[block]
+  {\fontsize{15}{17}\bfseries\sffamily}
+  {\thesection}
+  {0.4em}{}
+\titleformat{\subsection}[block]
+  {\fontsize{12}{14}\bfseries\sffamily}
+  {\thesubsection}
+  {0.4em}{}
+\titlespacing{\section}{0pt}{*5}{*1}
+\titlespacing{\subsection}{0pt}{*2}{*0.2}
+
+
+%% TITLE PAGE
+\def\Date{\number\day}
+\def\Month{\ifcase\month\or
+ January\or February\or March\or April\or May\or June\or
+ July\or August\or September\or October\or November\or December\fi}
+\def\Year{\number\year}
+
+\makeatletter
+\def\wp#1{\gdef\@wp{#1}}\def\@wp{??/??}
+\def\jel#1{\gdef\@jel{#1}}\def\@jel{??}
+\def\showjel{{\large\textsf{\textbf{JEL classification:}}~\@jel}}
+\def\nojel{\def\showjel{}}
+\def\addresses#1{\gdef\@addresses{#1}}\def\@addresses{??}
+\def\cover{{\sffamily\setcounter{page}{0}
+        \thispagestyle{empty}
+        \placefig{2}{1.5}{width=5cm}{monash2}
+        \placefig{16.9}{1.5}{width=2.1cm}{MBusSchool}
+        \begin{textblock}{4}(16.9,4)ISSN 1440-771X\end{textblock}
+        \begin{textblock}{7}(12.7,27.9)\hfill
+        \includegraphics[height=0.7cm]{AACSB}~~~
+        \includegraphics[height=0.7cm]{EQUIS}~~~
+        \includegraphics[height=0.7cm]{AMBA}
+        \end{textblock}
+        \vspace*{2cm}
+        \begin{center}\Large
+        Department of Econometrics and Business Statistics\\[.5cm]
+        \footnotesize http://monash.edu/business/ebs/research/publications
+        \end{center}\vspace{2cm}
+        \begin{center}
+        \fbox{\parbox{14cm}{\begin{onehalfspace}\centering\Huge\vspace*{0.3cm}
+                \textsf{\textbf{\expandafter{\@title}}}\vspace{1cm}\par
+                \LARGE\@author\end{onehalfspace}
+        }}
+        \end{center}
+        \vfill
+                \begin{center}\Large
+                \Month~\Year\\[1cm]
+                Working Paper \@wp
+        \end{center}\vspace*{2cm}}}
+\def\pageone{{\sffamily\setstretch{1}%
+        \thispagestyle{empty}%
+        \vbox to \textheight{%
+        \raggedright\baselineskip=1.2cm
+     {\fontsize{24.88}{30}\sffamily\textbf{\expandafter{\@title}}}
+        \vspace{2cm}\par
+        \hspace{1cm}\parbox{14cm}{\sffamily\large\@addresses}\vspace{1cm}\vfill
+        \hspace{1cm}{\large\Date~\Month~\Year}\\[1cm]
+        \hspace{1cm}\showjel\vss}}}
+\def\blindtitle{{\sffamily
+     \thispagestyle{plain}\raggedright\baselineskip=1.2cm
+     {\fontsize{24.88}{30}\sffamily\textbf{\expandafter{\@title}}}\vspace{1cm}\par
+        }}
+\def\titlepage{{\cover\newpage\pageone\newpage\blindtitle}}
+
+\def\blind{\def\titlepage{{\blindtitle}}\let\maketitle\blindtitle}
+\def\titlepageonly{\def\titlepage{{\pageone\end{document}}}}
+\def\nocover{\def\titlepage{{\pageone\newpage\blindtitle}}\let\maketitle\titlepage}
+\let\maketitle\titlepage
+\makeatother
+
+%% SPACING
+\RequirePackage{setspace}
+\spacing{1.5}
+
+%% LINE AND PAGE BREAKING
+\sloppy
+\clubpenalty = 10000
+\widowpenalty = 10000
+\brokenpenalty = 10000
+\RequirePackage{microtype}
+
+%% PARAGRAPH BREAKS
+\setlength{\parskip}{1.4ex}
+\setlength{\parindent}{0em}
+
+%% HYPERLINKS
+\RequirePackage{xcolor} % Needed for links
+\definecolor{darkblue}{rgb}{0,0,.6}
+\RequirePackage{url}
+
+\makeatletter
+\@ifpackageloaded{hyperref}{}{\RequirePackage{hyperref}}
+\makeatother
+\hypersetup{
+     citecolor=0 0 0,
+     breaklinks=true,
+     bookmarksopen=true,
+     bookmarksnumbered=true,
+     linkcolor=darkblue,
+     urlcolor=blue,
+     citecolor=darkblue,
+     colorlinks=true}
+
+%% KEYWORDS
+\newenvironment{keywords}{\par\vspace{0.5cm}\noindent{\sffamily\textbf{Keywords:}}}{\vspace{0.25cm}\par\hrule\vspace{0.5cm}\par}
+
+%% ABSTRACT
+\renewenvironment{abstract}{\begin{minipage}{\textwidth}\parskip=1.4ex\noindent
+\hrule\vspace{0.1cm}\par{\sffamily\textbf{\abstractname}}\newline}
+  {\end{minipage}}
+
+
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 
-\usepackage{float, bm}
-\usepackage{moreverb}
-\usepackage{url}
-\usepackage{grffile}
-\usepackage{lineno}
-\usepackage[UKenglish]{isodate}
-\usepackage{hyperref}
+\usepackage[showonlyrefs]{mathtools}
+\usepackage[no-weekday]{eukdate}
 
-\let\origfigure\figure
-\let\endorigfigure\endfigure
-\renewenvironment{figure}[1][2] {
-    \expandafter\origfigure\expandafter[tbp]
-} {
-    \endorigfigure
+%% BIBLIOGRAPHY
+
+\makeatletter
+\@ifpackageloaded{biblatex}{}{\usepackage[style=authoryear-comp, backend=biber, natbib=true]{biblatex}}
+\makeatother
+\ExecuteBibliographyOptions{bibencoding=utf8,minnames=1,maxnames=3, maxbibnames=99,dashed=false,terseinits=true,giveninits=true,uniquename=false,uniquelist=false,doi=false, isbn=false,url=true,sortcites=false}
+
+\DeclareFieldFormat{url}{\texttt{\url{#1}}}
+\DeclareFieldFormat[article]{pages}{#1}
+\DeclareFieldFormat[inproceedings]{pages}{\lowercase{pp.}#1}
+\DeclareFieldFormat[incollection]{pages}{\lowercase{pp.}#1}
+\DeclareFieldFormat[article]{volume}{\mkbibbold{#1}}
+\DeclareFieldFormat[article]{number}{\mkbibparens{#1}}
+\DeclareFieldFormat[article]{title}{\MakeCapital{#1}}
+\DeclareFieldFormat[inproceedings]{title}{#1}
+\DeclareFieldFormat{shorthandwidth}{#1}
+% No dot before number of articles
+\usepackage{xpatch}
+\xpatchbibmacro{volume+number+eid}{\setunit*{\adddot}}{}{}{}
+% Remove In: for an article.
+\renewbibmacro{in:}{%
+  \ifentrytype{article}{}{%
+  \printtext{\bibstring{in}\intitlepunct}}}
+
+\makeatletter
+\DeclareDelimFormat[cbx@textcite]{nameyeardelim}{\addspace}
+\makeatother
+\renewcommand*{\finalnamedelim}{%
+  %\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}% there really should be no funny Oxford comma business here
+  \addspace\&\space}
+
+
+\wp{31/20}
+\jel{J11,J14,C22}
+
+\RequirePackage[absolute,overlay]{textpos}
+\setlength{\TPHorizModule}{1cm}
+\setlength{\TPVertModule}{1cm}
+\def\placefig#1#2#3#4{\begin{textblock}{.1}(#1,#2)\rlap{\includegraphics[#3]{#4}}\end{textblock}}
+
+
+
+
+\author{Rob J~Hyndman, Yijun~Zeng, Han Lin~Shang}
+\addresses{\textbf{Rob J Hyndman}\newline
+Department of Econometrics \& Business Statistics\newline Monash University, Clayton VIC 3800, Australia
+\newline{Email: \href{mailto:Rob.Hyndman@monash.edu}{\nolinkurl{Rob.Hyndman@monash.edu}}}\newline Corresponding author\\[1cm]
+\textbf{Yijun Zeng}\newline
+Shanghai, China
+\\[1cm]
+\textbf{Han Lin Shang}\newline
+Macquarie University, Sydney, Australia
+\\[1cm]
 }
 
-\let\origtable\table
-\let\endorigtable\endtable
-\renewenvironment{table}[1][2] {
-    \expandafter\origtable\expandafter[tbp]
-} {
-    \endorigtable
-}
+\date{\sf\Date~\Month~\Year}
+\makeatletter
+ \lfoot{\sf Hyndman, Zeng, Shang: \@date}
+\makeatother
 
-\runningheads{Forecasting the OADR to determine a sustainable pension age}{HYNDMAN, ZENG, SHANG}
 
-\def\volumeyear{2020}
-\let\oldmaketitle\maketitle
-\def\maketitle{\cleanlookdateon\oldmaketitle}
-\linenumbers
-
-\usepackage{titling}
-\pretitle{\begin{center}\Large\bfseries}
-\posttitle{\end{center}\vspace{0.5cm}}
-\preauthor{\begin{center}\large}
-\postauthor{\end{center}\begin{center}
-$^1$\emph{Department of Econometrics \& Business Statistics, Monash University, Clayton, Australia}\\
-$^2$\emph{Shanghai, China}\\
-$^3$\emph{Macquarie University, Sydney, Australia}
-\footnotetext{$^*$Corresponding author. Email: \texttt{Rob.Hyndman@monash.edu}}\end{center}}
-
-\usepackage{mathptmx}
-\ifluatex
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
-\usepackage[]{natbib}
-\bibliographystyle{anzsj}
-
-\title{Forecasting the old-age dependency ratio to determine a sustainable pension age}
-\author{Rob J Hyndman\(^{1*}\), Yijun Zeng\(^2\), Han Lin Shang\(^3\)}
-\date{}
 
 \begin{document}
 \maketitle
-
-\hypertarget{summary}{%
-\section*{Summary}\label{summary}}
-\addcontentsline{toc}{section}{Summary}
-
+\begin{abstract}
 We forecast the old-age dependency ratio for Australia under various pension age proposals, and estimate a pension age scheme that will provide a stable old-age dependency ratio at a specified level. Our approach involves a stochastic population forecasting method based on coherent functional data models for mortality, fertility and net migration, which we use to simulate the future age-structure of the population. Our results suggest that the Australian pension age should be increased to 68 by 2030, 69 by 2036, and 70 by 2050, in order to maintain the old-age dependency ratio at 23\%, just above the 2018 level. Our general approach can easily be extended to other target levels of the old-aged dependency ratio and to other countries.
-
-\textbf{Keywords:} coherent forecasts, demographic components, functional time series, pension age.
+\end{abstract}
+\begin{keywords}
+coherent forecasts, demographic components, functional time series, pension age
+\end{keywords}
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-Australia's ageing population is a result of three factors: (1) significant technological advances in medical care leading to longer life spans; (2) high fertility rates after World War II resulting in the ``baby-boomer'' generation; and (3) a large decline in fertility rates over the past thirty years \citep{Fehr2008}. Consequently, there are many older people leaving the workforce, and fewer workers replacing them. Many other countries face similar demographic challenges. One way of measuring this problem is via the old-age dependency ratio (OADR): the number of people post-retirement to the number of people of working age \citep{Walker1982}. The OADR has been increasing for many decades, but recently the rate of increase has jumped markedly, and we show that it will continue to increase at a rapid rate if there are no age-related policy changes.
+Australia's ageing population is a result of three factors: (1) significant technological advances in medical care leading to longer life spans; (2) high fertility rates after World War II resulting in the ``baby-boomer'' generation; and (3) a large decline in fertility rates over the past thirty years \autocite{Fehr2008}. Consequently, there are many older people leaving the workforce, and fewer workers replacing them. Many other countries face similar demographic challenges. One way of measuring this problem is via the old-age dependency ratio (OADR): the number of people post-retirement to the number of people of working age \autocite{Walker1982}. The OADR has been increasing for many decades, but recently the rate of increase has jumped markedly, and we show that it will continue to increase at a rapid rate if there are no age-related policy changes.
 
-This is consistent with the Australian Intergenerational Reports \citep{IGR02, IGR07, Swan2010} that explored the extent to which existing age-related policies would affect the burden of future working generations. To date, the Australian government has addressed the problem through a variety of approaches including modifications to compulsory superannuation policies, instigating work incentives for older people, and increasing the pension age (defined as the age at which eligible residents can access the age pension for the first time). In 2009, the federal government announced an increase in pension age from 65 to 67 by 2023 \citep{Nielson2010}. In May 2014, the Federal Treasurer proposed a further increase in the pension age to 70 by 2035, in line with the recommendations from the \citet{PC13}. We investigate the effect of these changes in the pension age on the forecasts of the OADR.
+This is consistent with the Australian Intergenerational Reports \autocite{IGR02,IGR07,Swan2010} that explored the extent to which existing age-related policies would affect the burden of future working generations. To date, the Australian government has addressed the problem through a variety of approaches including modifications to compulsory superannuation policies, instigating work incentives for older people, and increasing the pension age (defined as the age at which eligible residents can access the age pension for the first time). In 2009, the federal government announced an increase in pension age from 65 to 67 by 2023 \autocite{Nielson2010}. In May 2014, the Federal Treasurer proposed a further increase in the pension age to 70 by 2035, in line with the recommendations from the \textcite{PC13}. We investigate the effect of these changes in the pension age on the forecasts of the OADR.
 
 The OADR can be expressed as
 \begin{equation}
   \text{OADR} = \frac{\text{number of people aged over pension age}}{\text{number of people aged 15 to pension age}}*100\%
 \end{equation}
-We use the OADR as a measure of the financial burden on the Australian workforce because a rise in the OADR will reduce the ability of working-age population to finance pensions and health costs \citep{ARW07, IGR02, IGR07}.
+We use the OADR as a measure of the financial burden on the Australian workforce because a rise in the OADR will reduce the ability of working-age population to finance pensions and health costs \autocite{ARW07,IGR02,IGR07}.
 We provide forecasts of future population age structures over the next 50 years, and use those forecasts to compute the OADR that would result under various pension age schemes.
 
 We then invert the analysis by finding a pension age scheme that would lead to a specified OADR value. For our analysis, the specified OADR value has been set at 23\%, just above the level of OADR in 2018. Whether this OADR level is the most appropriate level for Australia remains to be examined and is not the focus of this paper. Instead, we provide a methodology for policymakers to find a target pension age that leads to a given OADR value.
 
-Forecasts of population structure depend on forecasts of age- and sex-specific mortality rates, fertility rates and net migration. To this end, we combine the functional demographic models of \citet{HU07} and the product-ratio method of \citet{HBY13} within the general stochastic population forecasting framework of \citet{HB08}, to forecast a population age structure. These forecasts presuppose that the historical trends of past years will continue. Historical data of those rates have thus been used as input to simulate future paths of age- and sex-specific population structure.
+Forecasts of population structure depend on forecasts of age- and sex-specific mortality rates, fertility rates and net migration. To this end, we combine the functional demographic models of \textcite{HU07} and the product-ratio method of \textcite{HBY13} within the general stochastic population forecasting framework of \textcite{HB08}, to forecast a population age structure. These forecasts presuppose that the historical trends of past years will continue. Historical data of those rates have thus been used as input to simulate future paths of age- and sex-specific population structure.
 
-Some may argue that using OADR as a measure of a financial burden for the next generation could be biased, with a large number of retirees able to rely on self-financed retirement income, such as superannuation. However, 80\% of Australians over pension age rely fully or partly on the age pension \citep{Power14}. Therefore, the proportion of people over working age is still a good representation of the financial burden on future working generations. Nevertheless, using OADR as a single measurement of financial burden may overlook some important economic factors, and \citet{HY12} have suggested the use of an adjusted OADR that takes account of some of these factors in analyzing pension finance. We do not consider these here. Our approach is intended to illustrate how population forecasting can be used to explore the pension age issue in a simple context, and it could be extended to take into account other variables if required.
+Some may argue that using OADR as a measure of a financial burden for the next generation could be biased, with a large number of retirees able to rely on self-financed retirement income, such as superannuation. However, 80\% of Australians over pension age rely fully or partly on the age pension \autocite{Power14}. Therefore, the proportion of people over working age is still a good representation of the financial burden on future working generations. Nevertheless, using OADR as a single measurement of financial burden may overlook some important economic factors, and \textcite{HY12} have suggested the use of an adjusted OADR that takes account of some of these factors in analyzing pension finance. We do not consider these here. Our approach is intended to illustrate how population forecasting can be used to explore the pension age issue in a simple context, and it could be extended to take into account other variables if required.
 
 The remainder of this paper proceeds as follows. Section \ref{sec:litreview} reviews key literature on population forecasting and the pension age in Australia. Section \ref{sec:results} describes the data and modelling framework we use in this study. We show how our framework can be used to estimate a pension age scheme that leads to a target OADR in Section \ref{sec:target}. Finally, Section \ref{sec:conclusions} gives concluding remarks as well as identifies the scope for future research.
 
@@ -165,19 +331,19 @@ The remainder of this paper proceeds as follows. Section \ref{sec:litreview} rev
 
 The age pension in Australia provides income support and access to a range of concessions and additional allowances for older Australians who have passed a means test.
 
-In 2018, 67\% of Australian residents aged 65 and over received income support payments \citep{AIHW19}. Even though the government has promoted self-financed retirement by introducing the Superannuation Guarantee in 1992, the Superannuation Guarantee accumulations are still modest, with many retirees having no superannuation or very modest balances \citep{data61}.
+In 2018, 67\% of Australian residents aged 65 and over received income support payments \autocite{AIHW19}. Even though the government has promoted self-financed retirement by introducing the Superannuation Guarantee in 1992, the Superannuation Guarantee accumulations are still modest, with many retirees having no superannuation or very modest balances \autocite{data61}.
 
 The ageing trend in Australia, along with retirees' dependence on the age pension, means the cost of the age pension is currently around at 2.7\% of Gross Domestic Profit. With an ageing population, the pension age will need to increase or the fiscal burden will become unsustainable.
 
 \begin{figure}
 \centering
-\includegraphics{PensionAge_anzjs_files/figure-latex/changespension-1.pdf}
+\includegraphics{PensionAge_wp_files/figure-latex/changespension-1.pdf}
 \caption{\label{fig:changespension}Australian pension age policies.}
 \end{figure}
 
-The pension age for males was set at 65 for over a century. While the pension age for females was 60 years until 1994, it has steadily increased to 65 years in 2014, in line with that of males. From July 2017, pension eligibility ages for both males and females have been increasing by six months every two years and will reach 67 in July 2023. The \citet{PC13} proposed further lifting of the pension age to 70 on the grounds that increasing the pension age to 70 would save taxpayers \$150 billion in welfare costs and health spending, and older people are capable of continuing work. The former Treasurer Joe Hockey announced that the government would increase the pension age to 70 by 2035, and this was proposed in the Federal Budget Statement for 2014--2015, although it has never been legislated by the Australian Federal Government. Figure \ref{fig:changespension} illustrates the process of the adjustments on pension age scheme.
+The pension age for males was set at 65 for over a century. While the pension age for females was 60 years until 1994, it has steadily increased to 65 years in 2014, in line with that of males. From July 2017, pension eligibility ages for both males and females have been increasing by six months every two years and will reach 67 in July 2023. The \textcite{PC13} proposed further lifting of the pension age to 70 on the grounds that increasing the pension age to 70 would save taxpayers \$150 billion in welfare costs and health spending, and older people are capable of continuing work. The former Treasurer Joe Hockey announced that the government would increase the pension age to 70 by 2035, and this was proposed in the Federal Budget Statement for 2014--2015, although it has never been legislated by the Australian Federal Government. Figure \ref{fig:changespension} illustrates the process of the adjustments on pension age scheme.
 
-The government has not disclosed the method it used to determine the new pension age. \citet[p7]{CEDA07} proposed directly linking pension age with life expectancy in the way that ``pension age should increase by approximately 50\% of any increase in life expectancy''. However, using a ``rule of thumb'' approach might not be ideal, as 50\% of the change in life expectancy may not be a good adjustment to pension age in the long term. We propose that the pension age should be linked to the old age dependency ratio, and based on forecasts of future mortality and fertility rates. Our approach has the advantage that it can be used to justify the change in pension age and directly links the pension age with the goal of a stable financial burden for the public.
+The government has not disclosed the method it used to determine the new pension age. \textcite[p7]{CEDA07} proposed directly linking pension age with life expectancy in the way that ``pension age should increase by approximately 50\% of any increase in life expectancy''. However, using a ``rule of thumb'' approach might not be ideal, as 50\% of the change in life expectancy may not be a good adjustment to pension age in the long term. We propose that the pension age should be linked to the old age dependency ratio, and based on forecasts of future mortality and fertility rates. Our approach has the advantage that it can be used to justify the change in pension age and directly links the pension age with the goal of a stable financial burden for the public.
 
 \hypertarget{demographic-growth-balance-equations}{%
 \subsection{Demographic growth-balance equations}\label{demographic-growth-balance-equations}}
@@ -203,7 +369,7 @@ In addition, the net migration\footnote{Net migration is the difference between 
   G_t(p-1^+,p^+) & =P_{t+1}(p^+)-P_t(p^+)-P_t(p-1)+D_t(p-1^+,p^+),\\
   G_t(B,0)       & =P_{t+1}(0)-B_t+D_t(B,0),
 \end{align*}
-where \(G_t(x,x+1)\) refers to net migration in calendar year \(t\) of persons aged \(x\) at the beginning of year \(t\), \(G_t(p-1^+,p^+)\) refers to migration in calendar year \(t\) of persons aged \(p-1\) and older at the beginning of year \(t\), and \(G_t(B,0)\) refers to migration in calendar year \(t\) of persons born during year \(t\); and similarly for deaths, \(D_t(x,x+1)\), \(D_t(p-1^+,p^+)\), and \(D_t(B,0)\). The deaths are estimated using the standard life table approach of population projection \citep{Preston2000}. It should be noted that the estimated net migration includes errors in data recording.
+where \(G_t(x,x+1)\) refers to net migration in calendar year \(t\) of persons aged \(x\) at the beginning of year \(t\), \(G_t(p-1^+,p^+)\) refers to migration in calendar year \(t\) of persons aged \(p-1\) and older at the beginning of year \(t\), and \(G_t(B,0)\) refers to migration in calendar year \(t\) of persons born during year \(t\); and similarly for deaths, \(D_t(x,x+1)\), \(D_t(p-1^+,p^+)\), and \(D_t(B,0)\). The deaths are estimated using the standard life table approach of population projection \autocite{Preston2000}. It should be noted that the estimated net migration includes errors in data recording.
 
 \hypertarget{old-age-dependency-ratio}{%
 \subsection{Old-Age Dependency Ratio}\label{old-age-dependency-ratio}}
@@ -217,13 +383,13 @@ where \(a_t\) is the pension age in year \(t\) and \(r_t = a_t - \lfloor a_t \rf
 \hypertarget{forecasting-demographic-components}{%
 \subsection{Forecasting demographic components}\label{forecasting-demographic-components}}
 
-Variants of the Lee-Carter method \citep{LC92} are frequently used for demographic forecasting \citep[see, e.g.,][]{SBH11}. The most recent forecast of the population in Australia by the \citet{PC13} was based on basic Lee-Carter methods plus some judgement-based adaptations to address the characteristics of demographic trends that the Lee-Carter method failed to capture. The Hyndman-Ullah method (2007) is a generalization of the Lee-Carter method and is used as the basis for forecasting demographic components in this study. In addition, the product-ratio method \citep{HBY13} is used to eliminate the potential long-term divergence between female and male mortality rates and net-migration rates.
+Variants of the Lee-Carter method \autocite{LC92} are frequently used for demographic forecasting \autocite[see, e.g.,][]{SBH11}. The most recent forecast of the population in Australia by the \textcite{PC13} was based on basic Lee-Carter methods plus some judgement-based adaptations to address the characteristics of demographic trends that the Lee-Carter method failed to capture. The Hyndman-Ullah method (2007) is a generalization of the Lee-Carter method and is used as the basis for forecasting demographic components in this study. In addition, the product-ratio method \autocite{HBY13} is used to eliminate the potential long-term divergence between female and male mortality rates and net-migration rates.
 
 \hypertarget{lee-carter-method}{%
 \subsubsection*{Lee-Carter method}\label{lee-carter-method}}
 \addcontentsline{toc}{subsubsection}{Lee-Carter method}
 
-The Lee-Carter (LC) method has been widely used to forecast mortality rates across various countries, including Australia. The model proposed by \citet{LC92} (but using our notation) is
+The Lee-Carter (LC) method has been widely used to forecast mortality rates across various countries, including Australia. The model proposed by \textcite{LC92} (but using our notation) is
 \begin{equation}\label{eq:lc}
   \log m_{t}(x)=\mu(x)+\phi(x)\beta_{t}+\varepsilon_{t,x},
 \end{equation}
@@ -233,13 +399,13 @@ The model is over-parameterised. Therefore, the constraints
 \begin{equation}
   \sum_{t=1}^{T}\beta_t=0, \qquad\text{and}\qquad \int_x \phi(x)=1
 \end{equation}
-are imposed, and a singular value decomposition is used to find the least squares solution of \eqref{eq:lc} \citep{Good1969}. The estimates of \(\phi(x)\) and \(\beta_t\) are therefore the first principal component and scores of \(\bm{X}\) with \((i,t)\)th element \([\log(m_{t}(x))-\widehat\mu(x)]\), where \(\widehat\mu(x)\) is the sample mean of \(\log(m_{t}(x))\) over \(t\). The log transformation introduces some bias, so the LC method adjusts \(\beta_t\) such that for each year, the implied number of deaths will be equal to the actual number of deaths. The adjusted \(\beta_t\) is then extrapolated using a random walk with drift model.
+are imposed, and a singular value decomposition is used to find the least squares solution of \eqref{eq:lc} \autocite{Good1969}. The estimates of \(\phi(x)\) and \(\beta_t\) are therefore the first principal component and scores of \(\bm{X}\) with \((i,t)\)th element \([\log(m_{t}(x))-\widehat\mu(x)]\), where \(\widehat\mu(x)\) is the sample mean of \(\log(m_{t}(x))\) over \(t\). The log transformation introduces some bias, so the LC method adjusts \(\beta_t\) such that for each year, the implied number of deaths will be equal to the actual number of deaths. The adjusted \(\beta_t\) is then extrapolated using a random walk with drift model.
 
 \hypertarget{hyndman-ullah-method}{%
 \subsubsection*{\texorpdfstring{Hyndman-Ullah method \label{sec:HU}}{Hyndman-Ullah method }}\label{hyndman-ullah-method}}
 \addcontentsline{toc}{subsubsection}{Hyndman-Ullah method \label{sec:HU}}
 
-\citet{HU07} proposed a nonparametric method for demographic modelling and forecasting that extended the LC model in four ways:
+\textcite{HU07} proposed a nonparametric method for demographic modelling and forecasting that extended the LC model in four ways:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -259,19 +425,19 @@ The Hyndman-Ullah (HU) model can be written as
   y_t(x) & = s_t(x) + \sigma_t(x)\varepsilon_{t,x}\label{eq:HU_1}\\
   s_t(x) & = \mu(x) + \sum_{j=1}^{J}\beta_{t,j}\phi_j(x) + e_t(x)\label{eq:HU_2},
 \end{align}
-where \(y_t(x)\) may be log mortality, log fertility or net migration \citep{HB08} in year \(t\) and age \(x\). Here \(s_t(x)\) is a smoothed version of the observed data \(y_t(x)\), smoothed over age but not time, and estimated by constrained weighted penalized regression splines; and \(\{\varepsilon_{t,x}\}\) are independent and identically distributed standard normal error terms. Equation \eqref{eq:HU_2} has a similar structure to the LC method, except that it is applied to smoothed data and incorporates more than one principal component and score. The \(e_t(x)\) is the model error having mean zero and no serial correlation, while \(\mu(x)\) is estimated as the average of \(s_t(x)\) across years. Estimates of \(\phi_j(x)\) and \(\beta_{t,j}\) are the \(j^{th}\) principal components and scores of \(s_t(x)-\mu(x)\) respectively. Following \citet{HB08}, we select \(J=6\) which we have found to be large enough for demographic applications.
+where \(y_t(x)\) may be log mortality, log fertility or net migration \autocite{HB08} in year \(t\) and age \(x\). Here \(s_t(x)\) is a smoothed version of the observed data \(y_t(x)\), smoothed over age but not time, and estimated by constrained weighted penalized regression splines; and \(\{\varepsilon_{t,x}\}\) are independent and identically distributed standard normal error terms. Equation \eqref{eq:HU_2} has a similar structure to the LC method, except that it is applied to smoothed data and incorporates more than one principal component and score. The \(e_t(x)\) is the model error having mean zero and no serial correlation, while \(\mu(x)\) is estimated as the average of \(s_t(x)\) across years. Estimates of \(\phi_j(x)\) and \(\beta_{t,j}\) are the \(j^{th}\) principal components and scores of \(s_t(x)-\mu(x)\) respectively. Following \textcite{HB08}, we select \(J=6\) which we have found to be large enough for demographic applications.
 
 By conditioning on the observed data \(\bm{I}=\left\{{y_1(x),\dots,y_n(x)}\right\}\) and the set of functional principal components \(\bm{B}=\left\{{\phi_1(x),\phi_2(x),\dots,\phi_j(x)}\right\}\), the \(h\)-step-ahead forecast of \(y_{T+h}(x)\) are given by
 \begin{equation}
   \widehat{y}_{T+h\mid T}(x)=\widehat{s}_{T+h\mid T}(x) = \text{E}[\widehat{s}_{T+h\mid T}(x)\mid \bm{I, B}] = \widehat{\mu}(x)+\sum_{j=1}^{J}\phi_j(x)\widehat{\beta}_{T+h\mid T,j},
 \end{equation}
-where \(\widehat{\beta}_{T+h\mid T,j}\) denotes the \(h\)-step-ahead forecast of \(\beta_{T+h\mid T,j}\). Because \(\left\{\beta_{t,j}\right\}\) is time-varying, it controls the dynamics of the process. Each component series \(\left\{\beta_{t,j}\right\}\) is modelled with an ARIMA\((p_j,d_j,q_j)\) process, where \(p_j,d_j,q_j\) are selected using the automated algorithm of \citet{forecastpackage}, and the parameters are estimated using maximum likelihood estimation.
+where \(\widehat{\beta}_{T+h\mid T,j}\) denotes the \(h\)-step-ahead forecast of \(\beta_{T+h\mid T,j}\). Because \(\left\{\beta_{t,j}\right\}\) is time-varying, it controls the dynamics of the process. Each component series \(\left\{\beta_{t,j}\right\}\) is modelled with an ARIMA\((p_j,d_j,q_j)\) process, where \(p_j,d_j,q_j\) are selected using the automated algorithm of \textcite{forecastpackage}, and the parameters are estimated using maximum likelihood estimation.
 
 \hypertarget{product-ratio-method}{%
 \subsubsection*{Product-ratio method}\label{product-ratio-method}}
 \addcontentsline{toc}{subsubsection}{Product-ratio method}
 
-When we apply the \citet{HU07} model to data on males and females, we need to constrain the resulting forecasts so they do not diverge. In the product-ratio method \citep{HBY13}, the HU model is applied to the geometric mean of male and female log mortality data, and the ratio of male and female log mortality data, rather than to each series independently. That is, define
+When we apply the \textcite{HU07} model to data on males and females, we need to constrain the resulting forecasts so they do not diverge. In the product-ratio method \autocite{HBY13}, the HU model is applied to the geometric mean of male and female log mortality data, and the ratio of male and female log mortality data, rather than to each series independently. That is, define
 \begin{align}
   p_t(x)&=\sqrt{s_{t}^{\text{M}}(x)s_{t}^{\text{F}}(x)}, \label{eq:coherent_1}\\
   r_t(x)&=\sqrt{\frac{s_{t}^{\text{M}}(x)}{s_{t}^{\text{F}}(x)}}. \label{eq:coherent_2}
@@ -291,9 +457,9 @@ The method for forecasting net migration by sex is similar to the above method u
 \hypertarget{forecasting-oadr}{%
 \subsection{Forecasting OADR}\label{forecasting-oadr}}
 
-Following the general procedure proposed in \citet{HB08}, we model each of the five components of population change: female mortality rates, male mortality rates, female net migration, male net migration and fertility rates, and simulate these five components into the future. We use the HU method applied to log-fertility, and the product-ratio method applied to log-mortality and net-migration.
+Following the general procedure proposed in \textcite{HB08}, we model each of the five components of population change: female mortality rates, male mortality rates, female net migration, male net migration and fertility rates, and simulate these five components into the future. We use the HU method applied to log-fertility, and the product-ratio method applied to log-mortality and net-migration.
 
-From these models, sample paths are simulated for age-specific fertility rates, age- and sex-specific mortality rates and age- and sex-specific net migration. Then future population values are simulated using the demographic growth-balance equations. The future deaths and births in this equation are assumed to follow a Poisson distribution, with parameters as a function of future mortality and fertility rates. We bootstrap the residuals of the net-migration model to simulate future net-migration numbers (see \citet{HB08} for the details). Hence, we can simulate \(h\)-step-ahead age- and sex-specific population numbers based on simulated births, deaths and net-migrants.
+From these models, sample paths are simulated for age-specific fertility rates, age- and sex-specific mortality rates and age- and sex-specific net migration. Then future population values are simulated using the demographic growth-balance equations. The future deaths and births in this equation are assumed to follow a Poisson distribution, with parameters as a function of future mortality and fertility rates. We bootstrap the residuals of the net-migration model to simulate future net-migration numbers (see \textcite{HB08} for the details). Hence, we can simulate \(h\)-step-ahead age- and sex-specific population numbers based on simulated births, deaths and net-migrants.
 
 This simulation was repeated for years \(t=T+1,\dots,T+h\) to obtain a sample path of the age-specific population. Many simulated population paths were obtained in this way. For each simulated population path, and each proposed set of pension age changes, we can simulate future OADR values using \eqref{eq:oadr}.
 
@@ -305,7 +471,7 @@ There are three types of randomness in the simulation: (1) randomness from the s
 \hypertarget{data}{%
 \subsection{Data}\label{data}}
 
-Historical central death rates and start-year and mid-year populations of residents in Australia by sex and age in single years for age group 0--99 and 100+ have been sourced from the \citet{HMD} for 1921--2018. The start-year population for 2019 is also used to estimate net migration. Data for age-specific annual fertility rates by single years of age for 15--49 over the period 1950--2018 was obtained from the \citet{ABSBirths}. Even though annual mortality rates are available from 1921 to 2018, only data collected after 1950 is used for two reasons. First, the period between 1921--1950 has different mortality patterns from later years because of wars \citep{HB08}. Since the model for this study is valid under the assumption that extrapolative methods can be used, it seemed best to delete the less relevant data, which might influence estimations of parameters if we include them. Second, fertility rates are only available from 1950, so the mortality rates were also truncated to the same period.
+Historical central death rates and start-year and mid-year populations of residents in Australia by sex and age in single years for age group 0--99 and 100+ have been sourced from the \textcite{HMD} for 1921--2018. The start-year population for 2019 is also used to estimate net migration. Data for age-specific annual fertility rates by single years of age for 15--49 over the period 1950--2018 was obtained from the \textcite{ABSBirths}. Even though annual mortality rates are available from 1921 to 2018, only data collected after 1950 is used for two reasons. First, the period between 1921--1950 has different mortality patterns from later years because of wars \autocite{HB08}. Since the model for this study is valid under the assumption that extrapolative methods can be used, it seemed best to delete the less relevant data, which might influence estimations of parameters if we include them. Second, fertility rates are only available from 1950, so the mortality rates were also truncated to the same period.
 
 \hypertarget{component-forecasts}{%
 \subsection{Component forecasts}\label{component-forecasts}}
@@ -314,7 +480,7 @@ We illustrate the component model forecasts using fertility rates. Figure \ref{f
 
 \begin{figure}
 \centering
-\includegraphics{PensionAge_anzjs_files/figure-latex/componentsfertility-1.pdf}
+\includegraphics{PensionAge_wp_files/figure-latex/componentsfertility-1.pdf}
 \caption{\label{fig:componentsfertility}Fitted basis functions and coefficients for Australian age-specific fertility rates.}
 \end{figure}
 
@@ -329,23 +495,23 @@ Figure \ref{fig:totalpopulationbyyears} shows the forecast of the total populati
 
 \begin{figure}
 \centering
-\includegraphics{PensionAge_anzjs_files/figure-latex/totalpopulationbyyears-1.pdf}
+\includegraphics{PensionAge_wp_files/figure-latex/totalpopulationbyyears-1.pdf}
 \caption{\label{fig:totalpopulationbyyears}Fifty-year forecasts of the total population for each sex, along with 80\% prediction intervals.}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics{PensionAge_anzjs_files/figure-latex/totalpopulationin2038-1.pdf}
+\includegraphics{PensionAge_wp_files/figure-latex/totalpopulationin2038-1.pdf}
 \caption{\label{fig:totalpopulationin2038}Forecast population pyramid for 2038, along with 80\% pointwise prediction intervals. The actual pyramid for 2019 is shown using dashed lines.}
 \end{figure}
 
 Figure \ref{fig:totalpopulationin2038} shows the mean and the 80\% pointwise prediction interval of simulated population paths for the year 2038 (a 20-year forecast), along with the 2019 base population. The uncertainty of the population below aged 20 is largely due to higher forecast variation of fertility rates compared to other components.
 
-Historical OADR values are shown in black in Figure \ref{fig:OADRcurrent} for 1921--2019. The strong positive trend indicates an increasing tax burden on workers, consistent with the prediction of the intergenerational reports in 2002 \citep{IGR02} and 2007 \citep{IGR07}. The increased trend from 2010 is due to the retirements of ``Baby Boomers'', born after WW2. We also show forecasts for three pension schemes: (1) a fixed pension age of 65; (2) the current scheme with the pension age rising to age 67 in 2023; and (3) the proposed pension policy under which the pension ages continues to rise by 6 months every two years until it reaches 70 in 2035.
+Historical OADR values are shown in black in Figure \ref{fig:OADRcurrent} for 1921--2019. The strong positive trend indicates an increasing tax burden on workers, consistent with the prediction of the intergenerational reports in 2002 \autocite{IGR02} and 2007 \autocite{IGR07}. The increased trend from 2010 is due to the retirements of ``Baby Boomers'', born after WW2. We also show forecasts for three pension schemes: (1) a fixed pension age of 65; (2) the current scheme with the pension age rising to age 67 in 2023; and (3) the proposed pension policy under which the pension ages continues to rise by 6 months every two years until it reaches 70 in 2035.
 
 \begin{figure}
 \centering
-\includegraphics{PensionAge_anzjs_files/figure-latex/OADRcurrent-1.pdf}
+\includegraphics{PensionAge_wp_files/figure-latex/OADRcurrent-1.pdf}
 \caption{\label{fig:OADRcurrent}Fifty-year forecasts of the OADR associated with a pension age equal to 65 (green), the current approved pension age scheme (orange), and the proposed scheme with the pension age rising to 70 in 2035 (purple). The actual OADRs for 1921--2019 are shown in black.}
 \end{figure}
 
@@ -382,19 +548,19 @@ Figure \ref{fig:comparisonofpensionages} shows (in blue) the pension scheme prod
 
 \begin{figure}
 \centering
-\includegraphics{PensionAge_anzjs_files/figure-latex/comparisonofpensionages-1.pdf}
+\includegraphics{PensionAge_wp_files/figure-latex/comparisonofpensionages-1.pdf}
 \caption{\label{fig:comparisonofpensionages}The target pension age scheme (in blue) along with the pension age schemes that have been set and proposed by the government. The blue shaded region shows 80\% confidence intervals for the target pension age.}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics{PensionAge_anzjs_files/figure-latex/OADRwithoptimal-1.pdf}
+\includegraphics{PensionAge_wp_files/figure-latex/OADRwithoptimal-1.pdf}
 \caption{\label{fig:OADRwithoptimal}The mean forecast and 80\% prediction intervals for the OADR associated with the target pension age scheme shown in blue, along with the desired OADR level in gray.}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics{PensionAge_anzjs_files/figure-latex/OADRboundaries-1.pdf}
+\includegraphics{PensionAge_wp_files/figure-latex/OADRboundaries-1.pdf}
 \caption{\label{fig:OADRboundaries}The 80\% prediction intervals of OADR (in blue) associated with the upper and lower boundary of plausible pension age schemes, along with desired OADR level in gray.}
 \end{figure}
 
@@ -409,7 +575,7 @@ Figure \ref{fig:comparisonofpensionages} also compares the target pension age sc
 
 The ageing of the population is an increasingly critical issue in Australia (and many other countries) due to the increase in life expectancy and the retirement of baby boomers. The fiscal cost of the age pension has increased as a result, and is likely to continue to be a financial burden unless there are changes in age pension schemes. Under current Australian government policy, the pension age will rise to 67 in 2023, and there is a proposal to further increase it to 70 by 2035. Our analysis suggests that this increase is too rapid unless the aim is to reduce the OADR to below 2018 values.
 
-In this paper, we have suggested a statistical and demographic approach to address the issue. We attempt to quantify the effects of changes in the pension age on the OADR, which we take as a crude measure of the financial burden of the age pension. We have applied stochastic models to forecast the future population age structure and then used those future age structure projections to find the most appropriate pension age scheme that will ensure a stable OADR around the desired level. To forecast the population age structure, three demographic components of the population were modeled separately using functional time series methods \citep{HU07}, along with an extension of the product-ratio method \citep{HBY13}. Then the framework of \citet{HB08} was used to simulate future populations by age and sex. These were then used to simulate OADR values associated with different pension age schemes. Finally, we inverted the process to find a pension age scheme that leads to a specified OADR value.
+In this paper, we have suggested a statistical and demographic approach to address the issue. We attempt to quantify the effects of changes in the pension age on the OADR, which we take as a crude measure of the financial burden of the age pension. We have applied stochastic models to forecast the future population age structure and then used those future age structure projections to find the most appropriate pension age scheme that will ensure a stable OADR around the desired level. To forecast the population age structure, three demographic components of the population were modeled separately using functional time series methods \autocite{HU07}, along with an extension of the product-ratio method \autocite{HBY13}. Then the framework of \textcite{HB08} was used to simulate future populations by age and sex. These were then used to simulate OADR values associated with different pension age schemes. Finally, we inverted the process to find a pension age scheme that leads to a specified OADR value.
 
 We illustrate the approach based on assuming the desired level of OADR is around the 2018 level of 23\%. Using historical data from 1950 to 2019, the forecasts of future populations suggests a substantial increase in total population, and confirms the inherent ageing trend. It was found that pension age should not be fixed, but instead should grow at a rate that will ensure a stable OADR at a level which can be affordable to Australians of working age.
 
@@ -423,8 +589,8 @@ Finally, we have not allowed for the impact of COVID-19 in this analysis as it i
 \section*{Reproducibility}\label{reproducibility}}
 \addcontentsline{toc}{section}{Reproducibility}
 
-The data and code to fully reproduce our results is available at \href{https://github.com/robjhyndman/PensionAge}{\texttt{https://github.com/robjhyndman/PensionAge}}. We used R \citep{RCore}, along with the drake \citep{Rdrake}, tidyverse \citep{Rtidyverse}, demography \citep{Rdemography} and forecast \citep{Rforecast} packages.
+The data and code to fully reproduce our results is available at \href{https://github.com/robjhyndman/PensionAge}{\texttt{https://github.com/robjhyndman/PensionAge}}. We used R \autocite{RCore}, along with the drake \autocite{Rdrake}, tidyverse \autocite{Rtidyverse}, demography \autocite{Rdemography} and forecast \autocite{Rforecast} packages.
 
-  \bibliography{pensionage.bib}
+\printbibliography
 
 \end{document}
