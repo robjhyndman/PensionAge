@@ -1,10 +1,12 @@
-all: wp anzjs
+SOURCES=$(shell find . -name *.Rmd)
+SOURCES := $(wildcard PensionAge_*.Rmd)
+TARGETS=$(SOURCES:%.Rmd=%.pdf)
 
-wp:
-	Rscript -e 'rmarkdown::render("PensionAge_wp.Rmd")'
+%.pdf: %.Rmd
+	@echo "$< -> $@"
+	@Rscript -e "rmarkdown::render('$<')"
 
-anzjs:
-	Rscript -e 'rmarkdown::render("PensionAge_anzjs.Rmd")'
+default: $(TARGETS)
 
 clean:
 	latexmk -c
