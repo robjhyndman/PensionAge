@@ -2,7 +2,7 @@ SOURCES=$(shell find . -name *.Rmd)
 SOURCES := $(wildcard PensionAge_*.Rmd)
 TARGETS=$(SOURCES:%.Rmd=%.pdf)
 
-%.pdf: %.Rmd
+%.pdf: %.Rmd PensionAge.Rmd
 	@echo "$< -> $@"
 	@Rscript -e "rmarkdown::render('$<')"
 

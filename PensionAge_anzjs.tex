@@ -4,14 +4,13 @@
 %
 \documentclass[
   doublespace]{anzsauth}
+\usepackage{amsmath,amssymb}
 \usepackage{lmodern}
-\usepackage{amsmath}
 \usepackage{ifxetex,ifluatex}
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
-  \usepackage{amssymb}
 \else % if luatex or xetex
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
@@ -42,7 +41,7 @@
   hidelinks,
   pdfcreator={LaTeX via pandoc}}
 \urlstyle{same} % disable monospaced font for URLs
-\usepackage{longtable,booktabs}
+\usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -115,6 +114,8 @@ $^3$\emph{Macquarie University, Sydney, Australia}
 \footnotetext{$^*$Corresponding author. Email: \texttt{Rob.Hyndman@monash.edu}}\end{center}}
 
 \usepackage{mathptmx}
+
+\raggedbottom
 \ifluatex
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
@@ -154,7 +155,7 @@ We then invert the analysis by finding a pension age scheme that would lead to a
 
 Forecasts of population structure depend on forecasts of age- and sex-specific mortality rates, fertility rates and net migration. To this end, we combine the functional demographic models of \citet{HU07} and the product-ratio method of \citet{HBY13} within the general stochastic population forecasting framework of \citet{HB08}, to forecast a population age structure. These forecasts presuppose that the historical trends of past years will continue. Historical data of those rates have thus been used as input to simulate future paths of age- and sex-specific population structure.
 
-Some may argue that using OADR as a measure of a financial burden for the next generation could be biased, with a large number of retirees able to rely on self-financed retirement income, such as superannuation. However, 80\% of Australians over pension age rely fully or partly on the age pension \citep{Power14}. Therefore, the proportion of people over working age is still a good representation of the financial burden on future working generations. Nevertheless, using OADR as a single measurement of financial burden may overlook some important economic factors, and \citet{HY12} have suggested the use of an adjusted OADR that takes account of some of these factors in analyzing pension finance. We do not consider these here. Our approach is intended to illustrate how population forecasting can be used to explore the pension age issue in a simple context, and it could be extended to take into account other variables if required.
+Some may argue that using OADR as a measure of a financial burden for the next generation could be biased, with a large number of retirees able to rely on self-financed retirement income, such as superannuation. However, approximately two-thirds of Australians over pension age rely fully or partly on the age pension \citep{AIHW19}, and this figure has remained relatively constant over the last 20 years. Therefore, the proportion of people over working age is still a good representation of the financial burden on future working generations. Nevertheless, using OADR as a single measurement of financial burden may overlook some important economic factors, and \citet{HY12} have suggested the use of an adjusted OADR that takes account of some of these factors in analyzing pension finance. We do not consider these here. Our approach is intended to illustrate how population forecasting can be used to explore the pension age issue in a simple context, and it could be extended to take into account other variables if required.
 
 The remainder of this paper proceeds as follows. Section \ref{sec:litreview} reviews key literature on population forecasting and the pension age in Australia. Section \ref{sec:results} describes the data and modelling framework we use in this study. We show how our framework can be used to estimate a pension age scheme that leads to a target OADR in Section \ref{sec:target}. Finally, Section \ref{sec:conclusions} gives concluding remarks as well as identifies the scope for future research.
 
@@ -168,7 +169,7 @@ The age pension in Australia provides income support and access to a range of co
 
 In 2018, 67\% of Australian residents aged 65 and over received income support payments \citep{AIHW19}. Even though the government has promoted self-financed retirement by introducing the Superannuation Guarantee in 1992, the Superannuation Guarantee accumulations are still modest, with many retirees having no superannuation or very modest balances \citep{data61}.
 
-The ageing trend in Australia, along with retirees' dependence on the age pension, means the cost of the age pension is currently around at 2.7\% of Gross Domestic Profit. With an ageing population, the pension age will need to increase or the fiscal burden will become unsustainable.
+The ageing trend in Australia, along with retirees' dependence on the age pension, means the cost of the age pension is currently around at 2.7\% of Gross Domestic Product. With an ageing population, the pension age will need to increase or the fiscal burden will become unsustainable.
 
 \begin{figure}
 \centering
@@ -292,7 +293,7 @@ The method for forecasting net migration by sex is similar to the above method u
 \hypertarget{forecasting-oadr}{%
 \subsection{Forecasting OADR}\label{forecasting-oadr}}
 
-Following the general procedure proposed in \citet{HB08}, we model each of the five components of population change: female mortality rates, male mortality rates, female net migration, male net migration and fertility rates, and simulate these five components into the future. We use the HU method applied to log-fertility, and the product-ratio method applied to log-mortality and net-migration.
+Following the general procedure proposed in \citet{HB08}, we model each of the five components of population change: female mortality rates, male mortality rates, female net migration, male net migration and fertility rates, and simulate these five components into the future. We use the HU method applied to log-fertility, and the product-ratio method applied to log-mortality and net-migration. We used weighted penalized splines \citep{HU07} when estimating the log-fertility and log-mortality curves, where the weights account for Poisson variation in deaths and births. We use loess when estimating the net-migration curves.
 
 From these models, sample paths are simulated for age-specific fertility rates, age- and sex-specific mortality rates and age- and sex-specific net migration. Then future population values are simulated using the demographic growth-balance equations. The future deaths and births in this equation are assumed to follow a Poisson distribution, with parameters as a function of future mortality and fertility rates. We bootstrap the residuals of the net-migration model to simulate future net-migration numbers (see \citet{HB08} for the details). Hence, we can simulate \(h\)-step-ahead age- and sex-specific population numbers based on simulated births, deaths and net-migrants.
 
@@ -370,10 +371,10 @@ Let \(O^*\) denote the desired OADR threshold. Because we do not observe the pop
 \item
   Set \(a_{T+h}=a_{T+h-1}\).
 \item
-  Increment \(a_{T+h}\) by one-month intervals until either \(\widehat{O}_{T+h|T} > O^*\) or \(a_{T+1} - a_{T}=\) 1 month, where \(\widehat{O}_{T+h|T}\) denotes the mean of the simulated \(O_{T+h|T}\) values.
+  Increment \(a_{T+h}\) by one-month intervals until either \(\widehat{O}_{T+h|T} \le O^*\) or \(a_{T+h} - a_{T+h-1}=12\) months, where \(\widehat{O}_{T+h|T}\) denotes the mean of the simulated \(O_{T+h|T}\) values.
 \end{enumerate}
 
-We repeat these steps for \(h=2,\dots,H\).
+We repeat these steps for \(h=2,\dots,H\). The second limit in Step 2 arises because the pension age should not jump more than 12 months between years, to prevent pension-age people losing their pension.
 
 In addition to finding the target pension age based on the mean value of OADR, we also find ``plausible'' pension age schemes that could give the desired OADR level. Specifically, we find a range of pension age schemes for which \(O^*\) is contained within the 80\% prediction intervals of the simulated \(O_{T+H|T}\) values. Because of the monotonic relationship between pension age and OADR, we need only to find the upper (lower) boundary of plausible pension age schemes, at which the upper (lower) limit of 80\% prediction intervals of OADR is equal to the desired OADR level. Hence, any pension age scheme within those two boundaries is plausible. The range of plausible pension age schemes can be thought of as an 80\% confidence interval of pension age schemes where we are 80\% sure that they will give the desired outcome.
 
@@ -416,9 +417,9 @@ We illustrate the approach based on assuming the desired level of OADR is around
 
 The empirical analysis presented in this paper shows the adjustment of the pension age to age 67 has been effective in stopping the increasing trend in the OADR values. However, a one-time adjustment is not sufficient to ensure a stable OADR in the long term, due to ongoing changes in the population age structure. Therefore, we recommend consistently reviewing the pension age according to the proposed statistical approach. This approach has been used to calculate the target pension age from now until 2050 along with its 80\% confidence interval. The target pension age found in this research increases to 67 by 2023, 68 by 2030, 69 by 2036 and 70 by 2050. This generates a stable OADR of around 23\%.
 
-This research addresses the pension age issue from a purely demographic perspective. Further analysis should include an economic perspective as well including the impact of the superannuation guarantee and other economic measures to offset the fiscal burden of the age pension.
+This research addresses the pension age issue from a purely demographic perspective. Further analysis should include an economic perspective as well including the impact of the superannuation guarantee and other economic measures to offset the fiscal burden of the age pension. There are several issues to be considered here. First, not all people aged above the pension age will receive the pension, and the ratio of those receiving the pension may decrease as more retiring people can access superannuation. Second, labour force participation is probably related to age as self-funded retirees may opt out of paid employment before they reach pension age. Hence, raising the pension age may not have as large an effect on OADR as we have estimated. Third, we have not considered the effect of changing per capita GDP which helps fund the pension. If per capita GDP declines, the fiscal burden of the pension may increase even with a stable OADR.
 
-Finally, we have not allowed for the impact of COVID-19 in this analysis as it is too early to properly estimate its impact on mortality rates and future age structures. It is known that the mortality rates from COVID-19 are greater amongst older people, so it should lead to a decrease in the OADR. However, the relatively small number of deaths in Australia mean that the effect of the pandemic will probably not substantially change our recommendations.
+We have also not allowed for the impact of COVID-19 in this analysis as it is too early to properly estimate its impact on mortality rates and future age structures. It is known that the mortality rates from COVID-19 are greater amongst older people, so it should lead to a decrease in the OADR. However, the relatively small number of deaths in Australia mean that the effect of the pandemic will probably not substantially change our recommendations.
 
 \hypertarget{reproducibility}{%
 \section*{Reproducibility}\label{reproducibility}}

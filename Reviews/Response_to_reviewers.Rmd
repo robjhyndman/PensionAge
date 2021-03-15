@@ -10,7 +10,7 @@ output:
 
 We thank the reviewers for their careful reading of our paper; their comments have led to several improvements and corrections. Reviewer comments are in black, our responses are in green.
 
-# Reviewer 1
+# Reviewer 1 {-}
 
 This paper applies functional data models to mortality, fertility and net migration, and
 use the models to simulate future age-structure of the population. The paper then forecast
@@ -30,18 +30,29 @@ population projection.”
 > We have added a reference to @Preston2000 who discuss this method.
 
 3. Page 6, the numerator and denominator of equation (2) should be flipped?
+
+> Thanks. Now fixed.
+
 4. Page 8, after equation (9), it is mentioned that “the HU method is applied to these
 two new variables.” In the previous description of the HU method, smoothed version
 of $y_t(x)$ is modelled in the form of equation (6), whereas here the non-smoothed
 $\log[p_t(x)]$ and $\log[r_t(x)]$ are modelled in the form of equation (6). Please clarify.
+
+> No, we only apply the HU method to smoothed functions: $p_t(x)$ and $r_t(x)$ are functions of $s_t^M(x)$ and $s_t^F(x)$ which are both smooth.
+
 5. Page 9. It is mentioned that “The future deaths and births in this equation are
 assumed to follow a Poisson distribution, with parameters as a function of future
 mortality and fertility rates.” In the observed data, is the Poisson variation in the
 deaths and births modelled?
+
+> Yes, the Poisson variation is used in the weighted smoothing. This information has now been added to end of the first paragraph in Section 2.5.
+
 6. Page 14. In the second step of computing the pension age scheme $P$, what does “or
 $a_{T+1} - a_T = 1$” mean? Why is $h$ not involved?
 
-# Reviewer 2
+> Thanks you for spotting this error. It has now been corrected to $a_{T+h} - a_{T+h-1}=12$ months. It means that the pension age should not jump more than 12 months between years, to prevent pension-age people losing their pension. We have also added this explanation to the paper.
+
+# Reviewer 2 {-}
 
 What this paper has done is to calculate the right pension age to lead to a given OADR. The calculation is based on a careful and skillful projection on future population, which is described nicely in the first half of the title “Forecasting the old-age dependency ratio”. This part seems to be the main contribution of the paper.
 
@@ -53,7 +64,17 @@ Second, what does “sustainable” mean here? In Australia, the age pension is 
 
 Third, do labor force participation and technological growth matter at all? In most rich countries, the long-term growth rate of per capita GDP is lower over time. Hence even if the pension age is raised, the burden of pension payment, which comes from general taxes, may still become heavier if GDP does not grow as fast in the future. A decline in labor force participation rate may have similar effects. The authors may want to consider these extra factors, though they have stated that the approach of this paper is to “illustrate how population forecasting can be used to explore the pension age issue in a simple context” (p.3), and “whether this OADR is the most appropriate level for Australia remains to be examined and is not the focus of this paper” (p.2).
 
+> Thank you for these helpful comments. We had previously stated this very briefly in the second last paragraph of the conclusion. We have now extended that to incorporate some of the points you have made.
+
+> AIHW (2019) states that the proportion of the aged population receiving the pension has remained relatively stable from 2001 to 2018, so we think it is likely that Power (2014) and the private superannuation firms are counting the numbers differently. So we have now removed the citation to Power (2014) and just refer to AIHW (2019).
+
+> The GDP is much more difficult to forecast than age structure, so it is problematic to use it as a target.
+
 A minor point here. there are some typos to correct, such as (1) The definitions of OADR are opposite in Eq. 1 and Eq. 2. (2) Should “Gross Domestic Profit” on p.3 be “Gross Domestic Product”?
 
+> Thanks. Both now fixed.
+
 To sum up, the technical parts are nicely done, and the calculation of pension age to keep OADR constant can serve as a nice first step for policy decision. But more have to be done to improve the contribution of the paper.
+
+> Thank you for your comments. 
 
