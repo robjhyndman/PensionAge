@@ -23,7 +23,7 @@ the_plan <-
   # Pension age scheme plot
   pension_age_plot = pension_age %>%
     filter(Year >= 2014) %>%
-    ggplot(aes(x = Year, y = Age, group = Policy, col = Policy)) +
+    ggplot(aes(x = Year, y = Age, group = Policy, lty= Policy)) +
     geom_line() +
     ylab("Minimum pension age") +
     scale_color_manual(
@@ -31,7 +31,7 @@ the_plan <-
       labels = c("Proposed further change",
                  "Current policy",
                  "Pension age at 65")
-    ),
+    ) + theme_bw(),
 
   # Get population data to 1 Jan 2019
   aus.pop = hmd.pop(country = "AUS",
@@ -133,7 +133,8 @@ the_plan <-
     ggtitle("Total population") +
     facet_grid(. ~ Sex) +
     geom_ribbon(aes(y = Mean, ymin = Lo80, ymax = Up80), fill = "#7d7def", data = future_tot_pop) +
-    geom_line(data = future_tot_pop, col = "#0000cc", mapping = aes(y = Mean), size = 1),
+    geom_line(data = future_tot_pop, col = "#0000cc", mapping = aes(y = Mean), size = 1) +
+    theme_bw(),
 
   pyramid_plot = pyramid(
     history_pop %>% filter(Year == max(Year)),
@@ -152,7 +153,7 @@ the_plan <-
     #geom_hline(yintercept = oadr_target, col = "gray") +
     geom_ribbon(aes(ymin = Lo, ymax = Hi, fill = Policy, group = Policy),
                 alpha = 0.5) +
-    geom_line(aes(col = Policy, group = Policy), size = .75) +
+    geom_line(aes(lty=Policy, col = Policy, group = Policy), size = .75) +
     geom_line(col = "black", size = .75, data = OADR_history) +
     xlab("year") +
     ylab("ratio") +
@@ -167,7 +168,8 @@ the_plan <-
                       labels = c("Pension age 65",
                                  "Current policy",
                                  "Proposed policy")
-    ),
+    ) + theme_bw() +
+    guides(fill=FALSE, col=FALSE) + theme(legend.position="bottom"),
 
   # Target OADR
   oadr_target = 0.23,
@@ -208,7 +210,7 @@ the_plan <-
     geom_line(aes(y = OADR), col = pension_colors["Optimal"]) +
     geom_line(data = OADR_history, aes(y = OADR)) +
     ggtitle("OADR forecast estimates for the target pension age scheme") +
-    ylab("Old age dependency ratio"),
+    ylab("Old age dependency ratio") + theme_bw(),
 
   oadr_upper_lower_plot = bind_rows(
         OADR_upper %>% mutate(Series = "Upper boundary"),
@@ -221,7 +223,7 @@ the_plan <-
       geom_line(data = OADR_history, aes(y = OADR)) +
       facet_grid(. ~ Series) +
       ggtitle("OADR forecasts for boundary pension age schemes") +
-      ylab("Old age dependency ratio"),
+      ylab("Old age dependency ratio") + theme_bw(),
 
   # Forecast accuracy via tscv
   rollingsim = rolling_sim(ausmort.sm, ausfert.sm, ausmig.sm, aus.pop,
@@ -238,5 +240,5 @@ the_plan <-
     group_by(h) %>%
     summarise(RMSE = sqrt(mean(e^2))) %>%
     ggplot(aes(x = h, y = RMSE)) +
-    geom_point()
+    geom_point() + theme_bw()
 )

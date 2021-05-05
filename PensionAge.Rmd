@@ -1,5 +1,5 @@
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, messages = FALSE, warning = FALSE, cache = TRUE)
+knitr::opts_chunk$set(echo = FALSE, messages = FALSE, warning = FALSE, cache = FALSE)
 
 # Set up plan
 source("_drake.R")
@@ -12,7 +12,7 @@ loadd(oadr_target)
 
 # Introduction
 
-Australia's ageing population is a result of three factors: (1) significant technological advances in medical care leading to longer life spans; (2) high fertility rates after World War II resulting in the "baby-boomer" generation; and (3) a large decline in fertility rates over the past thirty years [@Fehr2008]. Consequently, there are many older people leaving the workforce, and fewer workers replacing them. Many other countries face similar demographic challenges. One way of measuring this problem is via the old-age dependency ratio (OADR): the number of people post-retirement to the number of people of working age [@Walker1982]. The OADR has been increasing for many decades, but recently the rate of increase has jumped markedly, and we show that it will continue to increase at a rapid rate if there are no age-related policy changes.
+Australia's ageing population is a result of three factors: 1) significant technological advances in medical care leading to longer life spans; 2) high fertility rates after World War II resulting in the 'baby-boomer' generation; and 3) a large decline in fertility rates over the past thirty years [@Fehr2008]. Consequently, there are many older people leaving the workforce, and fewer workers replacing them. Many other countries face similar demographic challenges. One way of measuring this problem is via the old-age dependency ratio (OADR): the number of people post-retirement to the number of people of working age [@Walker1982]. The OADR has been increasing for many decades, but recently the rate of increase has jumped markedly, and we show that it will continue to increase at a rapid rate if there are no age-related policy changes.
 
 This is consistent with the Australian Intergenerational Reports [@IGR02; @IGR07; @Swan2010] that explored the extent to which existing age-related policies would affect the burden of future working generations. To date, the Australian government has addressed the problem through a variety of approaches including modifications to compulsory superannuation policies, instigating work incentives for older people, and increasing the pension age (defined as the age at which eligible residents can access the age pension for the first time). In 2009, the federal government announced an increase in pension age from 65 to 67 by 2023 [@Nielson2010]. In May 2014, the Federal Treasurer proposed a further increase in the pension age to 70 by 2035, in line with the recommendations from the @PC13. We investigate the effect of these changes in the pension age on the forecasts of the OADR.
 
@@ -51,7 +51,7 @@ pension_age_plot
 
 The pension age for males was set at 65 for over a century. While the pension age for females was 60 years until 1994, it has steadily increased to 65 years in 2014, in line with that of males. From July 2017, pension eligibility ages for both males and females have been increasing by six months every two years and will reach 67 in July 2023. The @PC13 proposed further lifting of the pension age to 70 on the grounds that increasing the pension age to 70 would save taxpayers $150 billion in welfare costs and health spending, and older people are capable of continuing work. The former Treasurer Joe Hockey announced that the government would increase the pension age to 70 by 2035, and this was proposed in the Federal Budget Statement for 2014--2015, although it has never been legislated by the Australian Federal Government. Figure \@ref(fig:changespension) illustrates the process of the adjustments on pension age scheme.
 
-The government has not disclosed the method it used to determine the new pension age.  @CEDA07 [p7] proposed directly linking pension age with life expectancy in the way that "pension age should increase by approximately 50% of any increase in life expectancy". However, using a "rule of thumb" approach might not be ideal, as 50% of the change in life expectancy may not be a good adjustment to pension age in the long term. We propose that the pension age should be linked to the old age dependency ratio, and based on forecasts of future mortality and fertility rates. Our approach has the advantage that it can be used to justify the change in pension age and directly links the pension age with the goal of a stable financial burden for the public.
+The government has not disclosed the method it used to determine the new pension age.  @CEDA07 [p7] proposed directly linking pension age with life expectancy in the way that 'pension age should increase by approximately 50% of any increase in life expectancy'. However, using a 'rule of thumb' approach might not be ideal, as 50% of the change in life expectancy may not be a good adjustment to pension age in the long term. We propose that the pension age should be linked to the old age dependency ratio, and based on forecasts of future mortality and fertility rates. Our approach has the advantage that it can be used to justify the change in pension age and directly links the pension age with the goal of a stable financial burden for the public.
 
 ## Demographic growth-balance equations
 
@@ -66,11 +66,11 @@ where $x=0,1,2,\dots,p-1,p^+$ denotes age with $p^+$ the open-ended upper age gr
 
 We can obtain historical mortality rates $m_t(x)$ (also called central death rates) and fertility rates $f_t(x)$ as follows:
 \begin{align*}
-  m_t(x) & = \frac{D_t(x)}{E_t(x)}=\text{age-sex-specific central death rates in calendar year t}\\
-  f_t(x) & = \frac{B_t(x)}{E^F_t(x)}=\text{age-specific fertility rates in calendar year t}.
+  m_t(x) & = \frac{D_t(x)}{E_t(x)}=\text{age-sex-specific central death rates in calendar year $t$};\\
+  f_t(x) & = \frac{B_t(x)}{E^F_t(x)}=\text{age-specific fertility rates in calendar year $t$}.
 \end{align*}
 
-In addition, the net migration^[Net migration is the difference between immigration and emigration in a certain area during a specified time frame.] (denoted $G$) is estimated using demographic growth-balance equations, which summarize the relationship between population change and three factors: net migration, births and deaths. The equations are expressed as:
+The net migration is the difference between immigration and emigration in a certain area during a specified time frame. We denote net migration by $G$, and estimate it using demographic growth-balance equations, which summarise the relationship between population change and three factors: net migration, births and deaths. The equations are expressed as:
 \begin{align*}
   G_t(x,x+1)     & =P_{t+1}(x+1)-P_t(x)+D_t(x,x+1)\qquad\text{for $x=0,1,2,\dots,p-2$},\\
   G_t(p-1^+,p^+) & =P_{t+1}(p^+)-P_t(p^+)-P_t(p-1)+D_t(p-1^+,p^+),\\
@@ -88,15 +88,15 @@ where $a_t$ is the pension age in year $t$ and $r_t = a_t - \lfloor a_t \rfloor$
 
 ## Forecasting demographic components
 
-Variants of the Lee-Carter method [@LC92] are frequently used for demographic forecasting [see, e.g., @SBH11]. The most recent forecast of the population in Australia by the @PC13 was based on basic Lee-Carter methods plus some judgement-based adaptations to address the characteristics of demographic trends that the Lee-Carter method failed to capture. The Hyndman-Ullah method (2007) is a generalization of the Lee-Carter method and is used as the basis for forecasting demographic components in this study. In addition, the product-ratio method [@HBY13] is used to eliminate the potential long-term divergence between female and male mortality rates and net-migration rates.
+Variants of the Lee--Carter method [@LC92] are frequently used for demographic forecasting [see, e.g., @SBH11]. The most recent forecast of the population in Australia by the @PC13 was based on basic Lee--Carter methods plus some judgement-based adaptations to address the characteristics of demographic trends that the Lee--Carter method failed to capture. The Hyndman--Ullah method (2007) is a generalisation of the Lee--Carter method and is used as the basis for forecasting demographic components in this study. In addition, the product-ratio method [@HBY13] is used to eliminate the potential long-term divergence between female and male mortality rates and net-migration rates.
 
-### Lee-Carter method {-}
+### Lee--Carter method {-}
 
-The Lee-Carter (LC) method has been widely used to forecast mortality rates across various countries, including Australia. The model proposed by @LC92 (but using our notation) is
+The Lee--Carter (LC) method has been widely used to forecast mortality rates across various countries, including Australia. The model proposed by @LC92 (but using our notation) is
 \begin{equation}\label{eq:lc}
   \log m_{t}(x)=\mu(x)+\phi(x)\beta_{t}+\varepsilon_{t,x},
 \end{equation}
-where $m_{t}(x)$ is the central death rate for age $x$ in year $t$. This model involves fitting a matrix of log central death rates with sets of age-specific constants, {$\mu(x)$} and {$\phi(x)$}, and a time-varying index $\beta_{t}$. $\phi(x)$ is a set of parameters that tell us the rate at which each age responds to changes in $\beta_{t}$. $\beta_{t}$ measures the general level of the log death rates; $\mu(x)$ is the general pattern across the age of the log mortality rate and $\varepsilon_{t,x}$ is an error term with zero mean and constant variance, reflecting the randomness that can't be captured by the model.
+where $m_{t}(x)$ is the central death rate for age $x$ in year $t$. This model involves fitting a matrix of log central death rates with sets of age-specific constants, {$\mu(x)$} and {$\phi(x)$}, and a time-varying index $\beta_{t}$. The notation $\phi(x)$ denotes a set of parameters that tell us the rate at which each age responds to changes in $\beta_{t}$. $\beta_{t}$ measures the general level of the log death rates; $\mu(x)$ is the general pattern across the age of the log mortality rate and $\varepsilon_{t,x}$ is an error term with zero mean and constant variance, reflecting the randomness that can't be captured by the model.
 
 The model is over-parameterised. Therefore, the constraints
 \begin{equation}
@@ -104,7 +104,7 @@ The model is over-parameterised. Therefore, the constraints
 \end{equation}
 are imposed, and a singular value decomposition is used to find the least squares solution of \eqref{eq:lc} [@Good1969]. The estimates of $\phi(x)$ and $\beta_t$ are therefore the first principal component and scores of $\bm{X}$ with $(i,t)$th element $[\log(m_{t}(x))-\widehat\mu(x)]$, where $\widehat\mu(x)$ is the sample mean of $\log(m_{t}(x))$ over $t$. The log transformation introduces some bias, so the LC method adjusts $\beta_t$ such that for each year, the implied number of deaths will be equal to the actual number of deaths. The adjusted $\beta_t$ is then extrapolated using a random walk with drift model.
 
-### Hyndman-Ullah method \label{sec:HU} {-}
+### Hyndman--Ullah method \label{sec:HU} {-}
 
 @HU07 proposed a nonparametric method for demographic modelling and forecasting that extended the LC model in four ways:
 
@@ -113,14 +113,14 @@ are imposed, and a singular value decomposition is used to find the least square
   3. It uses more than one principal component, which addresses the main weakness of the LC method.
   4. The forecasting models for the principal component scores are more complex than the random walk with drift model used in the LC model.
 
-The Hyndman-Ullah (HU) model can be written as
+The Hyndman--Ullah (HU) model can be written as
 \begin{align}
-  y_t(x) & = s_t(x) + \sigma_t(x)\varepsilon_{t,x}\label{eq:HU_1}\\
+  y_t(x) & = s_t(x) + \sigma_t(x)\varepsilon_{t,x}\label{eq:HU_1},\\
   s_t(x) & = \mu(x) + \sum_{j=1}^{J}\beta_{t,j}\phi_j(x) + e_t(x)\label{eq:HU_2},
 \end{align}
-where $y_t(x)$ may be log mortality, log fertility or net migration [@HB08] in year $t$ and age $x$. Here $s_t(x)$ is a smoothed version of the observed data $y_t(x)$, smoothed over age but not time, and estimated by constrained weighted penalized regression splines; and $\{\varepsilon_{t,x}\}$ are independent and identically distributed standard normal error terms. Equation \eqref{eq:HU_2} has a similar structure to the LC method, except that it is applied to smoothed data and incorporates more than one principal component and score. The $e_t(x)$ is the model error having mean zero and no serial correlation, while $\mu(x)$ is estimated as the average of $s_t(x)$ across years. Estimates of $\phi_j(x)$ and $\beta_{t,j}$ are the $j^{th}$ principal components and scores of $s_t(x)-\mu(x)$ respectively. Following @HB08, we select $J=6$ which we have found to be large enough for demographic applications.
+where $y_t(x)$ may be log mortality, log fertility or net migration [@HB08] in year $t$ and age $x$. Here $s_t(x)$ is a smoothed version of the observed data $y_t(x)$, smoothed over age but not time, and estimated by constrained weighted penalised regression splines; and $\{\varepsilon_{t,x}\}$ are independent and identically distributed standard normal error terms. Equation \eqref{eq:HU_2} has a similar structure to the LC method, except that it is applied to smoothed data and incorporates more than one principal component and score. The $e_t(x)$ is the model error having mean zero and no serial correlation, while $\mu(x)$ is estimated as the average of $s_t(x)$ across years. Estimates of $\phi_j(x)$ and $\beta_{t,j}$ are the $j$th principal components and scores of $s_t(x)-\mu(x)$ respectively. Following @HB08, we select $J=6$, which we have found to be large enough for demographic applications.
 
-By conditioning on the observed data $\bm{I}=\left\{{y_1(x),\dots,y_n(x)}\right\}$ and the set of functional principal components $\bm{B}=\left\{{\phi_1(x),\phi_2(x),\dots,\phi_j(x)}\right\}$, the $h$-step-ahead forecast of $y_{T+h}(x)$ are given by
+By conditioning on the observed data $\bm{I}=\left\{{y_1(x),\dots,y_n(x)}\right\}$ and the set of functional principal components $\bm{B}=\left\{{\phi_1(x),\phi_2(x),\dots,\phi_j(x)}\right\}$, the $h$-step-ahead forecast of $y_{T+h}(x)$ is given by
 \begin{equation}
   \widehat{y}_{T+h\mid T}(x)=\widehat{s}_{T+h\mid T}(x) = \text{E}[\widehat{s}_{T+h\mid T}(x)\mid \bm{I, B}] = \widehat{\mu}(x)+\sum_{j=1}^{J}\phi_j(x)\widehat{\beta}_{T+h\mid T,j},
 \end{equation}
@@ -135,25 +135,25 @@ When we apply the @HU07 model to data on males and females, we need to constrain
 \end{align}
 Then, the HU method is applied to these two new variables:
 \begin{align*}
-  \log[p_t(x)]=\mu_p(x)+\sum_{j=1}^{J}\beta_{t,j}\phi_j(x)+e_t(x)\\
-  \log[r_t(x)]=\mu_r(x)+\sum_{l=1}^{L}\gamma_{t,l}\psi_l(x)+z_t(x)
+  \log[p_t(x)]=\mu_p(x)+\sum_{j=1}^{J}\beta_{t,j}\phi_j(x)+e_t(x),\\
+  \log[r_t(x)]=\mu_r(x)+\sum_{l=1}^{L}\gamma_{t,l}\psi_l(x)+z_t(x),
 \end{align*}
-where time series $\left\{\beta_{t,j}\right\}$ are fitted with ARIMA models while $\left\{\gamma_{t,l}\right\}$ are fitted by stationary ARFIMA models (i.e., the order of differencing is constrained to $0<d<\frac{1}{2}$). It is the stationary constraint on $\gamma_{t,l}$ that ensures the forecasts of male and female do not diverge. Then, forecasts of sex-specific data are obtained using
+where time series $\left\{\beta_{t,j}\right\}$ are fitted with ARIMA models, while $\left\{\gamma_{t,l}\right\}$ are fitted by stationary ARFIMA models (i.e., the order of differencing is constrained to $0< d < 1/2$). It is the stationary constraint on $\gamma_{t,l}$ that ensures the forecasts of male and female do not diverge. Then, forecasts of sex-specific data are obtained using
 \begin{align*}
-  m_{T+h\mid T}^{\text{M}}(x) & = p_{T+h\mid T}(x)r_{T+h\mid T}(x)\\
-  m_{T+h\mid T}^{\text{F}}(x) & = p_{T+h\mid T}(x)/r_{T+h\mid T}(x)
+  m_{T+h\mid T}^{\text{M}}(x) & = p_{T+h\mid T}(x)r_{T+h\mid T}(x),\\
+  m_{T+h\mid T}^{\text{F}}(x) & = p_{T+h\mid T}(x)/r_{T+h\mid T}(x).
 \end{align*}
 The method for forecasting net migration by sex is similar to the above method used on mortality rates except no log scale is applied to net migration, and a sum and difference is used rather than a product and ratio.
 
 ## Forecasting OADR
 
-Following the general procedure proposed in @HB08, we model each of the five components of population change: female mortality rates, male mortality rates, female net migration, male net migration and fertility rates, and simulate these five components into the future. We use the HU method applied to log-fertility, and the product-ratio method applied to log-mortality and net-migration. We used weighted penalized splines [@HU07] when estimating the log-fertility and log-mortality curves, where the weights account for Poisson variation in deaths and births. We use loess when estimating the net-migration curves.
+Following the general procedure proposed in @HB08, we model each of the five components of population change: female mortality rates, male mortality rates, female net migration, male net migration and fertility rates, and simulate these five components into the future. We use the HU method applied to log-fertility, and the product-ratio method applied to log-mortality and net-migration. We used weighted penalised splines [@HU07] when estimating the log-fertility and log-mortality curves, where the weights account for Poisson variation in deaths and births. We use loess when estimating the net-migration curves.
 
 From these models, sample paths are simulated for age-specific fertility rates, age- and sex-specific mortality rates and age- and sex-specific net migration. Then future population values are simulated using the demographic growth-balance equations. The future deaths and births in this equation are assumed to follow a Poisson distribution, with parameters as a function of future mortality and fertility rates. We bootstrap the residuals of the net-migration model to simulate future net-migration numbers (see @HB08 for the details). Hence, we can simulate $h$-step-ahead age- and sex-specific population numbers based on simulated births, deaths and net-migrants.
 
 This simulation was repeated for years $t=T+1,\dots,T+h$ to obtain a sample path of the age-specific population. Many simulated population paths were obtained in this way. For each simulated population path, and each proposed set of pension age changes, we can simulate future OADR values using \eqref{eq:oadr}.
 
-There are three types of randomness in the simulation: (1) randomness from the second equation in the Hyndman-Ullah specification (i.e., $e_t(x)$ in \eqref{eq:HU_1}); (2) randomness from the ARIMA model fitted to principal component scores; and (3) randomness from the Poisson distribution for births and deaths, or the bootstrap for migrants.
+There are three types of randomness in the simulation: (1) randomness from the second equation in the Hyndman--Ullah specification (i.e., $e_t(x)$ in \eqref{eq:HU_1}); (2) randomness from the ARIMA model fitted to principal component scores; and (3) randomness from the Poisson distribution for births and deaths, or the bootstrap for migrants.
 
 # Application to Australia {#sec:results}
 
@@ -174,13 +174,13 @@ loadd(fertf_plot)
 fertf_plot
 ```
 
-The first basis function $\widehat{\phi}_1(x)$ measures the different effects of the time-trend across ages. It indicates the general pattern of fertility has little effect on females of age 15, most likely because such pregnancies are almost always accidental and usually prior to the mother taking contraception. The two "bumps" in the first basic function suggests that the historical trend has a distinct impact on females aged around their 20s and 40s. The second basis function, accounting for `r round(fert.fit$varprop[2]*100,1)`% of the variation, largely concerns mothers aged over 30. The forecasts of future coefficients are shown as the blue lines in the lower panels with their 80% pointwise prediction intervals shown as blue shaded regions. These forecasts are obtained using automatically selected ARIMA models. In practice, we use six basis functions, but the four not shown have a much smaller effect on the resulting fertility forecasts, only account for `r round(sum(fert.fit$varprop[3:6])*100,1)`% of the variation, and are much harder to interpret.
+The first basis function $\widehat{\phi}_1(x)$ measures the different effects of the time-trend across ages. It indicates the general pattern of fertility has little effect on females of age 15, most likely because such pregnancies are almost always accidental and usually prior to the mother taking contraception. The two 'bumps' in the first basic function suggests that the historical trend has a distinct impact on females aged around their 20s and 40s. The second basis function, accounting for `r round(fert.fit$varprop[2]*100,1)`% of the variation, largely concerns mothers aged over 30. The forecasts of future coefficients are shown in the lower panels with their 80% pointwise prediction intervals shown as shaded regions. These forecasts are obtained using automatically selected ARIMA models. In practice, we use six basis functions, but the four not shown have a much smaller effect on the resulting fertility forecasts, only account for `r round(sum(fert.fit$varprop[3:6])*100,1)`% of the variation, and are much harder to interpret.
 
-Similar models are used for the product and ratio of mortality rates, and sum and different of net migration rates.
+Similar models are used for the product and ratio of mortality rates, and sum and difference of net migration rates.
 
 ## Population forecasts
 
-Figure \@ref(fig:totalpopulationbyyears) shows the forecast of the total population by sex over the prediction horizon, while Figure \@ref(fig:totalpopulationin2038) shows the 20-year forecast of population age structure in 2038. Figure \@ref(fig:totalpopulationbyyears) indicates that both the female and male population are expected to increase to around 27 million by 2068.
+Figure \@ref(fig:totalpopulationbyyears) shows the forecast of the total population by sex over the prediction horizon, while Figure \@ref(fig:totalpopulationin2038) shows the 20-year forecast of population age structure in 2038. Figure \@ref(fig:totalpopulationbyyears) indicates that both the female and male population are expected to increase to almost 20 million by 2050.
 
 ```{r totalpopulationbyyears, fig.cap="Fifty-year forecasts of the total population for each sex, along with 80% prediction intervals.", fig.height=4}
 loadd(population_plot)
@@ -194,20 +194,20 @@ pyramid_plot
 
 Figure \@ref(fig:totalpopulationin2038) shows the mean and the 80% pointwise prediction interval of simulated population paths for the year 2038 (a 20-year forecast), along with the 2019 base population. The uncertainty of the population below aged 20 is largely due to higher forecast variation of fertility rates compared to other components.
 
-Historical OADR values are shown in black in Figure \@ref(fig:OADRcurrent) for 1921--2019. The strong positive trend indicates an increasing tax burden on workers, consistent with the prediction of the intergenerational reports in 2002 [@IGR02] and 2007 [@IGR07]. The increased trend from 2010 is due to the retirements of "Baby Boomers", born after WW2. We also show forecasts for three pension schemes: (1) a fixed pension age of 65; (2) the current scheme with the pension age rising to age 67 in 2023; and (3) the proposed pension policy under which the pension ages continues to rise by 6 months every two years until it reaches 70 in 2035.
+Historical OADR values are shown in black in Figure \@ref(fig:OADRcurrent) for 1921--2019. The strong positive trend indicates an increasing tax burden on workers, consistent with the prediction of the intergenerational reports in 2002 [@IGR02] and 2007 [@IGR07]. The increased trend from 2010 is due to the retirements of 'Baby Boomers', born after WW2. We also show forecasts for three pension schemes: (1) a fixed pension age of 65; (2) the current scheme with the pension age rising to age 67 in 2023; and (3) the proposed pension policy under which the pension ages continues to rise by 6 months every two years until it reaches 70 in 2035.
 
-```{r OADRcurrent, fig.cap="Fifty-year forecasts of the OADR associated with a pension age equal to 65 (green), the current approved pension age scheme (orange), and the proposed scheme with the pension age rising to 70 in 2035 (purple). The actual OADRs for 1921--2019 are shown in black."}
+```{r OADRcurrent, fig.cap="Fifty-year forecasts of the OADR associated with a pension age equal to 65, the current approved pension age scheme, and the proposed scheme with the pension age rising to 70 in 2035. The actual OADRs for 1921--2019 are also shown."}
 loadd(oadr_plots)
 oadr_plots
 ```
 
-Once the pension age reaches 67, the OADR under the current policy grows at nearly the same rate as the OADR of a pension age equal of 65. This is consistent with the idea that there is a persistent positive trend in OADR associated with a constant pension age, due to low fertility rates and better health care. Even the proposal to raise the pension age incrementally to 70 by 2035 leads to a similar increasing trend beyond 2035. This proposal also leads to a slow decline in the OADR over the next 15 years. Figure \@ref(fig:OADRcurrent) demonstrates that the pension age scheme requires constant review to ensure a stable OADR over the long term.
+Once the pension age reaches 67, the OADR under the current policy grows at nearly the same rate as the OADR of a pension age equal to 65. This is consistent with the idea that there is a persistent positive trend in OADR associated with a constant pension age, due to low fertility rates and better health care. Even the proposal to raise the pension age incrementally to 70 by 2035 leads to a similar increasing trend beyond 2035. This proposal also leads to a slow decline in the OADR over the next 15 years. Figure \@ref(fig:OADRcurrent) demonstrates that the pension age scheme requires constant review to ensure a stable OADR over the long term.
 
 # Sustainable pension age schemes {#sec:target}
 
 Our aim is to determine a pension age scheme that would lead to the OADR being below a desired threshold, thus imposing a sustainability constraint.
 
-Let $a_t$ denote the pension age in year $t$, and we denote a pension age scheme over the prediction horizon by $\bm{P}=[a_{T+1},\dots,a_{T+H}]'$, with the corresponding OADR values given by $O_{T+1},\dots,O_{T+H}$. Our goal is to find the minimum pension age in each year that gives an OADR lower than the desired OADR threshold.  We impose the constraint $0 \le a_t - a_{t-1} < 1$ to prevent two undesirable situations: (a) years where no-one is able to retire; and (b) years where retired people become ineligible for the pension. We also assume that the adjustment unit of the pension age is one month, for easier implementation.
+Let $a_t$ denote the pension age in year $t$, and we denote a pension age scheme over the prediction horizon by $\bm{P}=[a_{T+1},\dots,a_{T+H}]^\top$, with the corresponding OADR values given by $O_{T+1},\dots,O_{T+H}$. Our goal is to find the minimum pension age in each year that gives an OADR lower than the desired OADR threshold.  We impose the constraint $0 \le a_t - a_{t-1} < 1$ to prevent two undesirable situations: (a) years where no-one is able to retire; and (b) years where retired people become ineligible for the pension. We also assume that the adjustment unit of the pension age is one month, for easier implementation.
 
 ## Finding the target pension age scheme
 
@@ -218,24 +218,24 @@ Let $O^*$ denote the desired OADR threshold. Because we do not observe the popul
 
 We repeat these steps for $h=2,\dots,H$. The second limit in Step 2 arises because the pension age should not jump more than 12 months between years, to prevent pension-age people losing their pension.
 
-In addition to finding the target pension age based on the mean value of OADR, we also find "plausible" pension age schemes that could give the desired OADR level. Specifically, we find a range of pension age schemes for which $O^*$ is contained within the 80% prediction intervals of the simulated $O_{T+H|T}$ values. Because of the monotonic relationship between pension age and OADR, we need only to find the upper (lower) boundary of plausible pension age schemes, at which the upper (lower) limit of 80% prediction intervals of OADR is equal to the desired OADR level. Hence, any pension age scheme within those two boundaries is plausible. The range of plausible pension age schemes can be thought of as an 80% confidence interval of pension age schemes where we are 80% sure that they will give the desired outcome.
+In addition to finding the target pension age based on the mean value of OADR, we also find 'plausible' pension age schemes that could give the desired OADR level. Specifically, we find a range of pension age schemes for which $O^*$ is contained within the 80% prediction intervals of the simulated $O_{T+H|T}$ values. Because of the monotonic relationship between pension age and OADR, we need only to find the upper (lower) boundary of plausible pension age schemes, at which the upper (lower) limit of 80% prediction intervals of OADR is equal to the desired OADR level. Hence, any pension age scheme within those two boundaries is plausible. The range of plausible pension age schemes can be thought of as an 80% confidence interval of pension age schemes where we are 80% sure that they will give the desired outcome.
 
 The algorithm to find the upper and lower boundary of plausible pension age schemes is the same as above, but the mean of $O_{T+H|T}$ is replaced by the 10% and 90% quantiles.
 
-Figure \@ref(fig:comparisonofpensionages) shows (in blue) the pension scheme produced by this algorithm, along with 80% confidence intervals. In comparison, the previous (green), current (red) and proposed (orange) schemes are also shown.
+Figure \@ref(fig:comparisonofpensionages) shows the pension scheme produced by this algorithm, along with 80% confidence intervals. In comparison, the previous, current and proposed schemes are also shown.
 
-```{r comparisonofpensionages, fig.cap="The target pension age scheme (in blue) along with the pension age schemes that have been set and proposed by the government. The blue shaded region shows 80% confidence intervals for the target pension age."}
+```{r comparisonofpensionages, fig.cap="The target pension age scheme along with the pension age schemes that have been set and proposed by the government. The shaded region shows 80% confidence intervals for the target pension age."}
 loadd(proposed_pension_scheme_plot)
 proposed_pension_scheme_plot
 ```
 
-```{r OADRwithoptimal, fig.cap="The mean forecast and 80% prediction intervals for the OADR associated with the target pension age scheme shown in blue, along with the desired OADR level in gray."}
+```{r OADRwithoptimal, fig.cap="The mean forecast and 80% prediction intervals for the OADR associated with the target pension age scheme, along with the desired OADR level at 0.23."}
 ## plots of OADR with plausible pension age schemes
 loadd(proposed_oadr_plot)
 proposed_oadr_plot
 ```
 
-```{r OADRboundaries, fig.cap="The 80% prediction intervals of OADR (in blue) associated with the upper and lower boundary of plausible pension age schemes, along with desired OADR level in gray.", fig.height=3}
+```{r OADRboundaries, fig.cap="The 80% prediction intervals of OADR associated with the upper and lower boundary of plausible pension age schemes, along with desired OADR level at 0.23.", fig.height=3}
 loadd(oadr_upper_lower_plot)
 oadr_upper_lower_plot
 ```
@@ -311,6 +311,6 @@ We have also not allowed for the impact of COVID-19 in this analysis as it is to
 
 # Reproducibility {-}
 
-The data and code to fully reproduce our results is available at [`https://github.com/robjhyndman/PensionAge`](https://github.com/robjhyndman/PensionAge). We used R [@RCore], along with the drake [@Rdrake], tidyverse [@Rtidyverse], demography [@Rdemography] and forecast [@Rforecast] packages.
+The data and code to fully reproduce our results is available at [`https://github.com/robjhyndman/PensionAge`](https://github.com/robjhyndman/PensionAge). We used \textsf{R} [@RCore], along with the \textsf{drake} [@Rdrake], \textsf{tidyverse} [@Rtidyverse], \textsf{demography} [@Rdemography] and \textsf{forecast} [@Rforecast] packages.
 
 

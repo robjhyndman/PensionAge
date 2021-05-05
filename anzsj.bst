@@ -11,7 +11,7 @@
 %% merlin.mbs  (with options: `ay,nat,nm-rvvc,mcite,mct-3,mct-x3,nmft,nmft-sc,keyxyr,dt-beg,yr-par,note-yr,thtit-a,trtit-b,trnum-it,vol-bf,vnum-x,volp-com,pp-last,num-xser,numser,ser-vol,jnm-x,add-pub,doi,edparxc,edby,edbyx,pp,ed,abr,ord,amper,and-xcom,etal-xc,etal-it,eprint,url,url-blk,nfss,')
 %% ----------------------------------------
 %% *** For Aust. N. Z. Stat. ***
-%% 
+%%
 %% Copyright 1994-2011 Patrick W Daly
  % ===============================================================
  % IMPORTANT NOTICE:
